@@ -1,54 +1,16 @@
-# Git-Vis: An Interactive Git Visualizer 🚀
+# React + Vite
 
-An interactive learning tool that demystifies the Git version control system by visualizing its underlying commit graph in real-time. This project demonstrates the practical application of the Directed Acyclic Graph (DAG) data structure.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-**[➡️ View Live Demo](https://your-deployment-link-here.com)** ---
+Currently, two official plugins are available:
 
-![Git-Vis Demo GIF](./public/git-vis-demo.gif)
-## ✨ Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-* **Visualize the Commit Graph**: See your Git history as a clear, interactive node-based graph.
-* **Interactive Git Commands**: Perform basic Git operations through a simple UI:
-    * `commit`: Create new commits on the current branch.
-    * `branch`: Create new branches from any commit.
-    * `merge`: Merge one branch into another, creating a merge commit.
-* **Advanced Visualizations**: Understand complex operations with clear animations:
-    * `rebase`: Watch as commits are replayed onto a new base branch. * **Branch & HEAD Pointers**: Clearly see where your branches and the `HEAD` are pointing at all times.
-* **Interactive UI**: Pan, zoom, and click on nodes to inspect their details.
+## React Compiler
 
-## 🛠️ Tech Stack
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-* **Frontend**: [React](https://reactjs.org/) (with [Vite](https://vitejs.dev/))
-* **Visualization**: [React Flow](https://reactflow.dev/)
-* **Styling**: CSS Modules / [Chakra UI](https://chakra-ui.com/) * **Deployment**: [Vercel](https://vercel.com/)
+## Expanding the ESLint configuration
 
-## 📚 Project Goals & Learning
-
-The primary goal of this project was to solidify my understanding of core data structures by applying them to a real-world, industry-standard tool. Specifically, I focused on:
-
-* **Data Structure Implementation**: Implementing and managing a Directed Acyclic Graph (DAG) to accurately model Git's commit history.
-* **State Management**: Handling complex application state and ensuring the UI reacts correctly to logical changes.
-* **Frontend Development**: Building a responsive and interactive user interface with React and a specialized visualization library.
-
-## 🚀 Getting Started
-
-To run this project locally:
-
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/your-username/interactive-git-graph.git](https://github.com/your-username/interactive-git-graph.git)
-    ```
-2.  **Navigate to the project directory:**
-    ```bash
-    cd interactive-git-graph
-    ```
-3.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
-4.  **Start the development server:**
-    ```bash
-    npm run dev
-    ```
-
-The application should now be running on `http://localhost:5173` (or another port specified by Vite).
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.

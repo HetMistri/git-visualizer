@@ -39,17 +39,33 @@ export class GitGraph {
   // --- YOUR IMPLEMENTATION GOES HERE ---
 
   commit(message) {
-    // TODO: Implement the commit logic.
+
     // 1. Get the ID of the parent commit. This is the commit that the current branch (this.HEAD) points to.
+
+    const parentId = this.branches.get(this.HEAD);
+
     // 2. Create a new CommitNode with the given message and the parent ID.
+
+    const newCommit = new CommitNode(message, parentId);
+
     // 3. Add the new commit to our `this.commits` hash map.
+
+    this.commits.set(newCommit.id, newCommit);
+
     // 4. Update the branch pointer in `this.branches` to point to the new commit's ID.
+
+    this.branches.set(this.HEAD, newCommit.id);
   }
 
   createBranch(branchName) {
-    // TODO: Implement the branch logic.
+    
     // 1. Get the ID of the commit that the current branch (this.HEAD) points to.
+    const currentBID = this.branches.get(this.HEAD);
+
     // 2. Add a new entry to `this.branches`, mapping the new branchName to that commit ID.
+
+    this.branches.set(branchName, currentBID)
+
   }
 
   // More methods like merge() and checkout() will go here later. Let's focus on these two first.

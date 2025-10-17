@@ -1,5 +1,5 @@
 // A simple utility for generating unique IDs. We'll use this to simulate commit hashes.
-const generateId = () => Math.random().toString(36).substring(2, 9);
+const generateId =( ) => Math.random().toString(36).substring(2, 9);
 
 class CommitNode {
   constructor(message, parent = null) {
@@ -10,8 +10,6 @@ class CommitNode {
     // We can add more properties later, like author or timestamp, but this is the essential core.
   }
 }
-
-
 
 export class GitGraph {
   constructor() {
@@ -34,9 +32,9 @@ export class GitGraph {
     this.commits.set(initialCommit.id, initialCommit);
     this.branches.set("main", initialCommit.id);
     this.HEAD = "main";
+
   }
 
-  // --- YOUR IMPLEMENTATION GOES HERE ---
 
   commit(message) {
 
@@ -65,6 +63,20 @@ export class GitGraph {
     // 2. Add a new entry to `this.branches`, mapping the new branchName to that commit ID.
 
     this.branches.set(branchName, currentBID)
+
+  }
+
+  checkout(branchName) {
+
+    // 1. Check if the branch actually exists in our `this.branches` map.
+    // 2. If it does not exist throw an error.
+    // 3. Else checkout to that branch.
+
+      if(!this.branches.has(branchName)){
+        console.error(`Error: Branch "${branchName}" does not exist.`)
+      } else {
+        this.HEAD = branchName;
+      }
 
   }
 

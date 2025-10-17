@@ -13,6 +13,12 @@ function App() {
   graph.createBranch("develop");
   console.log("After creating 'develop' branch:", graph);
 
+  graph.checkout("develop");
+  console.log("After checking out 'develop': ", graph);
+  
+  graph.commit("feat: Implement new feature on develop");
+  console.log("After committing on 'develop':", graph);
+
   return (
 
       <>

@@ -2,10 +2,10 @@
 const generateId =( ) => Math.random().toString(36).substring(2, 9);
 
 class CommitNode {
-  constructor(message, parent = null) {
+  constructor(message, parents = []) {
     this.id = generateId(); // A unique hash for this commit.
     this.message = message; // The commit message.
-    this.parents = parent ? [parent] : []; // An array of parent commit IDs. A merge commit will have more than one.
+    this.parents = parents; // An array of parent commit IDs. A merge commit will have more than one.
     
     // We can add more properties later, like author or timestamp, but this is the essential core.
   }
@@ -44,7 +44,7 @@ export class GitGraph {
 
     // 2. Create a new CommitNode with the given message and the parent ID.
 
-    const newCommit = new CommitNode(message, parentId);
+    const newCommit = new CommitNode(message, [parentId]);
 
     // 3. Add the new commit to our `this.commits` hash map.
 
@@ -80,5 +80,49 @@ export class GitGraph {
 
   }
 
-  // More methods like merge() and checkout() will go here later. Let's focus on these two first.
+  merge(sourceBranchName) {
+    // 1. Identify the target branch. This is the branch you are currently on (this.HEAD).
+
+    const targetBranch = this.HEAD;
+    
+    // 2. Perform safety checks:
+    //    a. Ensure the source branch exists.
+    //    b. Ensure the source and target branches are not the same.
+
+    if(!this.branches.has(sourceBranchName)){
+      console.error(`Error: Branch "${sourceBranchName}" does not exist.`)
+      return;
+    }
+
+    if(sourceBranchName==targetBranch){
+      console.error('Error: Source and target branches are the same.')
+      return;
+    }
+
+    
+    // 3. Get the commit IDs for both the source and target branch tips.
+
+    const targetId = this.branches.get(targetBranch);
+    const sourceId = this.branches.get(sourceBranchName);
+
+    if(targetId==sourceId){
+      console.log("Branches are already up-to-date. Nothing to merge.");
+      return;
+    }
+
+    // 4. Create a new merge commit. This is the key step:
+    //    a. The message should be something like `Merge branch '${sourceBranchName}' into '${this.HEAD}'`.
+    //    b. It will have TWO parents: the target branch ID and the source branch ID.
+
+    const mergeCommit = new CommitNode(`Merged branch '${sourceBranchName}' into '${this.HEAD}'`, [targetId, sourceId]);
+
+    // 5. Add the new merge commit to the `this.commits` map.
+
+    this.commits.set(mergeCommit.id, mergeCommit);    
+
+    // 6. Update the target branch pointer (`this.HEAD`) to point to the new merge commit.
+
+    this.branches.set(targetBranch, mergeCommit.id);
+  }
+
 }

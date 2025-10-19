@@ -124,5 +124,5 @@ export class GitGraph {
 
     this.branches.set(targetBranch, mergeCommit.id);
   }
-
+    // Test Commit
 }

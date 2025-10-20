@@ -1,0 +1,265 @@
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-header {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  left: 320px;
+  z-index: 99;
+  border-radius: 16px;
+  padding: 20px 28px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    left: 20px;
+    top: 20px;
+  }
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px var(--shadow-color);
+}
+
+.logo-text h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-text p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 2px 0 0 0;
+  font-weight: 500;
+}
+
+.header-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.stat-badge:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.stat-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+/* React Flow Container */
+.react-flow__viewport {
+  padding-top: 120px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .app-header {
+    left: 20px;
+    padding: 16px 20px;
+  }
+
+  .logo-text h1 {
+    font-size: 20px;
+  }
+
+  .header-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stat-badge {
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    padding: 12px 16px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .logo {
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo-text h1 {
+    font-size: 18px;
+  }
+
+  .header-stats {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .stat-badge {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Loading animation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  animation: rotate 2s linear infinite;
+}
+
+/* Notification styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1001;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.notification.success {
+  border-color: var(--success-color);
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.notification.error {
+  border-color: var(--error-color);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.notification.warning {
+  border-color: var(--warning-color);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+/* React Flow Controls - glassmorphic blending */
+.rf-controls.react-flow__controls {
+  background: transparent;
+  box-shadow: none;
+}
+
+.rf-controls .react-flow__controls-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  backdrop-filter: blur(16px);
+  transition: all 0.2s ease;
+}
+
+.rf-controls .react-flow__controls-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.rf-controls .react-flow__controls-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Icons inside controls */
+.rf-controls svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Position tweaks */
+.react-flow__panel.react-flow__controls.rf-controls {
+  border-radius: 16px;
+  padding: 6px;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.1);
+}

@@ -3,7 +3,6 @@ import {
   ReactFlow,
   Background,
   Controls,
-  MiniMap,
   useNodesState,
   useEdgesState,
 } from "@xyflow/react";
@@ -219,19 +218,8 @@ function App() {
         <Background color="#94a3b8" gap={25} size={1.5} variant="dots" />
         <Controls
           showInteractive={false}
-          position="bottom-right"
-          className="rf-controls"
-        />
-        <MiniMap
-          nodeColor={(node) => node.data.color}
-          pannable
-          zoomable
           position="bottom-left"
-          style={{
-            backgroundColor: "rgba(15, 23, 42, 0.9)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "12px",
-          }}
+          className="rf-controls"
         />
       </ReactFlow>
 

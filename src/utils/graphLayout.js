@@ -4,38 +4,67 @@
  */
 
 /**
- * Get branch color based on branch name
+ * Convert HSL to HEX for consistent usage in UI (e.g., box-shadows expect HEX with alpha)
+ */
+const hslToHex = (h, s, l) => {
+  // h: 0-360, s: 0-100, l: 0-100
+  s /= 100;
+  l /= 100;
+  const k = (n) => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = (n) =>
+    l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  const toHex = (x) =>
+    Math.round(255 * x)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${toHex(f(0))}${toHex(f(8))}${toHex(f(4))}`;
+};
+
+/**
+ * Stable string hash -> 32-bit unsigned int
+ */
+const hashString = (str) => {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+  return hash >>> 0; // ensure unsigned
+};
+
+/**
+ * Deterministic, high-contrast branch color based on name.
+ * - Known branch names map to curated, recognizable colors (HEX)
+ * - Others use golden-angle HSL spread converted to HEX for distinctness
  */
 export const getBranchColor = (branchName) => {
-  const colors = {
-    main: "#667eea",
-    master: "#667eea",
-    develop: "#4ade80",
-    dev: "#4ade80",
-    hotfix: "#f87171",
-    release: "#a78bfa",
-    feature: "#fbbf24",
+  const name = (branchName || "").trim();
+  const lower = name.toLowerCase();
+
+  // Curated colors for common branches (distinct and recognizable)
+  const fixed = {
+    main: "#3B82F6", // blue
+    master: "#3B82F6", // same as main
+    develop: "#22C55E", // green
+    dev: "#22C55E",
+    hotfix: "#EF4444", // red
+    release: "#8B5CF6", // violet
+    feature: "#F59E0B", // amber
   };
 
-  // Check for exact match
-  if (colors[branchName]) {
-    return colors[branchName];
-  }
+  if (fixed[lower]) return fixed[lower];
+  if (lower.startsWith("feature")) return fixed.feature;
+  if (lower.startsWith("hotfix")) return fixed.hotfix;
+  if (lower.startsWith("release")) return fixed.release;
+  if (lower.startsWith("dev")) return fixed.develop;
 
-  // Check for prefix match
-  const lowerBranch = branchName.toLowerCase();
-  if (lowerBranch.startsWith("feature")) return colors.feature;
-  if (lowerBranch.startsWith("hotfix")) return colors.hotfix;
-  if (lowerBranch.startsWith("release")) return colors.release;
-  if (lowerBranch.startsWith("dev")) return colors.develop;
-
-  // Generate a consistent color based on branch name
-  const hash = branchName.split("").reduce((acc, char) => {
-    return char.charCodeAt(0) + ((acc << 5) - acc);
-  }, 0);
-
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 65%, 60%)`;
+  // Golden-angle distribution over hue space for clear separation
+  // Using fractional part of (hash * phi) for uniform coverage
+  const phi = 0.618033988749895; // golden ratio conjugate
+  const h = Math.floor(360 * ((hashString(name) * phi) % 1));
+  const s = 72; // vivid but not neon
+  const l = 52; // good contrast on dark/light glass
+  return hslToHex(h, s, l);
 };
 
 /**
@@ -187,10 +216,11 @@ const branchColorCache = new Map();
  * @returns {string} - The cached color for the branch
  */
 export const getCachedBranchColor = (branchName) => {
-  if (!branchColorCache.has(branchName)) {
-    branchColorCache.set(branchName, getBranchColor(branchName));
+  const key = (branchName || "").trim();
+  if (!branchColorCache.has(key)) {
+    branchColorCache.set(key, getBranchColor(key));
   }
-  return branchColorCache.get(branchName);
+  return branchColorCache.get(key);
 };
 
 /**

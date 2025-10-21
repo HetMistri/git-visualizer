@@ -243,8 +243,8 @@ export const convertToReactFlow = (gitGraph) => {
   // Calculate adaptive spacing based on graph size
   const laneCount = Math.max(...Array.from(lanes.values())) + 1;
   const nodeSpacing = {
-    x: 300, // Horizontal spacing
-    y: Math.max(120, 800 / Math.max(laneCount, 1)), // Adaptive vertical spacing
+    x: 200, // Horizontal spacing
+    y: Math.max(200, 800 / Math.max(laneCount, 1)), // Adaptive vertical spacing
   };
 
   // Create nodes - LEFT TO RIGHT layout

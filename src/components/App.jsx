@@ -198,12 +198,7 @@ function App() {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{
-          padding: 0.15,
-          minZoom: 0.5,
-          maxZoom: 1.2,
-          duration: 400,
-        }}
+        onInit={(instance) => instance.fitView({ padding: 0.2, duration: 500 })}
         minZoom={0.2}
         maxZoom={2}
         defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}

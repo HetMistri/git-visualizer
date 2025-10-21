@@ -7,6 +7,16 @@
 }
 
 :root {
+  /* Z-index layers (theme-independent) */
+  --z-toolbar: 100;
+  --z-tooltip: 10000;
+  --z-modal: 1000;
+  --z-overlay: 9999;
+}
+
+/* Dark Theme (default) */
+:root,
+[data-theme="dark"] {
   --primary-color: #667eea;
   --secondary-color: #764ba2;
   --accent-color: #f093fb;
@@ -15,17 +25,44 @@
   --error-color: #f87171;
   --background-dark: #0f172a;
   --background-darker: #020617;
+  --background-gradient-start: #020617;
+  --background-gradient-end: #0f172a;
   --glass-background: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.08);
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
   --shadow-color: rgba(102, 126, 234, 0.3);
+  --shadow-strong: rgba(0, 0, 0, 0.5);
+  --overlay-bg: rgba(0, 0, 0, 0.6);
+  --node-bg: rgba(15, 23, 42, 0.95);
+  --node-border: rgba(255, 255, 255, 0.15);
+}
 
-  /* Z-index layers */
-  --z-toolbar: 100;
-  --z-tooltip: 10000;
-  --z-modal: 1000;
-  --z-overlay: 9999;
+/* Light Theme */
+[data-theme="light"] {
+  --primary-color: #5b6dd6;
+  --secondary-color: #6b4c9a;
+  --accent-color: #e084f8;
+  --success-color: #22c55e;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --background-dark: #f8fafc;
+  --background-darker: #ffffff;
+  --background-gradient-start: #ffffff;
+  --background-gradient-end: #f1f5f9;
+  --glass-background: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(148, 163, 184, 0.2);
+  --glass-hover: rgba(241, 245, 249, 0.9);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --shadow-color: rgba(91, 109, 214, 0.2);
+  --shadow-strong: rgba(0, 0, 0, 0.1);
+  --overlay-bg: rgba(15, 23, 42, 0.4);
+  --node-bg: rgba(255, 255, 255, 0.95);
+  --node-border: rgba(148, 163, 184, 0.3);
 }
 
 body {
@@ -33,13 +70,14 @@ body {
     sans-serif;
   background: linear-gradient(
     135deg,
-    var(--background-darker) 0%,
-    var(--background-dark) 100%
+    var(--background-gradient-start) 0%,
+    var(--background-gradient-end) 100%
   );
   color: var(--text-primary);
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -74,15 +112,17 @@ body {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px 0 var(--shadow-strong);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-hover);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px 0 var(--shadow-strong);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 /* Animations */
@@ -196,11 +236,12 @@ body {
   border: 1px solid var(--glass-border);
   border-radius: 12px;
   padding: 4px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px var(--shadow-strong);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .react-flow__controls-button {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--glass-hover);
   border: none;
   border-bottom: 1px solid var(--glass-border);
   color: var(--text-primary);
@@ -223,7 +264,8 @@ body {
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 16px var(--shadow-strong);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .react-flow__background {

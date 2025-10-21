@@ -1,5 +1,13 @@
-import { GitCommit, GitBranch, GitMerge, RotateCcw } from "lucide-react";
+import {
+  GitCommit,
+  GitBranch,
+  GitMerge,
+  RotateCcw,
+  Sun,
+  Moon,
+} from "lucide-react";
 import { getCachedBranchColor } from "../utils/graphLayout";
+import { useTheme } from "../context/ThemeContext";
 import "./Toolbar.css";
 
 const Toolbar = ({
@@ -11,6 +19,8 @@ const Toolbar = ({
   currentBranch,
   branches,
 }) => {
+  const { theme, toggleTheme, isDark } = useTheme();
+
   const handleBranchClick = (branch) => {
     if (branch !== currentBranch) {
       onCheckout(branch);
@@ -59,6 +69,16 @@ const Toolbar = ({
           title="Reset graph"
         >
           <RotateCcw size={22} />
+        </button>
+
+        <button
+          type="button"
+          className="toolbar-icon-btn btn-theme"
+          onClick={toggleTheme}
+          data-tooltip={isDark ? "Light Mode" : "Dark Mode"}
+          title={`Switch to ${isDark ? "light" : "dark"} mode`}
+        >
+          {isDark ? <Sun size={22} /> : <Moon size={22} />}
         </button>
       </div>
 

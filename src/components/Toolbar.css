@@ -139,6 +139,21 @@
   box-shadow: 0 4px 20px rgba(248, 113, 113, 0.4);
 }
 
+.btn-theme:hover {
+  border-color: var(--accent-color);
+  background: rgba(240, 147, 251, 0.2);
+  color: var(--accent-color);
+  box-shadow: 0 4px 20px rgba(240, 147, 251, 0.4);
+}
+
+.btn-theme {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme:active {
+  transform: scale(1.05) rotate(180deg);
+}
+
 /* Divider */
 .toolbar-divider {
   width: 32px;

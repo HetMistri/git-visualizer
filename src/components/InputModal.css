@@ -1,7 +1,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--overlay-bg);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -18,7 +18,7 @@
   border-radius: 20px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 24px 64px var(--shadow-strong);
   animation: slideInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
@@ -58,7 +58,7 @@
 }
 
 .modal-close {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-background);
   border: 1px solid var(--glass-border);
   border-radius: 10px;
   width: 36px;
@@ -90,7 +90,7 @@
 .modal-input {
   width: 100%;
   padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--glass-background);
   border: 2px solid var(--glass-border);
   border-radius: 12px;
   color: var(--text-primary);
@@ -101,7 +101,7 @@
 }
 
 .modal-input:focus {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-hover);
   border-color: var(--primary-color);
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
   transform: translateY(-2px);
@@ -178,16 +178,16 @@
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--glass-background);
   color: var(--text-secondary);
   border: 1px solid var(--glass-border);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--glass-hover);
   color: var(--text-primary);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px var(--shadow-strong);
 }
 
 .btn-primary {

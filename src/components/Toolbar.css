@@ -1,0 +1,361 @@
+/* Vertical Pill Toolbar */
+.toolbar-pill {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: center center;
+  z-index: var(--z-toolbar);
+  padding: 20px 12px;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-height: calc(100vh - 40px);
+  width: 64px;
+  animation: slideInLeft 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  isolation: isolate;
+}
+
+/* Custom scrollbar */
+.toolbar-pill::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toolbar-pill::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toolbar-pill::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 2px;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+/* Action Buttons Section */
+.toolbar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Icon-only buttons */
+.toolbar-icon-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--glass-border);
+  border-radius: 50%;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+}
+
+/* Tooltip on hover */
+.toolbar-icon-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: clamp(70px, calc(100% + 16px), 200px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: var(--z-tooltip);
+}
+
+.toolbar-icon-btn:hover::after,
+.toolbar-icon-btn:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.toolbar-icon-btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.toolbar-icon-btn:active {
+  transform: scale(1.05);
+}
+
+/* Individual button colors */
+.btn-commit:hover {
+  border-color: var(--primary-color);
+  background: rgba(102, 126, 234, 0.2);
+  color: var(--primary-color);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-branch:hover {
+  border-color: var(--success-color);
+  background: rgba(74, 222, 128, 0.2);
+  color: var(--success-color);
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.4);
+}
+
+.btn-merge:hover {
+  border-color: var(--warning-color);
+  background: rgba(251, 191, 36, 0.2);
+  color: var(--warning-color);
+  box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4);
+}
+
+.btn-reset:hover {
+  border-color: var(--error-color);
+  background: rgba(248, 113, 113, 0.2);
+  color: var(--error-color);
+  box-shadow: 0 4px 20px rgba(248, 113, 113, 0.4);
+}
+
+.btn-theme:hover {
+  border-color: var(--accent-color);
+  background: rgba(240, 147, 251, 0.2);
+  color: var(--accent-color);
+  box-shadow: 0 4px 20px rgba(240, 147, 251, 0.4);
+}
+
+.btn-theme {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme:active {
+  transform: scale(1.05) rotate(180deg);
+}
+
+/* Divider */
+.toolbar-divider {
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--glass-border),
+    transparent
+  );
+  margin: 4px 0;
+}
+
+/* Branch Dots Section */
+.branch-dots {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+}
+
+.branch-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+}
+
+/* Tooltip for branch dots */
+.branch-dot::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: clamp(70px, calc(100% + 16px), 200px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: "Courier New", monospace;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  z-index: var(--z-tooltip);
+}
+
+.branch-dot:hover::after,
+.branch-dot:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.branch-dot:hover {
+  transform: scale(1.4);
+}
+
+.branch-dot:active {
+  transform: scale(1.2);
+}
+
+/* Active branch dot with pulse */
+.branch-dot.active {
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 20px currentColor !important;
+}
+
+.dot-pulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid;
+  animation: dotPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .toolbar-pill {
+    left: 16px;
+    width: 56px;
+    padding: 16px 10px;
+  }
+
+  .toolbar-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .branch-dot {
+    width: 14px;
+    height: 14px;
+  }
+
+  .branch-dot.active {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .toolbar-pill {
+    position: fixed;
+    bottom: 20px;
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: center center;
+    flex-direction: row;
+    width: auto;
+    max-width: calc(100vw - 40px);
+    height: auto;
+    max-height: none;
+    padding: 12px 20px;
+    border-radius: 50px;
+    animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  @keyframes slideInUp {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  .toolbar-actions {
+    flex-direction: row;
+  }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      var(--glass-border),
+      transparent
+    );
+    margin: 0 4px;
+  }
+
+  .branch-dots {
+    flex-direction: row;
+  }
+
+  .toolbar-icon-btn::after,
+  .branch-dot::after {
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 12px);
+    transform: translateX(-50%) translateY(10px);
+  }
+
+  .toolbar-icon-btn:hover::after,
+  .toolbar-icon-btn:focus-visible::after,
+  .branch-dot:hover::after,
+  .branch-dot:focus-visible::after {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Accessibility */
+.toolbar-icon-btn:focus-visible,
+.branch-dot:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
+}
+.branch-option:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+}

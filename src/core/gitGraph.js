@@ -149,6 +149,90 @@ export class GitGraph {
     this.branches.set(targetBranch, mergeCommit.id);
   }
 
+  rebase(sourceBranchName, targetBranchName) {
+    // 1. Perform all safety checks (branches exist, not the same branch, etc.)
+    if (sourceBranchName === targetBranchName || !this.branches.has(sourceBranchName) || !this.branches.has(targetBranchName)) {
+      console.error("Invalid rebase operation.");
+      return;
+    }
+
+    // 2. Get the commit IDs for both branch tips.
+    const sourceTipId = this.branches.get(sourceBranchName);
+    const targetTipId = this.branches.get(targetBranchName);
+
+    // 3. Find all the commits on the source branch that are "new"
+    //    (i.e., not already part of the target branch's history).
+    const commitsToReplay = [];
+    let currentCommitId = sourceTipId;
+    const targetHistory = new Set(); // Use a Set for fast O(1) lookups
+    
+    // Build the target branch's history
+    let tempId = targetTipId;
+    while(tempId) {
+      targetHistory.add(tempId);
+      const commit = this.commits.get(tempId);
+      tempId = commit.parents[0]; // Simplified: assumes single parent history for target
+    }
+
+    // Walk up the source branch until we find a commit that's in the target history (the common ancestor)
+    while(currentCommitId && !targetHistory.has(currentCommitId)) {
+      const commit = this.commits.get(currentCommitId);
+      commitsToReplay.push(commit);
+      currentCommitId = commit.parents[0]; // Assumes single parent history for source
+    }
+    
+    // The commits were added from newest to oldest. We must reverse them.
+    commitsToReplay.reverse();
+    
+    // 4. "Replay" the commits on top of the target branch.
+    let currentParentId = targetTipId; // Start replaying on top of the target's tip
+
+    commitsToReplay.forEach(commit => {
+      // Create a NEW commit object. It's a new commit, just with the same message.
+      const newCommit = new CommitNode(commit.message, [currentParentId]);
+      
+      // Add it to our central store
+      this.commits.set(newCommit.id, newCommit);
+      
+      // The next replayed commit will have this new commit as its parent
+      currentParentId = newCommit.id;
+    });
+
+    // 5. Update the source branch pointer to point to the last new commit.
+    this.branches.set(sourceBranchName, currentParentId);
+    
+    // 6. Checkout the source branch.
+    this.HEAD = sourceBranchName;
+  }
+
+  revert(commitIdToRevert) {
+    // 1. Safety Check: Ensure the commit we're trying to revert actually exists.
+    if (!this.commits.has(commitIdToRevert)) {
+      console.error(`Error: Commit "${commitIdToRevert}" does not exist.`);
+      return;
+    }
+
+    // 2. Get the commit object we are reverting to read its message.
+    const commitToRevert = this.commits.get(commitIdToRevert);
+
+    // 3. Get the current parent ID (the tip of the current branch).
+    const parentId = this.branches.get(this.HEAD);
+
+    // 4. Create the new revert commit message.
+    const revertMessage = `Revert "${commitToRevert.message}"`;
+
+    // 5. Create the new commit, just like a normal commit.
+    const newCommit = new CommitNode(revertMessage, [parentId]);
+
+    // 6. Add the new revert commit to the central store.
+    this.commits.set(newCommit.id, newCommit);
+
+    // 7. Update the current branch to point to this new revert commit.
+    this.branches.set(this.HEAD, newCommit.id);
+  }
+
+
+
   reset() {
     // Clear all commits and branches, then reinitialize
     this.commits.clear();

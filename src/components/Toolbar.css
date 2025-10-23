@@ -154,6 +154,33 @@
   transform: scale(1.05) rotate(180deg);
 }
 
+.btn-rebase:hover {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-quick:hover {
+  border-color: #06b6d4; /* teal-500 */
+  background: rgba(6, 182, 212, 0.2);
+  color: #06b6d4;
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.4);
+}
+
+.btn-revert:hover:not(.disabled) {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+}
+
+.btn-revert.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Divider */
 .toolbar-divider {
   width: 32px;

@@ -70,6 +70,28 @@
   animation: glow 2s ease-in-out infinite;
 }
 
+/* Selected node for revert operation */
+.selected-node {
+  border-width: 4px;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3), 0 4px 16px var(--shadow-strong),
+    0 0 20px 5px var(--node-color, var(--primary-color)) !important;
+  animation: selectedPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes selectedPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3),
+      0 4px 16px var(--shadow-strong),
+      0 0 20px 5px var(--node-color, var(--primary-color));
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.5),
+      0 4px 16px var(--shadow-strong),
+      0 0 30px 8px var(--node-color, var(--primary-color));
+  }
+}
+
 .head-pulse {
   position: absolute;
   width: 100%;

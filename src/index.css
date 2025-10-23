@@ -275,3 +275,238 @@ body {
 .react-flow__attribution {
   display: none;
 }
+
+/* ============================================
+   GRAPH ANIMATIONS
+   ============================================ */
+
+/* Particle container for bursts */
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: var(--z-overlay);
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Node appearing animation (commit/branch creation) */
+@keyframes nodeAppear {
+  0% {
+    opacity: 0;
+    transform: translate(var(--origin-x, 0), var(--origin-y, 0)) scale(0.3);
+  }
+  60% {
+    transform: translate(0, 0) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+.node-appearing {
+  animation: nodeAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Sequential node animation (Quick Test) */
+@keyframes nodeSequential {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  60% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.node-sequential {
+  animation: nodeSequential 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Merge pulse animation */
+@keyframes mergePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--pulse-color, var(--primary-color));
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow: 0 0 30px 10px var(--pulse-color, var(--primary-color));
+    filter: brightness(1.3);
+  }
+}
+
+.node-merge-pulse {
+  animation: mergePulse 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Flowing edge animation */
+@keyframes edgeFlow {
+  0% {
+    stroke-dashoffset: 20;
+    opacity: 0.6;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.edge-flowing {
+  stroke-dasharray: 10 5;
+  animation: edgeFlow 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Graph shake animation (reset warning) */
+@keyframes graphShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.graph-shake {
+  animation: graphShake 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Graph fade out (reset) */
+@keyframes graphFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.graph-fade-out {
+  animation: graphFadeOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Graph fade in (after reset) */
+@keyframes graphFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.graph-fade-in {
+  animation: graphFadeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Branch switching animation */
+.branch-switching {
+  animation: branchSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes branchSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Enhanced notification animations */
+@keyframes notificationSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  60% {
+    transform: translateY(5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes notificationSlideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+}
+
+.notification {
+  animation: notificationSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.notification.notification-exit {
+  animation: notificationSlideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Node color transition (checkout) */
+.react-flow__node {
+  transition: filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.react-flow__node:hover {
+  transform: scale(1.05);
+}
+
+/* Progress bar for Quick Test */
+.quick-test-progress {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 4px;
+  background: var(--glass-background);
+  border-radius: 2px;
+  overflow: hidden;
+  z-index: var(--z-overlay);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.quick-test-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px var(--primary-color);
+}

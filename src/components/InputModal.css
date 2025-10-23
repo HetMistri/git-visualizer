@@ -248,3 +248,94 @@
   outline: 3px solid var(--primary-color);
   outline-offset: 2px;
 }
+
+/* Rebase Modal Specific Styles */
+.modal-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-icon {
+  color: var(--primary-color);
+}
+
+.rebase-explanation {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.rebase-explanation p {
+  margin: 0 0 8px 0;
+}
+
+.rebase-explanation p:last-child {
+  margin-bottom: 0;
+}
+
+.rebase-formula {
+  font-family: "Courier New", monospace;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 12px !important;
+  text-align: center;
+  font-size: 16px;
+}
+
+.rebase-formula code {
+  background: rgba(102, 126, 234, 0.15);
+  padding: 4px 12px;
+  border-radius: 6px;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.rebase-arrow {
+  text-align: center;
+  font-size: 28px;
+  color: var(--primary-color);
+  margin: 12px 0;
+  font-weight: bold;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.modal-select option {
+  background: var(--background-dark);
+  color: var(--text-primary);
+  padding: 8px;
+}

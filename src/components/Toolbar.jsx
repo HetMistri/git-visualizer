@@ -3,7 +3,6 @@ import {
   GitBranch,
   GitMerge,
   GitCompare,
-  RotateCcw,
   Play,
   Sun,
   Moon,
@@ -18,7 +17,6 @@ const Toolbar = ({
   onMerge,
   onRebase,
   onQuickTest,
-  onReset,
   onCheckout,
   currentBranch,
   branches,
@@ -83,16 +81,6 @@ const Toolbar = ({
           title="Run quick test scenario"
         >
           <Play size={22} />
-        </button>
-
-        <button
-          type="button"
-          className="toolbar-icon-btn btn-reset"
-          onClick={onReset}
-          data-tooltip="Reset"
-          title="Reset graph"
-        >
-          <RotateCcw size={22} />
         </button>
 
         <button

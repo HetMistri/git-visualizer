@@ -70,16 +70,19 @@ export const useGitGraph = () => {
     [gitGraph, forceUpdate]
   );
 
-  // Reset operation
-  const reset = useCallback(() => {
-    try {
-      gitGraph.reset();
-      forceUpdate();
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  }, [gitGraph, forceUpdate]);
+  // Reset operation - moves current branch pointer to specified commit
+  const reset = useCallback(
+    (commitId) => {
+      try {
+        gitGraph.reset(commitId);
+        forceUpdate();
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: error.message };
+      }
+    },
+    [gitGraph, forceUpdate]
+  );
 
   // Revert operation
   const revert = useCallback(

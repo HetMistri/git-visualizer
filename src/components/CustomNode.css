@@ -92,6 +92,29 @@
   }
 }
 
+/* Orphaned node styling - greyed out and dashed */
+.orphaned-node {
+  border-style: dashed;
+  border-width: 3px;
+  opacity: 0.7; /* Increased from 0.5 for better visibility */
+  background: rgba(107, 114, 128, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 12px 3px rgba(107, 114, 128, 0.5) !important;
+  filter: grayscale(0.9);
+}
+
+.orphaned-node:hover {
+  transform: scale(1.15);
+  opacity: 0.85; /* Increased from 0.6 */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4),
+    0 0 20px 5px rgba(107, 114, 128, 0.6) !important;
+}
+
+/* No glow animation for orphaned nodes */
+.orphaned-node.head-node {
+  animation: none;
+}
+
 .head-pulse {
   position: absolute;
   width: 100%;
@@ -191,6 +214,34 @@
   animation: pulse-head 2s ease-in-out infinite;
 }
 
+.orphaned-indicator {
+  font-size: 10px; /* Increased from 9px */
+  font-weight: 800; /* Bolder */
+  color: #ef4444; /* Red instead of grey for better visibility */
+  background: rgba(239, 68, 68, 0.15);
+  padding: 3px 10px; /* Increased padding */
+  border-radius: 6px;
+  border: 1.5px dashed #ef4444;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.orphaned-info {
+  opacity: 0.8; /* Increased from 0.6 */
+}
+
+.orphaned-info .commit-hash {
+  color: #9ca3af; /* Lighter grey */
+  font-weight: 700;
+}
+
+.orphaned-info .commit-message {
+  color: #d1d5db; /* Much lighter */
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
 @keyframes pulse-head {
   0%,
   100% {
@@ -232,6 +283,23 @@
   transform: translateY(-2px) scale(1.05);
   box-shadow: 0 4px 12px var(--shadow-strong);
   filter: brightness(1.2);
+}
+
+/* Orphaned node branch badges - less prominent */
+.orphaned-node + .branch-badges .branch-badge,
+.custom-node-wrapper:has(.orphaned-node) .branch-badge {
+  opacity: 0.4;
+  border-color: #6b7280 !important;
+  background-color: rgba(107, 114, 128, 0.1) !important;
+  color: #9ca3af !important;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.orphaned-node + .branch-badges .branch-badge:hover,
+.custom-node-wrapper:has(.orphaned-node) .branch-badge:hover {
+  transform: none;
+  filter: none;
 }
 
 .active-branch {

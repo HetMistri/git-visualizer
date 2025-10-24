@@ -48,9 +48,16 @@ export const useRebaseAnimation = () => {
       });
 
       const newPositions = new Map();
+      const newNodeIds = new Set();
       newNodes.forEach((node) => {
         newPositions.set(node.id, { x: node.position.x, y: node.position.y });
+        newNodeIds.add(node.id);
       });
+
+      // Identify nodes that are disappearing (orphaned by rebase)
+      const disappearingNodes = oldNodes.filter(
+        (node) => !newNodeIds.has(node.id)
+      );
 
       const startTime = performance.now();
 
@@ -58,6 +65,16 @@ export const useRebaseAnimation = () => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
         const easedProgress = easeInOutCubic(progress);
+
+        // Animate disappearing nodes (fade out)
+        const fadingOutNodes = disappearingNodes.map((node) => ({
+          ...node,
+          style: {
+            ...node.style,
+            opacity: 1 - easedProgress, // Fade out
+            transition: "none",
+          },
+        }));
 
         // Interpolate positions for all nodes
         const animatedNodes = newNodes.map((node) => {
@@ -70,7 +87,7 @@ export const useRebaseAnimation = () => {
               ...node,
               style: {
                 ...node.style,
-                opacity: easedProgress,
+                opacity: easedProgress, // Fade in
               },
             };
           }
@@ -89,7 +106,11 @@ export const useRebaseAnimation = () => {
           };
         });
 
-        setNodes(animatedNodes);
+        // Combine animated nodes with fading out nodes during animation
+        const allNodes =
+          progress < 1 ? [...animatedNodes, ...fadingOutNodes] : animatedNodes;
+
+        setNodes(allNodes);
 
         // Continue animation or complete
         if (progress < 1) {

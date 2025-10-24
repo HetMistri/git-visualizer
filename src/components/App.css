@@ -292,23 +292,3 @@
   animation: pulse 1.5s ease-in-out infinite;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
 }
-
-/* Particles */
-.particles-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: var(--z-overlay);
-  overflow: hidden;
-}
-
-.particle {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-  will-change: transform, opacity;
-  box-shadow: 0 0 8px currentColor;
-}

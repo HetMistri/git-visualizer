@@ -15,7 +15,6 @@ import RebaseModal from "./RebaseModal";
 import CommitDetails from "./CommitDetails";
 import { useGitGraph } from "../hooks/useGitGraph";
 import { useRebaseAnimation } from "../hooks/useRebaseAnimation";
-import { useGraphAnimation } from "../hooks/useGraphAnimation";
 import { GitBranch } from "lucide-react";
 import "./App.css";
 
@@ -48,20 +47,8 @@ function App() {
   // Animation hooks
   const { performAnimatedRebase, isAnimating: isRebaseAnimating } =
     useRebaseAnimation();
-  const {
-    particles,
-    isAnimating: isGraphAnimating,
-    createParticleBurst,
-    animateSequentialNodes,
-    animateMergePulse,
-    shakeGraph,
-    fadeOutGraph,
-    fadeInGraph,
-    animateBranchSwitch,
-    getButtonOrigin,
-  } = useGraphAnimation();
 
-  const isAnimating = isRebaseAnimating || isGraphAnimating;
+  const isAnimating = isRebaseAnimating;
 
   // Modal states
   const [commitModalOpen, setCommitModalOpen] = useState(false);
@@ -94,68 +81,52 @@ function App() {
     setTimeout(() => setNotification(null), 3000);
   }, []);
 
-  // Handle commit with animation
+  // Handle commit
   const handleCommit = useCallback(
     (message, event) => {
       const result = commit(message);
       if (result.success) {
-        // Particle burst from button
-        const origin = getButtonOrigin(event);
-        createParticleBurst(origin, "#667eea", 15);
-
         showNotification(`✓ Commit created: ${message}`, "success");
         setCommitModalOpen(false);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
     },
-    [commit, showNotification, createParticleBurst, getButtonOrigin]
+    [commit, showNotification]
   );
 
-  // Handle create branch with animation
+  // Handle create branch
   const handleCreateBranch = useCallback(
     (branchName, event) => {
       const result = createBranch(branchName);
       if (result.success) {
-        // Particle burst with success color
-        const origin = getButtonOrigin(event);
-        createParticleBurst(origin, "#4ade80", 15);
-
         showNotification(`✓ Branch created: ${branchName}`, "success");
         setBranchModalOpen(false);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
     },
-    [createBranch, showNotification, createParticleBurst, getButtonOrigin]
+    [createBranch, showNotification]
   );
 
-  // Handle checkout with animation
+  // Handle checkout
   const handleCheckout = useCallback(
     (branchName) => {
       const result = checkout(branchName);
       if (result.success) {
-        // Animate branch switch
-        animateBranchSwitch(branchName);
         showNotification(`✓ Switched to branch: ${branchName}`, "success");
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
     },
-    [checkout, showNotification, animateBranchSwitch]
+    [checkout, showNotification]
   );
 
-  // Handle merge with animation
+  // Handle merge
   const handleMerge = useCallback(
     (sourceBranch) => {
       const result = merge(sourceBranch);
       if (result.success) {
-        // Pulse animation on target branch tip
-        const targetCommitId = gitGraph.branches.get(currentBranch);
-        if (targetCommitId) {
-          animateMergePulse(targetCommitId, "#fbbf24");
-        }
-
         showNotification(
           `✓ Merged ${sourceBranch} into ${currentBranch}`,
           "success"
@@ -165,42 +136,77 @@ function App() {
         showNotification(`✗ ${result.error}`, "error");
       }
     },
-    [merge, currentBranch, showNotification, gitGraph, animateMergePulse]
+    [merge, currentBranch, showNotification]
   );
 
-  // Handle reset with animation
-  const handleReset = useCallback(() => {
-    if (
-      confirm(
-        "Are you sure you want to reset the entire graph? This cannot be undone."
-      )
-    ) {
-      // Shake warning then fade out
-      shakeGraph(() => {
-        fadeOutGraph(() => {
-          const result = reset();
-          if (result.success) {
-            // Fade in new blank graph
-            setTimeout(() => {
-              fadeInGraph();
-            }, 100);
-            showNotification("✓ Graph reset successfully", "success");
-            setSelectedCommitId(null);
-          }
-        });
-      });
-    }
-  }, [reset, showNotification, shakeGraph, fadeOutGraph, fadeInGraph]);
+  // Handle reset to a specific commit
+  const handleResetToCommit = useCallback(
+    (commitId) => {
+      // Preview: compute which commits on the target branch would become orphaned
+      const targetBranch = gitGraph.HEAD;
+      const targetTip = gitGraph.branches.get(targetBranch);
+      const oldReachable = gitGraph.getReachableCommits(targetTip);
+      const selectedReachable = gitGraph.getReachableCommits(commitId);
 
-  // Quick test sequence with animation
+      // Collect reachable commits from all OTHER branches
+      const otherReachable = new Set();
+      for (const [bName, bTip] of gitGraph.branches.entries()) {
+        if (bName === targetBranch) continue;
+        const r = gitGraph.getReachableCommits(bTip);
+        r.forEach((id) => otherReachable.add(id));
+      }
+
+      const keepSet = new Set([...selectedReachable, ...otherReachable]);
+      const wouldOrphan = [];
+      for (const id of oldReachable) {
+        if (!keepSet.has(id)) wouldOrphan.push(id);
+      }
+
+      const isInLineage = oldReachable.has(commitId);
+
+      const warning = isInLineage
+        ? ""
+        : `\n\n⚠️ Selected commit is not in ${targetBranch}'s current lineage. The branch pointer will move to a different history.`;
+
+      const confirmMsg =
+        `Reset branch '${targetBranch}' to this commit?` +
+        `\n\nThis will move '${targetBranch}' from ${targetTip} to ${commitId}.` +
+        `\nCommits unique to '${targetBranch}' that would be orphaned: ${wouldOrphan.length}` +
+        `\n\nOrphaned commits are shown greyed out and will be permanently removed after the next commit.` +
+        warning +
+        `\n\nProceed?`;
+
+      if (confirm(confirmMsg)) {
+        const result = reset(commitId);
+        if (result.success) {
+          const orphanCount = gitGraph.orphanedCommits.size;
+          if (orphanCount > 0) {
+            showNotification(
+              `✓ Branch reset. ${orphanCount} commit${
+                orphanCount > 1 ? "s" : ""
+              } orphaned (will be removed on next commit)`,
+              "success"
+            );
+          } else {
+            showNotification(
+              `✓ Branch ${currentBranch} reset to commit`,
+              "success"
+            );
+          }
+        } else {
+          showNotification(`✗ ${result.error}`, "error");
+        }
+      }
+    },
+    [reset, currentBranch, showNotification, gitGraph]
+  );
+
+  // Quick test sequence
   const handleQuickTest = useCallback(() => {
     const frontend = "frontend";
     const backend = "backend";
 
     showNotification("▶ Running quick test scenario...", "info");
-
-    // Store initial node count
-    const initialCount = gitGraph.commits.size;
 
     // Ensure branches exist
     if (!branches.includes(frontend)) {
@@ -229,28 +235,8 @@ function App() {
     checkout(backend);
     commit("Feat: add B");
 
-    // Collect new node IDs and animate them sequentially
-    setTimeout(() => {
-      const newNodeIds = Array.from(gitGraph.commits.keys()).slice(
-        initialCount
-      );
-      if (newNodeIds.length > 0) {
-        animateSequentialNodes(newNodeIds, 150, () => {
-          showNotification("✓ Quick test scenario complete", "success");
-        });
-      } else {
-        showNotification("✓ Quick test scenario complete", "success");
-      }
-    }, 100);
-  }, [
-    branches,
-    createBranch,
-    checkout,
-    commit,
-    showNotification,
-    gitGraph,
-    animateSequentialNodes,
-  ]);
+    showNotification("✓ Quick test scenario complete", "success");
+  }, [branches, createBranch, checkout, commit, showNotification]);
 
   // Handle revert
   const handleRevert = useCallback(() => {
@@ -341,46 +327,58 @@ function App() {
       const commitData = getCommit(node.id);
       const commitBranches = getBranchesForCommit(node.id);
 
+      // Auto-switch HEAD to a sensible target branch for this node
+      // Priority:
+      // 1) If currentBranch already points here, keep it
+      // 2) If some branch tip points here, prefer commitData.createdByBranch if present, else the first branch tip
+      // 3) Else fall back to the commit's creating branch (if it exists)
+      let targetBranch = null;
+
+      if (commitBranches.includes(currentBranch)) {
+        targetBranch = currentBranch;
+      } else if (commitBranches.length > 0) {
+        if (
+          commitData?.createdByBranch &&
+          commitBranches.includes(commitData.createdByBranch)
+        ) {
+          targetBranch = commitData.createdByBranch;
+        } else {
+          targetBranch = commitBranches[0];
+        }
+      } else if (
+        commitData?.createdByBranch &&
+        branches.includes(commitData.createdByBranch)
+      ) {
+        targetBranch = commitData.createdByBranch;
+      }
+
+      if (targetBranch && targetBranch !== currentBranch) {
+        const result = checkout(targetBranch);
+        if (result.success) {
+          showNotification(
+            `✓ Switched to branch '${targetBranch}' for this commit`,
+            "info"
+          );
+        }
+      }
+
       setSelectedCommit({
         ...commitData,
         branches: commitBranches,
       });
     },
-    [getCommit, getBranchesForCommit]
+    [
+      getCommit,
+      getBranchesForCommit,
+      checkout,
+      currentBranch,
+      branches,
+      showNotification,
+    ]
   );
 
   return (
     <div className="app-container">
-      {/* Header */}
-      {/* <header className="app-header glass">
-        <div className="header-content">
-          <div className="logo">
-            <div className="logo-icon">
-              <GitBranch size={24} />
-            </div>
-            <div className="logo-text">
-              <h1>Git-Vis</h1>
-              <p>Interactive Git Visualizer</p>
-            </div>
-          </div>
-
-          <div className="header-stats">
-            <div className="stat-badge">
-              <div>
-                <div className="stat-label">Commits</div>
-                <div className="stat-number">{stats.commits}</div>
-              </div>
-            </div>
-            <div className="stat-badge">
-              <div>
-                <div className="stat-label">Branches</div>
-                <div className="stat-number">{stats.branches}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header> */}
-
       {/* Toolbar */}
       <Toolbar
         onCommit={() => setCommitModalOpen(true)}
@@ -388,7 +386,6 @@ function App() {
         onMerge={() => setMergeModalOpen(true)}
         onRebase={() => setRebaseModalOpen(true)}
         onQuickTest={handleQuickTest}
-        onReset={handleReset}
         onCheckout={handleCheckout}
         currentBranch={currentBranch}
         branches={branches}
@@ -467,26 +464,10 @@ function App() {
           onClose={() => setSelectedCommit(null)}
           onCheckout={handleCheckout}
           onRevert={handleRevert}
+          onReset={() => handleResetToCommit(selectedCommit.id)}
+          currentBranch={currentBranch}
         />
       )}
-
-      {/* Particles */}
-      <div className="particles-container">
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            className="particle"
-            style={{
-              left: `${particle.x}px`,
-              top: `${particle.y}px`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              backgroundColor: particle.color,
-              opacity: particle.life,
-            }}
-          />
-        ))}
-      </div>
 
       {/* Notification */}
       {notification && (

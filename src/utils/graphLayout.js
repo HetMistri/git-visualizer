@@ -228,7 +228,7 @@ export const getCachedBranchColor = (branchName) => {
  * Layout: Left to Right (old commits on left, new on right)
  */
 export const convertToReactFlow = (gitGraph) => {
-  const { commits, branches, HEAD } = gitGraph;
+  const { commits, branches, HEAD, orphanedCommits } = gitGraph;
 
   if (commits.size === 0) {
     return { nodes: [], edges: [] };
@@ -256,9 +256,11 @@ export const convertToReactFlow = (gitGraph) => {
 
     // Find branches pointing to this commit
     const commitBranches = [];
+    const branchColors = {}; // Map branch names to their colors
     for (const [branchName, branchCommitId] of branches) {
       if (branchCommitId === id) {
         commitBranches.push(branchName);
+        branchColors[branchName] = getCachedBranchColor(branchName);
       }
     }
 
@@ -270,6 +272,9 @@ export const convertToReactFlow = (gitGraph) => {
     // Check if this is the HEAD commit
     const isHead = commitBranches.includes(HEAD);
 
+    // Check if this commit is orphaned (after reset, pending garbage collection)
+    const isOrphaned = orphanedCommits && orphanedCommits.has(id);
+
     nodes.push({
       id,
       type: "custom",
@@ -280,10 +285,12 @@ export const convertToReactFlow = (gitGraph) => {
       data: {
         commit,
         branches: commitBranches,
+        branchColors, // Add branch-specific colors
         color,
         isHead,
         headBranch: HEAD, // Pass HEAD to identify active branch
         isMerge: commit.parents.length > 1,
+        isOrphaned, // Mark orphaned commits
       },
     });
   }
@@ -301,6 +308,13 @@ export const convertToReactFlow = (gitGraph) => {
         // Determine edge type based on node positions
         const isMainLine = i === 0; // First parent is main line
 
+        // Check if either end of the edge is orphaned
+        const isOrphanedEdge =
+          childNode?.data.isOrphaned ||
+          false ||
+          parentNode?.data.isOrphaned ||
+          false;
+
         // For main line, use parent's color (continuity)
         // For merge lines, use child's color (showing what's being merged in)
         const edgeColor = isMainLine
@@ -316,14 +330,23 @@ export const convertToReactFlow = (gitGraph) => {
           type: "smoothstep", // Use smoothstep for better curves
           animated: false,
           style: {
-            stroke: edgeColor,
-            strokeWidth: isMainLine ? 3 : 2.5,
-            strokeDasharray: !isMainLine ? "8,4" : undefined, // Dashed for merge parents
-            opacity: isMainLine ? 1 : 0.7,
+            stroke: isOrphanedEdge ? "#9ca3af" : edgeColor, // Lighter grey for orphaned edges
+            strokeWidth: isOrphanedEdge ? 2 : isMainLine ? 3 : 2.5,
+            strokeDasharray: isOrphanedEdge
+              ? "8,8" // More prominent dashes for orphaned
+              : !isMainLine
+              ? "8,4"
+              : undefined,
+            opacity: isOrphanedEdge ? 0.4 : isMainLine ? 1 : 0.7, // Slightly more visible
           },
           markerEnd: {
             type: "arrowclosed",
-            color: edgeColor,
+            color: isOrphanedEdge ? "#9ca3af" : edgeColor,
+            width: 20,
+            height: 20,
+          },
+          data: {
+            isOrphaned: isOrphanedEdge, // Mark orphaned edges
           },
         });
       }

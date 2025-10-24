@@ -81,6 +81,40 @@ export const useGitGraph = () => {
     }
   }, [gitGraph, forceUpdate]);
 
+  // Revert operation
+  const revert = useCallback(
+    (commitId) => {
+      try {
+        if (!commitId) {
+          throw new Error("No commit selected");
+        }
+        gitGraph.revert(commitId);
+        forceUpdate();
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: error.message };
+      }
+    },
+    [gitGraph, forceUpdate]
+  );
+
+  // Rebase operation
+  const rebase = useCallback(
+    (sourceBranch, targetBranch) => {
+      try {
+        if (!sourceBranch || !targetBranch) {
+          throw new Error("Both source and target branches are required");
+        }
+        gitGraph.rebase(sourceBranch, targetBranch);
+        forceUpdate();
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: error.message };
+      }
+    },
+    [gitGraph, forceUpdate]
+  );
+
   // Convert graph to React Flow format (memoized)
   const { nodes, edges } = useMemo(() => {
     return convertToReactFlow(gitGraph);
@@ -134,6 +168,8 @@ export const useGitGraph = () => {
     checkout,
     merge,
     reset,
+    revert,
+    rebase,
 
     // Data
     nodes,
@@ -145,5 +181,6 @@ export const useGitGraph = () => {
     // Helpers
     getCommit,
     getBranchesForCommit,
+    gitGraph, // Expose gitGraph instance for advanced operations
   };
 };

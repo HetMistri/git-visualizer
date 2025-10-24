@@ -33,7 +33,7 @@ const InputModal = ({
       return;
     }
 
-    onSubmit(value.trim());
+    onSubmit(value.trim(), e);
     setValue("");
     setError("");
   };

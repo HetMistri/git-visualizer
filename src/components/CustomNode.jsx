@@ -4,7 +4,7 @@ import { GitBranch, GitMerge } from "lucide-react";
 import "./CustomNode.css";
 
 const CustomNode = ({ data, isConnectable }) => {
-  const { commit, branches, color, isHead, isMerge } = data;
+  const { commit, branches, color, isHead, isMerge, isSelected } = data;
 
   return (
     <div className="custom-node-wrapper">
@@ -21,7 +21,7 @@ const CustomNode = ({ data, isConnectable }) => {
         <div
           className={`commit-node ${isHead ? "head-node" : ""} ${
             isMerge ? "merge-node" : ""
-          }`}
+          } ${isSelected ? "selected-node" : ""}`}
           style={{
             "--node-color": color,
           }}

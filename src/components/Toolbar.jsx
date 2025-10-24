@@ -2,7 +2,9 @@ import {
   GitCommit,
   GitBranch,
   GitMerge,
+  GitCompare,
   RotateCcw,
+  Play,
   Sun,
   Moon,
 } from "lucide-react";
@@ -14,6 +16,8 @@ const Toolbar = ({
   onCommit,
   onCreateBranch,
   onMerge,
+  onRebase,
+  onQuickTest,
   onReset,
   onCheckout,
   currentBranch,
@@ -59,6 +63,26 @@ const Toolbar = ({
           title="Merge branches"
         >
           <GitMerge size={22} />
+        </button>
+
+        <button
+          type="button"
+          className="toolbar-icon-btn btn-rebase"
+          onClick={onRebase}
+          data-tooltip="Rebase"
+          title="Rebase branch"
+        >
+          <GitCompare size={22} />
+        </button>
+
+        <button
+          type="button"
+          className="toolbar-icon-btn btn-quick"
+          onClick={onQuickTest}
+          data-tooltip="Quick Test"
+          title="Run quick test scenario"
+        >
+          <Play size={22} />
         </button>
 
         <button

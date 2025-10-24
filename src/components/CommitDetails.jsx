@@ -1,12 +1,19 @@
-import { X, GitCommit, GitBranch, Calendar, Hash } from "lucide-react";
+import { X, GitCommit, GitBranch, Calendar, Hash, Undo2 } from "lucide-react";
 import "./CommitDetails.css";
 
-const CommitDetails = ({ commit, branches, onClose, onCheckout }) => {
+const CommitDetails = ({ commit, branches, onClose, onCheckout, onRevert }) => {
   if (!commit) return null;
 
   const handleBranchClick = (branchName) => {
     onCheckout(branchName);
     onClose();
+  };
+
+  const handleRevert = () => {
+    if (onRevert) {
+      onRevert();
+      onClose();
+    }
   };
 
   return (
@@ -20,6 +27,15 @@ const CommitDetails = ({ commit, branches, onClose, onCheckout }) => {
             <GitCommit size={24} />
           </div>
           <h2 className="details-title">Commit Details</h2>
+          <button
+            className="details-revert"
+            onClick={handleRevert}
+            aria-label="Revert commit"
+            title="Revert this commit"
+          >
+            <Undo2 size={18} />
+            <span>Revert</span>
+          </button>
           <button
             className="details-close"
             onClick={onClose}

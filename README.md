@@ -240,6 +240,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 Made with ❤️ for learning Data Structures & Algorithms
 npm run dev
+
 ```
 
 The application should now be running on `http://localhost:5173` (or another port specified by Vite).
+```

@@ -39,8 +39,8 @@ export class GitGraph {
     // These will be shown greyed out until the next commit on that branch
     this.orphanedCommits = new Set();
 
-  // Debug flag to control verbose logging (disabled by default)
-  this.debug = false;
+    // Debug flag to control verbose logging (disabled by default)
+    this.debug = false;
 
     // Let's create the very first commit when the repository is initialized.
     const initialCommit = new CommitNode("Initial commit", [], "main");

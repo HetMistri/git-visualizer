@@ -249,6 +249,15 @@ export class GitGraph {
       return;
     }
 
+    // Disallow reverting an orphaned commit (it's out of history)
+    if (this.orphanedCommits.has(commitIdToRevert)) {
+      throw new Error("Cannot revert an orphaned commit");
+    }
+
+    if (!this.HEAD || !this.branches.has(this.HEAD)) {
+      throw new Error("HEAD is not pointing to a valid branch");
+    }
+
     // 2. Get the commit object we are reverting to read its message.
     const commitToRevert = this.commits.get(commitIdToRevert);
 
@@ -259,7 +268,7 @@ export class GitGraph {
     const revertMessage = `Revert "${commitToRevert.message}"`;
 
     // 5. Create the new commit, just like a normal commit.
-    const newCommit = new CommitNode(revertMessage, [parentId]);
+    const newCommit = new CommitNode(revertMessage, [parentId], this.HEAD);
 
     // 6. Add the new revert commit to the central store.
     this.commits.set(newCommit.id, newCommit);
@@ -307,6 +316,11 @@ export class GitGraph {
 
     if (!this.commits.has(commitId)) {
       throw new Error(`Commit "${commitId}" does not exist`);
+    }
+
+    // Prevent resetting to an orphaned commit
+    if (this.orphanedCommits.has(commitId)) {
+      throw new Error("Cannot reset to an orphaned commit");
     }
 
     if (!this.HEAD || !this.branches.has(this.HEAD)) {

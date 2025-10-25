@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import "./InputModal.css";
 
@@ -6,83 +6,75 @@ const InputModal = ({
   isOpen,
   onClose,
   onSubmit,
-  title,
-  placeholder,
-  buttonText,
+  title = "Enter Value",
+  placeholder = "Type here...",
+  buttonText = "Submit",
   type = "text",
 }) => {
-  const [value, setValue] = useState("");
+  const [input, setInput] = useState("");
   const [error, setError] = useState("");
+  const inputRef = useRef(null);
 
+  // Reset when opened
   useEffect(() => {
     if (isOpen) {
-      setValue("");
+      setInput("");
       setError("");
-      // Focus input when modal opens
-      setTimeout(() => {
-        document.getElementById("modal-input")?.focus();
-      }, 100);
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!value.trim()) {
-      setError("This field cannot be empty");
-      return;
-    }
-
-    onSubmit(value.trim(), e);
-    setValue("");
-    setError("");
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Escape") {
-      onClose();
-    }
-  };
-
   if (!isOpen) return null;
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!input.trim()) {
+      setError("Please fill this field");
+      return;
+    }
+    onSubmit(input.trim());
+    setInput("");
+    onClose();
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay" onClick={handleOverlayClick}>
+      <div className="modal-card">
+        {/* Header */}
         <div className="modal-header">
           <h3 className="modal-title">{title}</h3>
-          <button className="modal-close" onClick={onClose} aria-label="Close">
-            <X size={20} />
+          <button onClick={onClose} className="close-btn">
+            <X size={18} />
           </button>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="modal-form">
-          <div className="input-wrapper">
-            <input
-              id="modal-input"
-              type={type}
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-                setError("");
-              }}
-              onKeyDown={handleKeyDown}
-              placeholder={placeholder}
-              className={`modal-input ${error ? "input-error" : ""}`}
-              autoComplete="off"
-            />
-            {error && <span className="error-message">{error}</span>}
-          </div>
+          <input
+            ref={inputRef}
+            type={type}
+            value={input}
+            placeholder={placeholder}
+            onChange={(e) => {
+              setInput(e.target.value);
+              setError("");
+            }}
+            className={`modal-input ${error ? "has-error" : ""}`}
+            onKeyDown={(e) => e.key === "Escape" && onClose()}
+            autoComplete="off"
+          />
+          {error && <p className="error-text">{error}</p>}
 
+          {/* Actions */}
           <div className="modal-actions">
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn btn-secondary"
-            >
+            <button type="button" onClick={onClose} className="btn secondary">
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn primary">
               {buttonText}
             </button>
           </div>

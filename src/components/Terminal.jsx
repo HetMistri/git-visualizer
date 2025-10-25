@@ -11,366 +11,233 @@ const Terminal = ({
   commandsFromToolbar = [],
   onClose,
 }) => {
-  const [cmdHistory, setCmdHistory] = useState([
-    {
-      type: "system",
-      text: "Welcome to Git Visualizer Terminal 🎨",
-      timestamp: new Date(),
-    },
-    {
-      type: "system",
-      text: 'Type "git help" to see available commands.',
-      timestamp: new Date(),
-    },
+  // -----------------------------
+  // STATE & REFERENCES
+  // -----------------------------
+  const [history, setHistory] = useState([
+    { type: "system", text: "Welcome to Git Visualizer Terminal 🎨" },
+    { type: "system", text: 'Type "git help" to see available commands.' },
   ]);
-  const [curInput, setCurInput] = useState("");
+  const [input, setInput] = useState("");
+  const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [commandList, setCommandList] = useState([]);
 
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
-  const lastToolbarCommandRef = useRef(null);
 
-  // Auto-scroll to bottom when history changes
+  // -----------------------------
+  // SCROLL & FOCUS HANDLING
+  // -----------------------------
   useEffect(() => {
-    if (terminalRef.current) {
-      terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
-    }
-  }, [cmdHistory]);
+    terminalRef.current?.scrollTo({
+      top: terminalRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [history]);
 
-  // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  const parseCommand = (input) => {
-    const trimmed = input.trim();
-    if (!trimmed) return null;
-
-    // Parse git command
-    const parts = trimmed.split(/\s+/);
+  // -----------------------------
+  // COMMAND PARSING
+  // -----------------------------
+  const parseCommand = (cmd) => {
+    const parts = cmd.trim().split(/\s+/);
     if (parts[0] !== "git") {
-      return { error: `Command not found: ${parts[0]}` };
+      return { error: `Unknown command: ${parts[0]}` };
     }
-
-    const subCmd = parts[1];
-    const args = parts.slice(2);
-
-    return { subCmd, args };
+    return { subCmd: parts[1], args: parts.slice(2) };
   };
 
+  // -----------------------------
+  // COMMAND EXECUTION
+  // -----------------------------
   const executeCommand = useCallback(
-    (input, fromToolbar = false) => {
-      const parsed = parseCommand(input);
+    (cmd) => {
+      const parsed = parseCommand(cmd);
+      const inputEntry = { type: "input", text: cmd, branch: currentBranch };
 
-      // Add command to history
-      const newEntry = {
-        type: "input",
-        text: input,
-        timestamp: new Date(),
-        branch: currentBranch,
-      };
-
-      if (!parsed) {
-        setCmdHistory((prev) => [...prev, newEntry]);
-        return;
-      }
-
-      if (parsed.error) {
-        setCmdHistory((prev) => [
+      // 1️⃣ Invalid or unknown command
+      if (!parsed || parsed.error) {
+        return setHistory((prev) => [
           ...prev,
-          newEntry,
-          { type: "error", text: parsed.error, timestamp: new Date() },
+          inputEntry,
+          { type: "error", text: parsed?.error || "Invalid command." },
         ]);
-        return;
       }
 
       const { subCmd, args } = parsed;
+      let output = [];
 
-      // If command is from toolbar, just show it in history without executing
-      if (fromToolbar) {
-        setCmdHistory((prev) => [
-          ...prev,
-          newEntry,
-          {
-            type: "success",
-            text: "✓ Command executed from toolbar",
-            timestamp: new Date(),
-          },
-        ]);
-        return;
-      }
-
-      // Handle special commands
-      if (subCmd === "help") {
-        const helpText = [
-          "Available commands:",
-          "  git commit -m <message>    Create a new commit",
-          "  git branch <name>          Create a new branch",
-          "  git checkout <branch>      Switch to a branch",
-          "  git merge <branch>         Merge a branch into current",
-          "  git rebase <branch>        Rebase current onto branch",
-          "  git reset <commit-id>      Reset branch to commit",
-          "  git revert <commit-id>     Revert a commit",
-          "  git log                    Show commit history",
-          "  git clear or git cls       Clear terminal",
-        ];
-        setCmdHistory((prev) => [
-          ...prev,
-          newEntry,
-          ...helpText.map((line) => ({
-            type: "output",
-            text: line,
-            timestamp: new Date(),
-          })),
-        ]);
-        return;
-      }
-
-      if (subCmd === "clear" || subCmd === "cls" || input.trim() === "clear") {
-        setCmdHistory([]);
-        return;
-      }
-
-      if (subCmd === "log") {
-        const commits = Array.from(gitGraph.commits.values())
-          .sort((a, b) => b.timestampMs - a.timestampMs)
-          .slice(0, 10);
-
-        const logOutput = commits.map(
-          (c) =>
-            `${c.id.substring(0, 7)} - ${c.message} (${
-              c.createdByBranch || "unknown"
-            })`
-        );
-
-        setCmdHistory((prev) => [
-          ...prev,
-          newEntry,
-          ...logOutput.map((line) => ({
-            type: "output",
-            text: line,
-            timestamp: new Date(),
-          })),
-        ]);
-        return;
-      }
-
-      // Execute git commands
       try {
-        let result;
-
         switch (subCmd) {
+          case "help":
+            output = [
+              "Available commands:",
+              "  git commit -m <msg>   → Create a commit",
+              "  git branch [name]     → Create or list branches",
+              "  git checkout <name>   → Switch branch",
+              "  git merge <name>      → Merge branch",
+              "  git reset <id>        → Reset to commit",
+              "  git log               → Show recent commits",
+              "  git clear             → Clear terminal",
+            ];
+            break;
+
+          case "clear":
+          case "cls":
+            setHistory([]);
+            return;
+
           case "commit": {
             const msgIndex = args.indexOf("-m");
-            if (msgIndex === -1 || msgIndex === args.length - 1) {
-              throw new Error(
-                "Missing commit message. Use: git commit -m <message>"
-              );
-            }
-            const message = args
-              .slice(msgIndex + 1)
-              .join(" ")
-              .replace(/^["']|["']$/g, "");
+            if (msgIndex === -1 || msgIndex === args.length - 1)
+              throw new Error("Missing commit message. Use: git commit -m <msg>");
+            const message = args.slice(msgIndex + 1).join(" ");
             gitGraph.commit(message);
-            result = `✓ Commit created: ${message}`;
+            output = [`✅ Commit created: "${message}"`];
             break;
           }
 
           case "branch": {
             if (args.length === 0) {
               const branches = Array.from(gitGraph.branches.keys());
-              result = branches
-                .map((b) => (b === currentBranch ? `* ${b}` : `  ${b}`))
-                .join("\n");
+              output = branches.map((b) =>
+                b === currentBranch ? `* ${b}` : `  ${b}`
+              );
             } else {
               gitGraph.createBranch(args[0]);
-              result = `✓ Branch created: ${args[0]}`;
+              output = [`✅ Branch created: ${args[0]}`];
             }
             break;
           }
 
-          case "checkout": {
-            if (args.length === 0) {
-              throw new Error(
-                "Missing branch name. Use: git checkout <branch>"
-              );
-            }
+          case "checkout":
+            if (args.length === 0)
+              throw new Error("Missing branch name. Use: git checkout <name>");
             gitGraph.checkout(args[0]);
-            result = `✓ Switched to branch: ${args[0]}`;
+            output = [`✅ Switched to branch: ${args[0]}`];
             break;
-          }
 
-          case "merge": {
-            if (args.length === 0) {
-              throw new Error("Missing branch name. Use: git merge <branch>");
-            }
+          case "merge":
+            if (args.length === 0)
+              throw new Error("Missing branch name. Use: git merge <name>");
             gitGraph.merge(args[0]);
-            result = `✓ Merged ${args[0]} into ${currentBranch}`;
+            output = [`✅ Merged ${args[0]} into ${currentBranch}`];
             break;
-          }
 
-          case "rebase": {
-            if (args.length === 0) {
-              throw new Error("Missing branch name. Use: git rebase <branch>");
-            }
-            gitGraph.rebase(currentBranch, args[0]);
-            result = `✓ Rebased ${currentBranch} onto ${args[0]}`;
-            break;
-          }
-
-          case "reset": {
-            if (args.length === 0) {
-              throw new Error("Missing commit ID. Use: git reset <commit-id>");
-            }
+          case "reset":
+            if (args.length === 0)
+              throw new Error("Missing commit ID. Use: git reset <id>");
             gitGraph.reset(args[0]);
-            result = `✓ Branch ${currentBranch} reset to ${args[0].substring(
-              0,
-              7
-            )}`;
+            output = [`✅ Reset ${currentBranch} to ${args[0].slice(0, 7)}`];
             break;
-          }
 
-          case "revert": {
-            if (args.length === 0) {
-              throw new Error("Missing commit ID. Use: git revert <commit-id>");
-            }
-            gitGraph.revert(args[0]);
-            const commit = gitGraph.commits.get(args[0]);
-            result = `✓ Reverted commit: ${commit?.message || args[0]}`;
+          case "log": {
+            const commits = Array.from(gitGraph.commits.values())
+              .sort((a, b) => b.timestampMs - a.timestampMs)
+              .slice(0, 8);
+            output = commits.map(
+              (c) =>
+                `${c.id.slice(0, 7)} - ${c.message} (${c.createdByBranch ?? "?"})`
+            );
             break;
           }
 
           default:
-            throw new Error(
-              `git: '${subCmd}' is not a git command. See 'git help'.`
-            );
+            throw new Error(`Unknown git command: ${subCmd}`);
         }
 
-        // Add output
-        const outputLines = result.split("\n");
-        setCmdHistory((prev) => [
+        setHistory((prev) => [
           ...prev,
-          newEntry,
-          ...outputLines.map((line) => ({
-            type: "success",
-            text: line,
-            timestamp: new Date(),
-          })),
+          inputEntry,
+          ...output.map((t) => ({ type: "success", text: t })),
         ]);
-
-        // Notify parent
-        if (onCommandExecute) {
-          onCommandExecute();
-        }
-      } catch (error) {
-        setCmdHistory((prev) => [
+        onCommandExecute?.();
+      } catch (err) {
+        setHistory((prev) => [
           ...prev,
-          newEntry,
-          { type: "error", text: `✗ ${error.message}`, timestamp: new Date() },
+          inputEntry,
+          { type: "error", text: `✗ ${err.message}` },
         ]);
       }
     },
-    [currentBranch, gitGraph, onCommandExecute]
+    [gitGraph, currentBranch, onCommandExecute]
   );
 
-  // Handle external commands from toolbar
-  useEffect(() => {
-    if (commandsFromToolbar.length > 0) {
-      const latestCmd = commandsFromToolbar[commandsFromToolbar.length - 1];
-      if (latestCmd !== lastToolbarCommandRef.current) {
-        lastToolbarCommandRef.current = latestCmd;
-        executeCommand(latestCmd, true);
-      }
-    }
-  }, [commandsFromToolbar, executeCommand]);
-
-  const handleEnter = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (curInput.trim()) {
-        setCommandList((prev) => [...prev, curInput]);
-        executeCommand(curInput);
-        setCurInput("");
-        setHistoryIndex(-1);
-      }
+  // -----------------------------
+  // INPUT HANDLING (↑, ↓, ENTER)
+  // -----------------------------
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && input.trim()) {
+      executeCommand(input);
+      setCommandHistory((prev) => [...prev, input]);
+      setInput("");
+      setHistoryIndex(-1);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      if (commandList.length > 0) {
+      if (commandHistory.length > 0) {
         const newIndex =
           historyIndex === -1
-            ? commandList.length - 1
+            ? commandHistory.length - 1
             : Math.max(0, historyIndex - 1);
         setHistoryIndex(newIndex);
-        setCurInput(commandList[newIndex]);
+        setInput(commandHistory[newIndex]);
       }
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       if (historyIndex !== -1) {
         const newIndex = historyIndex + 1;
-        if (newIndex >= commandList.length) {
+        if (newIndex >= commandHistory.length) {
           setHistoryIndex(-1);
-          setCurInput("");
+          setInput("");
         } else {
           setHistoryIndex(newIndex);
-          setCurInput(commandList[newIndex]);
+          setInput(commandHistory[newIndex]);
         }
       }
     }
   };
 
-  const formatTimestamp = (date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    });
-  };
-
+  // -----------------------------
+  // RENDER
+  // -----------------------------
   return (
     <motion.div
-      className="terminal-container glass"
-      initial={{ opacity: 0, y: 20 }}
+      className="terminal-container"
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.3 }}
+      exit={{ opacity: 0, y: 15 }}
+      transition={{ duration: 0.25 }}
     >
       <div className="terminal-header">
         <div className="terminal-title">
           <TerminalIcon size={16} />
           <span>Git Terminal</span>
         </div>
-        {onClose && (
-          <button
-            className="terminal-close"
-            onClick={onClose}
-            title="Close terminal"
-          >
-            <X size={16} />
-          </button>
-        )}
+        <button className="terminal-close" onClick={onClose}>
+          <X size={16} />
+        </button>
       </div>
 
       <div className="terminal-body" ref={terminalRef}>
         <AnimatePresence>
-          {cmdHistory.map((entry, idx) => (
+          {history.map((entry, i) => (
             <motion.div
-              key={idx}
+              key={i}
               className={`terminal-line terminal-line-${entry.type}`}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.15 }}
             >
-              {entry.type === "input" && (
+              {entry.type === "input" ? (
                 <>
-                  <span className="terminal-prompt">
-                    <span className="terminal-branch">{entry.branch}</span>
-                    <span className="terminal-arrow">➜</span>
-                  </span>
+                  <span className="terminal-branch">{entry.branch}</span>
+                  <span className="terminal-arrow">➜</span>
                   <span className="terminal-command">{entry.text}</span>
                 </>
-              )}
-              {entry.type !== "input" && (
+              ) : (
                 <span className="terminal-output">{entry.text}</span>
               )}
             </motion.div>
@@ -378,20 +245,17 @@ const Terminal = ({
         </AnimatePresence>
 
         <div className="terminal-input-line">
-          <span className="terminal-prompt">
-            <span className="terminal-branch">{currentBranch}</span>
-            <span className="terminal-arrow">➜</span>
-          </span>
+          <span className="terminal-branch">{currentBranch}</span>
+          <span className="terminal-arrow">➜</span>
           <input
             ref={inputRef}
             type="text"
             className="terminal-input"
-            value={curInput}
-            onChange={(e) => setCurInput(e.target.value)}
-            onKeyDown={handleEnter}
             placeholder="Type a git command..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
             spellCheck={false}
-            autoComplete="off"
           />
         </div>
       </div>

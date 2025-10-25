@@ -16,8 +16,9 @@
   height: 64px;
   animation: slideInBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  overflow-x: auto;
-  overflow-y: hidden;
+  /* overflow-x: auto;
+  overflow-y: hidden; */
+  overflow: hidden;
   scrollbar-gutter: stable;
   isolation: isolate;
   transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);

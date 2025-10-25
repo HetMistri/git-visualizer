@@ -195,17 +195,17 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  padding: 16px 20px;
+  padding: 14px 18px;
   border-radius: 12px;
   background: var(--glass-background);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(14px);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
   z-index: 1001;
-  animation: slideIn 0.3s ease-out;
-  box-shadow: 0 8px 32px var(--shadow-strong);
+  animation: slideIn 0.22s ease-in-out;
+  box-shadow: 0 6px 18px var(--shadow-color);
 }
 
 .notification.success {
@@ -230,19 +230,19 @@
 }
 
 .rf-controls .react-flow__controls-button {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   background: var(--glass-background);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
-  backdrop-filter: blur(16px);
-  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  transition: all 0.18s ease-in-out;
 }
 
 .rf-controls .react-flow__controls-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--shadow-strong);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
   border-color: var(--primary-color);
   color: var(--primary-color);
 }
@@ -259,10 +259,18 @@
 
 /* Position tweaks */
 .react-flow__panel.react-flow__controls.rf-controls {
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 6px;
   gap: 8px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Subtle dim during animations (no loud overlays) */
+.react-flow.animating .react-flow__controls {
+  opacity: 0.5;
+  filter: saturate(0.9);
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
 }
 
 /* Animation state */

@@ -118,6 +118,17 @@ export const useGitGraph = () => {
     [gitGraph, forceUpdate]
   );
 
+  // Clear entire graph to initial state
+  const clearGraph = useCallback(() => {
+    try {
+      gitGraph.clear();
+      forceUpdate();
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }, [gitGraph, forceUpdate]);
+
   // Convert graph to React Flow format (memoized)
   const { nodes, edges } = useMemo(() => {
     return convertToReactFlow(gitGraph);
@@ -186,5 +197,6 @@ export const useGitGraph = () => {
     getBranchesForCommit,
     gitGraph, // Expose gitGraph instance for advanced operations
     forceUpdate, // Expose forceUpdate for external operations
+    clearGraph, // Expose clearGraph to reset to initial state
   };
 };

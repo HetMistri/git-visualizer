@@ -24,6 +24,7 @@ const Terminal = ({
 
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
+  const toolbarIndexRef = useRef(0);
 
   // -----------------------------
   // SCROLL & FOCUS HANDLING
@@ -38,6 +39,24 @@ const Terminal = ({
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // -----------------------------
+  // REFLECT TOOLBAR COMMANDS (LOG-ONLY)
+  // -----------------------------
+  useEffect(() => {
+    if (!Array.isArray(commandsFromToolbar)) return;
+    // Append any new commands since last update as input entries without executing
+    const pending = commandsFromToolbar.slice(toolbarIndexRef.current);
+    if (pending.length > 0) {
+      const entries = pending.map((cmd) => ({
+        type: "input",
+        text: cmd,
+        branch: currentBranch,
+      }));
+      setHistory((prev) => [...prev, ...entries]);
+      toolbarIndexRef.current = commandsFromToolbar.length;
+    }
+  }, [commandsFromToolbar, currentBranch]);
 
   // -----------------------------
   // COMMAND PARSING
@@ -80,6 +99,8 @@ const Terminal = ({
               "  git checkout <name>   → Switch branch",
               "  git merge <name>      → Merge branch",
               "  git reset <id>        → Reset to commit",
+              "  git revert <id>       → Create a revert commit",
+              "  git rebase <target> [source] → Rebase source (or current) onto target",
               "  git log               → Show recent commits",
               "  git clear             → Clear terminal",
             ];
@@ -93,7 +114,9 @@ const Terminal = ({
           case "commit": {
             const msgIndex = args.indexOf("-m");
             if (msgIndex === -1 || msgIndex === args.length - 1)
-              throw new Error("Missing commit message. Use: git commit -m <msg>");
+              throw new Error(
+                "Missing commit message. Use: git commit -m <msg>"
+              );
             const message = args.slice(msgIndex + 1).join(" ");
             gitGraph.commit(message);
             output = [`✅ Commit created: "${message}"`];
@@ -134,13 +157,34 @@ const Terminal = ({
             output = [`✅ Reset ${currentBranch} to ${args[0].slice(0, 7)}`];
             break;
 
+          case "revert":
+            if (args.length === 0)
+              throw new Error("Missing commit ID. Use: git revert <id>");
+            gitGraph.revert(args[0]);
+            output = [`✅ Reverted ${args[0].slice(0, 7)}`];
+            break;
+
+          case "rebase": {
+            if (args.length === 0)
+              throw new Error(
+                "Missing target branch. Use: git rebase <target> [source]"
+              );
+            const target = args[0];
+            const source = args[1] || gitGraph.HEAD || currentBranch;
+            gitGraph.rebase(source, target);
+            output = [`✅ Rebased ${source} onto ${target}`];
+            break;
+          }
+
           case "log": {
             const commits = Array.from(gitGraph.commits.values())
               .sort((a, b) => b.timestampMs - a.timestampMs)
               .slice(0, 8);
             output = commits.map(
               (c) =>
-                `${c.id.slice(0, 7)} - ${c.message} (${c.createdByBranch ?? "?"})`
+                `${c.id.slice(0, 7)} - ${c.message} (${
+                  c.createdByBranch ?? "?"
+                })`
             );
             break;
           }

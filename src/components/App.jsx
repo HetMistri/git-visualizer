@@ -17,7 +17,7 @@ import CommitDetails from "./CommitDetails";
 import Terminal from "./Terminal";
 import { useGitGraph } from "../hooks/useGitGraph";
 import { useRebaseAnimation } from "../hooks/useRebaseAnimation";
-import { GitBranch } from "lucide-react";
+import { GitBranch, Eraser } from "lucide-react";
 import "./App.css";
 
 const nodeTypes = {
@@ -36,6 +36,7 @@ function App() {
     merge,
     reset,
     revert,
+    clearGraph,
     nodes: graphNodes,
     edges: graphEdges,
     branches,
@@ -190,6 +191,11 @@ function App() {
       if (confirm(confirmMsg)) {
         const result = reset(commitId);
         if (result.success) {
+          // Reflect in terminal
+          setTerminalCommands((prev) => [
+            ...prev,
+            `git reset --hard ${commitId}`,
+          ]);
           const orphanCount = gitGraph.orphanedCommits.size;
           if (orphanCount > 0) {
             toast(
@@ -260,6 +266,11 @@ function App() {
       const result = revert(selectedCommitId);
       if (result.success) {
         toast(`✓ Reverted commit: ${commitData.message}`, "success");
+        // Reflect in terminal
+        setTerminalCommands((prev) => [
+          ...prev,
+          `git revert ${selectedCommitId}`,
+        ]);
         setSelectedCommitId(null);
       } else {
         toast(`✗ ${result.error}`, "error");
@@ -301,6 +312,13 @@ function App() {
 
       if (!result.success) {
         toast(`✗ ${result.error}`, "error");
+      } else {
+        // Reflect in terminal – common CLI sequence
+        setTerminalCommands((prev) => [
+          ...prev,
+          `git checkout ${sourceBranch}`,
+          `git rebase ${targetBranch}`,
+        ]);
       }
     },
     [gitGraph, performAnimatedRebase, setNodes, setEdges, toast, isAnimating]
@@ -418,6 +436,31 @@ function App() {
           position="top-left"
           className="rf-controls"
         />
+        {/* Clear Canvas button near controls */}
+        <div className="clear-canvas-panel">
+          <button
+            className="clear-canvas-btn"
+            onClick={() => {
+              if (
+                confirm(
+                  "Clear canvas? This will reset to a fresh repo with only the initial commit on 'main'."
+                )
+              ) {
+                const res = clearGraph();
+                if (res.success) {
+                  toast("✓ Canvas cleared", "success");
+                  // Log to terminal (informational)
+                  setTerminalCommands((prev) => [...prev, "git init"]);
+                } else {
+                  toast(`✗ ${res.error}`, "error");
+                }
+              }
+            }}
+            title="Clear Canvas"
+          >
+            <Eraser size={16} />
+          </button>
+        </div>
       </ReactFlow>
 
       {/* Modals */}

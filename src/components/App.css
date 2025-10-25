@@ -265,6 +265,36 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
+/* Clear Canvas panel/button */
+.clear-canvas-panel {
+  position:absolute;
+  top: 16vh; 
+  left: 17px;
+  z-index: 5;
+}
+
+.clear-canvas-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-background);
+  color: var(--text-primary);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.18s ease-in-out;
+}
+
+.clear-canvas-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-color: var(--warning-color);
+  color: var(--warning-color);
+}
+
 /* Subtle dim during animations (no loud overlays) */
 .react-flow.animating .react-flow__controls {
   opacity: 0.5;

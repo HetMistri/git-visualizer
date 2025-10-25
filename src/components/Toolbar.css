@@ -2,7 +2,7 @@
 .toolbar-pill {
   position: fixed;
   left: 50%;
-  bottom: 20px; /* Default position when terminal is closed */
+  bottom: 20px; 
   transform: translateX(-50%);
   transform-origin: center center;
   z-index: 1000;
@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   max-width: calc(100vw - 40px);
   height: 64px;
   animation: slideInBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -26,7 +26,7 @@
 
 /* When terminal is open, move toolbar up */
 .toolbar-pill.terminal-open {
-  bottom: 440px; /* Above terminal: 400px terminal height + 20px terminal bottom + 20px gap */
+  bottom: 380px; /* Above terminal: 350px terminal height + 20px terminal bottom + 10px gap */
 }
 
 /* Custom scrollbar */

@@ -49,6 +49,18 @@ export class GitGraph {
     this.HEAD = "main";
   }
 
+  // Reset the entire repository to a fresh state with only the initial commit on main
+  clear() {
+    this.commits.clear();
+    this.branches.clear();
+    this.orphanedCommits.clear();
+
+    const initialCommit = new CommitNode("Initial commit", [], "main");
+    this.commits.set(initialCommit.id, initialCommit);
+    this.branches.set("main", initialCommit.id);
+    this.HEAD = "main";
+  }
+
   // Enable or disable verbose debug logging
   setDebugMode(enabled) {
     this.debug = !!enabled;

@@ -22,6 +22,7 @@ const Toolbar = ({
   onToggleTerminal,
   currentBranch,
   branches,
+  terminalOpen,
 }) => {
   const { toggleTheme, isDark } = useTheme();
 
@@ -32,7 +33,9 @@ const Toolbar = ({
   };
 
   return (
-    <div className="toolbar-pill glass">
+    <div
+      className={`toolbar-pill glass ${terminalOpen ? "terminal-open" : ""}`}
+    >
       {/* Git Action Buttons */}
       <div className="toolbar-actions">
         <button

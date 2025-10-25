@@ -1,9 +1,9 @@
 .terminal-container {
   position: fixed;
   bottom: 20px;
+  left: 20px;
   right: 20px;
-  width: 600px;
-  max-width: calc(100vw - 40px);
+  width: calc(100vw - 40px);
   height: 400px;
   background: rgba(24, 24, 27, 0.95);
   backdrop-filter: blur(20px);
@@ -12,9 +12,21 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 999;
   font-family: "Fira Code", "Courier New", monospace;
   overflow: hidden;
+  animation: slideUpTerminal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUpTerminal {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .terminal-header {
@@ -189,15 +201,21 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .terminal-container {
-    width: calc(100vw - 40px);
-    height: 300px;
     bottom: 10px;
-    right: 10px;
+    width: calc(100vw - 20px);
+    height: 250px;
     left: 10px;
+    right: 10px;
   }
 
   .terminal-body {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .terminal-container {
+    height: 300px;
   }
 }
 

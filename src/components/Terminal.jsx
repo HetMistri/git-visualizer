@@ -43,17 +43,6 @@ const Terminal = ({
     inputRef.current?.focus();
   }, []);
 
-  // Handle external commands from toolbar
-  useEffect(() => {
-    if (commandsFromToolbar.length > 0) {
-      const latestCmd = commandsFromToolbar[commandsFromToolbar.length - 1];
-      if (latestCmd !== lastToolbarCommandRef.current) {
-        lastToolbarCommandRef.current = latestCmd;
-        executeCommand(latestCmd, true);
-      }
-    }
-  }, [commandsFromToolbar, executeCommand]);
-
   const parseCommand = (input) => {
     const trimmed = input.trim();
     if (!trimmed) return null;
@@ -98,6 +87,20 @@ const Terminal = ({
 
       const { subCmd, args } = parsed;
 
+      // If command is from toolbar, just show it in history without executing
+      if (fromToolbar) {
+        setCmdHistory((prev) => [
+          ...prev,
+          newEntry,
+          {
+            type: "success",
+            text: "✓ Command executed from toolbar",
+            timestamp: new Date(),
+          },
+        ]);
+        return;
+      }
+
       // Handle special commands
       if (subCmd === "help") {
         const helpText = [
@@ -110,7 +113,7 @@ const Terminal = ({
           "  git reset <commit-id>      Reset branch to commit",
           "  git revert <commit-id>     Revert a commit",
           "  git log                    Show commit history",
-          "  clear                      Clear terminal",
+          "  git clear or git cls       Clear terminal",
         ];
         setCmdHistory((prev) => [
           ...prev,
@@ -124,7 +127,7 @@ const Terminal = ({
         return;
       }
 
-      if (subCmd === "clear" || input.trim() === "clear") {
+      if (subCmd === "clear" || subCmd === "cls" || input.trim() === "clear") {
         setCmdHistory([]);
         return;
       }
@@ -270,6 +273,17 @@ const Terminal = ({
     },
     [currentBranch, gitGraph, onCommandExecute]
   );
+
+  // Handle external commands from toolbar
+  useEffect(() => {
+    if (commandsFromToolbar.length > 0) {
+      const latestCmd = commandsFromToolbar[commandsFromToolbar.length - 1];
+      if (latestCmd !== lastToolbarCommandRef.current) {
+        lastToolbarCommandRef.current = latestCmd;
+        executeCommand(latestCmd, true);
+      }
+    }
+  }, [commandsFromToolbar, executeCommand]);
 
   const handleEnter = (e) => {
     if (e.key === "Enter") {

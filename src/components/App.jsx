@@ -43,6 +43,7 @@ function App() {
     getCommit,
     getBranchesForCommit,
     gitGraph,
+    forceUpdate,
   } = useGitGraph();
 
   const [nodes, setNodes, onNodesChange] = useNodesState(graphNodes);
@@ -340,10 +341,10 @@ function App() {
       const commitData = getCommit(node.id);
       const commitBranches = getBranchesForCommit(node.id);
 
-      // Auto-switch HEAD to a sensible target branch for this node
+      // Autoo-switch HEAD to a sensible target branch for this node
       // Priority:
       // 1) If currentBranch already points here, keep it
-      // 2) If some branch tip points here, prefer commitData.createdByBranch if present, else the first branch tip
+      // 2) If some branch tip pints here, prefer commitData.createdByBranch if present, else the first branch tip
       // 3) Else fall back to the commit's creating branch (if it exists)
       let targetBranch = null;
 
@@ -403,6 +404,7 @@ function App() {
         onToggleTerminal={() => setTerminalOpen((prev) => !prev)}
         currentBranch={currentBranch}
         branches={branches}
+        terminalOpen={terminalOpen}
       />
 
       {/* React Flow Graph */}
@@ -431,7 +433,7 @@ function App() {
         <Background color="#94a3b8" gap={25} size={1.5} variant="dots" />
         <Controls
           showInteractive={false}
-          position="bottom-left"
+          position="top-left"
           className="rf-controls"
         />
       </ReactFlow>
@@ -496,11 +498,7 @@ function App() {
         <Terminal
           gitGraph={gitGraph}
           currentBranch={currentBranch}
-          onCommandExecute={() => {
-            // Trigger graph update after terminal command
-            setNodes(graphNodes);
-            setEdges(graphEdges);
-          }}
+          onCommandExecute={forceUpdate}
           commandsFromToolbar={terminalCommands}
           onClose={() => setTerminalOpen(false)}
         />

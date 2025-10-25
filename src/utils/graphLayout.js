@@ -83,7 +83,7 @@ export const calculateLevels = (commits) => {
   });
 
   // Step 2: Assign initial levels based on chronological order
-  sortedCommits.forEach(([id, commit], index) => {
+  sortedCommits.forEach(([id], index) => {
     levels.set(id, index);
   });
 
@@ -155,13 +155,13 @@ export const calculateLevels = (commits) => {
  * Assign lanes (vertical positions) with main/master branch centered
  * Other branches distributed above and below
  */
-const assignLanes = (commits, branches, levels) => {
+const assignLanes = (commits) => {
   const lanes = new Map();
   const branchLanes = new Map(); // Track which lane each branch uses
 
   // Get all unique branch names from commits
   const allBranches = new Set();
-  for (const [id, commit] of commits) {
+  for (const [, commit] of commits) {
     if (commit.createdByBranch) {
       allBranches.add(commit.createdByBranch);
     }
@@ -238,7 +238,7 @@ export const convertToReactFlow = (gitGraph) => {
   const levels = calculateLevels(commits);
 
   // Assign lanes for vertical positioning
-  const lanes = assignLanes(commits, branches, levels);
+  const lanes = assignLanes(commits);
 
   // Calculate adaptive spacing based on graph size
   const laneCount = Math.max(...Array.from(lanes.values())) + 1;
@@ -302,8 +302,7 @@ export const convertToReactFlow = (gitGraph) => {
       const parentId = commit.parents[i];
       if (commits.has(parentId)) {
         const childNode = nodes.find((n) => n.id === id);
-        const parentNode = nodes.find((n) => n.id === parentId);
-        const parentCommit = commits.get(parentId);
+  const parentNode = nodes.find((n) => n.id === parentId);
 
         // Determine edge type based on node positions
         const isMainLine = i === 0; // First parent is main line

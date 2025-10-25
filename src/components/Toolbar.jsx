@@ -21,7 +21,7 @@ const Toolbar = ({
   currentBranch,
   branches,
 }) => {
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
 
   const handleBranchClick = (branch) => {
     if (branch !== currentBranch) {

@@ -35,12 +35,10 @@ function App() {
     merge,
     reset,
     revert,
-    rebase,
     nodes: graphNodes,
     edges: graphEdges,
     branches,
     currentBranch,
-    stats,
     getCommit,
     getBranchesForCommit,
     gitGraph,
@@ -88,7 +86,7 @@ function App() {
 
   // Handle commit
   const handleCommit = useCallback(
-    (message, event) => {
+    (message) => {
       const result = commit(message);
       if (result.success) {
         showNotification(`✓ Commit created: ${message}`, "success");
@@ -102,7 +100,7 @@ function App() {
 
   // Handle create branch
   const handleCreateBranch = useCallback(
-    (branchName, event) => {
+    (branchName) => {
       const result = createBranch(branchName);
       if (result.success) {
         showNotification(`✓ Branch created: ${branchName}`, "success");

@@ -2,7 +2,13 @@ import { useState } from "react";
 import { X, GitCompare } from "lucide-react";
 import "./RebaseModal.css"; // we’ll reuse your modern modal styles
 
-const RebaseModal = ({ isOpen, onClose, onSubmit, branches, currentBranch }) => {
+const RebaseModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  branches,
+  currentBranch,
+}) => {
   const [source, setSource] = useState("");
   const [target, setTarget] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +29,8 @@ const RebaseModal = ({ isOpen, onClose, onSubmit, branches, currentBranch }) => 
       return;
     }
 
-    onSubmit({ source, target });
+    // App.jsx expects keys: { sourceBranch, targetBranch }
+    onSubmit({ sourceBranch: source, targetBranch: target });
     handleClose();
   };
 
@@ -52,11 +59,12 @@ const RebaseModal = ({ isOpen, onClose, onSubmit, branches, currentBranch }) => 
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="rebase-info">
             <p>
-              <strong>Rebase</strong> moves commits from one branch onto another —
-              like stacking your changes on a fresh base.
+              <strong>Rebase</strong> moves commits from one branch onto another
+              — like stacking your changes on a fresh base.
             </p>
             <div className="rebase-preview">
-              <code>{source || "source"}</code> → <code>{target || "target"}</code>
+              <code>{source || "source"}</code> →{" "}
+              <code>{target || "target"}</code>
             </div>
           </div>
 
@@ -110,7 +118,11 @@ const RebaseModal = ({ isOpen, onClose, onSubmit, branches, currentBranch }) => 
 
           {/* Actions */}
           <div className="modal-actions">
-            <button type="button" className="btn secondary" onClick={handleClose}>
+            <button
+              type="button"
+              className="btn secondary"
+              onClick={handleClose}
+            >
               Cancel
             </button>
             <button type="submit" className="btn primary">

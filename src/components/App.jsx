@@ -9,6 +9,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 import CustomNode from "./CustomNode";
+import CustomEdge from "./CustomEdge";
 import Toolbar from "./Toolbar";
 import InputModal from "./InputModal";
 import RebaseModal from "./RebaseModal";
@@ -20,6 +21,10 @@ import "./App.css";
 
 const nodeTypes = {
   custom: CustomNode,
+};
+
+const edgeTypes = {
+  custom: CustomEdge,
 };
 
 function App() {
@@ -399,6 +404,7 @@ function App() {
         onEdgesChange={onEdgesChange}
         onNodeClick={isAnimating ? undefined : onNodeClick}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
         onInit={(instance) => instance.fitView({ padding: 0.2, duration: 500 })}
         minZoom={0.2}

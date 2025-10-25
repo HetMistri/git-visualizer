@@ -22,7 +22,8 @@ An interactive learning tool that demystifies the Git version control system by 
 - **Branch**: Create new branches from the current HEAD position
 - **Checkout**: Switch between different branches seamlessly
 - **Merge**: Merge branches with visual merge commit representation
-- **Reset**: Clear and restart the entire graph
+- **Rebase**: Replay a branch's unique commits on top of another branch with clear visuals
+- **Reset (branch pointer)**: Move the current branch to a selected commit; commits unique to the old tip are shown as orphaned (greyed) and are removed on the next commit
 
 ### 📊 Visualization Features
 
@@ -187,7 +188,7 @@ git-visualizer/
 
 ## 🔮 Future Enhancements
 
-- [ ] Rebase operation
+- [x] Rebase operation
 - [ ] Cherry-pick commits
 - [ ] Tag support
 - [ ] Commit history timeline
@@ -239,6 +240,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 Made with ❤️ for learning Data Structures & Algorithms
 npm run dev
+
 ```
 
 The application should now be running on `http://localhost:5173` (or another port specified by Vite).
+```

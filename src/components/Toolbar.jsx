@@ -6,6 +6,7 @@ import {
   Play,
   Sun,
   Moon,
+  Terminal,
 } from "lucide-react";
 import { getCachedBranchColor } from "../utils/graphLayout";
 import { useTheme } from "../context/ThemeContext";
@@ -18,10 +19,12 @@ const Toolbar = ({
   onRebase,
   onQuickTest,
   onCheckout,
+  onToggleTerminal,
   currentBranch,
   branches,
+  terminalOpen,
 }) => {
-  const { theme, toggleTheme, isDark } = useTheme();
+  const { toggleTheme, isDark } = useTheme();
 
   const handleBranchClick = (branch) => {
     if (branch !== currentBranch) {
@@ -30,7 +33,9 @@ const Toolbar = ({
   };
 
   return (
-    <div className="toolbar-pill glass">
+    <div
+      className={`toolbar-pill glass ${terminalOpen ? "terminal-open" : ""}`}
+    >
       {/* Git Action Buttons */}
       <div className="toolbar-actions">
         <button
@@ -91,6 +96,16 @@ const Toolbar = ({
           title={`Switch to ${isDark ? "light" : "dark"} mode`}
         >
           {isDark ? <Sun size={22} /> : <Moon size={22} />}
+        </button>
+
+        <button
+          type="button"
+          className="toolbar-icon-btn btn-terminal"
+          onClick={onToggleTerminal}
+          data-tooltip="Terminal"
+          title="Toggle Git terminal"
+        >
+          <Terminal size={22} />
         </button>
       </div>
 

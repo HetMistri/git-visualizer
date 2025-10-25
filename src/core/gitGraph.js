@@ -39,11 +39,19 @@ export class GitGraph {
     // These will be shown greyed out until the next commit on that branch
     this.orphanedCommits = new Set();
 
+    // Debug flag to control verbose logging (disabled by default)
+    this.debug = false;
+
     // Let's create the very first commit when the repository is initialized.
     const initialCommit = new CommitNode("Initial commit", [], "main");
     this.commits.set(initialCommit.id, initialCommit);
     this.branches.set("main", initialCommit.id);
     this.HEAD = "main";
+  }
+
+  // Enable or disable verbose debug logging
+  setDebugMode(enabled) {
+    this.debug = !!enabled;
   }
 
   commit(message) {
@@ -308,48 +316,66 @@ export class GitGraph {
     // Get the current branch tip (before reset)
     const oldBranchTip = this.branches.get(this.HEAD);
 
-    console.log("\n=== RESET DEBUG ===");
-    console.log("Resetting branch:", this.HEAD);
-    console.log("From commit:", oldBranchTip);
-    console.log("To commit:", commitId);
-    console.log("\nAll branches BEFORE reset:");
-    for (const [branch, tip] of this.branches.entries()) {
-      console.log(`  ${branch} -> ${tip}`);
+    if (this.debug) {
+      console.log("\n=== RESET DEBUG ===");
+      console.log("Resetting branch:", this.HEAD);
+      console.log("From commit:", oldBranchTip);
+      console.log("To commit:", commitId);
+      console.log("\nAll branches BEFORE reset:");
+      for (const [branch, tip] of this.branches.entries()) {
+        console.log(`  ${branch} -> ${tip}`);
+      }
     }
 
     // Find all commits that were reachable from the old tip
     const oldReachable = this.getReachableCommits(oldBranchTip);
-    console.log("\nCommits reachable from old tip:", Array.from(oldReachable));
+    if (this.debug) {
+      console.log(
+        "\nCommits reachable from old tip:",
+        Array.from(oldReachable)
+      );
+    }
 
     // Move the current branch pointer to the specified commit
     this.branches.set(this.HEAD, commitId);
 
-    console.log("\nAll branches AFTER moving pointer:");
-    for (const [branch, tip] of this.branches.entries()) {
-      console.log(`  ${branch} -> ${tip}`);
+    if (this.debug) {
+      console.log("\nAll branches AFTER moving pointer:");
+      for (const [branch, tip] of this.branches.entries()) {
+        console.log(`  ${branch} -> ${tip}`);
+      }
     }
 
     // Find all commits that are NOW reachable after the reset
     const newReachable = this.getAllReachableCommits();
-    console.log(
-      "\nCommits reachable from ALL branches:",
-      Array.from(newReachable)
-    );
+    if (this.debug) {
+      console.log(
+        "\nCommits reachable from ALL branches:",
+        Array.from(newReachable)
+      );
+    }
 
     // Commits that were reachable before but not anymore are orphaned
     // (They existed in the old branch but are no longer reachable from any branch)
-    console.log("\nMarking orphaned commits:");
+    if (this.debug) {
+      console.log("\nMarking orphaned commits:");
+    }
     for (const id of oldReachable) {
       if (!newReachable.has(id)) {
-        console.log(`  ${id} - ORPHANED`);
+        if (this.debug) {
+          console.log(`  ${id} - ORPHANED`);
+        }
         this.orphanedCommits.add(id);
       } else {
-        console.log(`  ${id} - still reachable`);
+        if (this.debug) {
+          console.log(`  ${id} - still reachable`);
+        }
       }
     }
-
-    console.log("\nOrphaned commits:", Array.from(this.orphanedCommits));
-    console.log("=== END RESET DEBUG ===\n");
+    if (this.debug) {
+      console.log("\nOrphaned commits:", Array.from(this.orphanedCommits));
+      console.log("=== END RESET DEBUG ===\n");
+    }
 
     // Note: Orphaned commits will be shown greyed out
     // They'll be permanently deleted on the next commit to this branch

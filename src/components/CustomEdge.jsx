@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { getSmoothStepPath } from "@xyflow/react";
 import { motion } from "framer-motion";
 import { edgeAnimations } from "../utils/animations";
@@ -11,7 +12,6 @@ const CustomEdge = ({
   sourcePosition,
   targetPosition,
   style = {},
-  markerEnd,
   data = {},
 }) => {
   const [edgePath] = getSmoothStepPath({

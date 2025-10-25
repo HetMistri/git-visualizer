@@ -185,5 +185,6 @@ export const useGitGraph = () => {
     getCommit,
     getBranchesForCommit,
     gitGraph, // Expose gitGraph instance for advanced operations
+    forceUpdate, // Expose forceUpdate for external operations
   };
 };

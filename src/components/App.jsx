@@ -14,6 +14,7 @@ import Toolbar from "./Toolbar";
 import InputModal from "./InputModal";
 import RebaseModal from "./RebaseModal";
 import CommitDetails from "./CommitDetails";
+import Terminal from "./Terminal";
 import { useGitGraph } from "../hooks/useGitGraph";
 import { useRebaseAnimation } from "../hooks/useRebaseAnimation";
 import { GitBranch } from "lucide-react";
@@ -35,15 +36,14 @@ function App() {
     merge,
     reset,
     revert,
-    rebase,
     nodes: graphNodes,
     edges: graphEdges,
     branches,
     currentBranch,
-    stats,
     getCommit,
     getBranchesForCommit,
     gitGraph,
+    forceUpdate,
   } = useGitGraph();
 
   const [nodes, setNodes, onNodesChange] = useNodesState(graphNodes);
@@ -64,6 +64,10 @@ function App() {
 
   // Selected commit for revert operation
   const [selectedCommitId, setSelectedCommitId] = useState(null);
+
+  // Terminal state
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const [terminalCommands, setTerminalCommands] = useState([]);
 
   // Notification state
   const [notification, setNotification] = useState(null); // Update React Flow nodes/edges when graph changes
@@ -88,11 +92,13 @@ function App() {
 
   // Handle commit
   const handleCommit = useCallback(
-    (message, event) => {
+    (message) => {
       const result = commit(message);
       if (result.success) {
         showNotification(`✓ Commit created: ${message}`, "success");
         setCommitModalOpen(false);
+        // Push to terminal
+        setTerminalCommands((prev) => [...prev, `git commit -m "${message}"`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -102,11 +108,12 @@ function App() {
 
   // Handle create branch
   const handleCreateBranch = useCallback(
-    (branchName, event) => {
+    (branchName) => {
       const result = createBranch(branchName);
       if (result.success) {
         showNotification(`✓ Branch created: ${branchName}`, "success");
         setBranchModalOpen(false);
+        setTerminalCommands((prev) => [...prev, `git branch ${branchName}`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -120,6 +127,7 @@ function App() {
       const result = checkout(branchName);
       if (result.success) {
         showNotification(`✓ Switched to branch: ${branchName}`, "success");
+        setTerminalCommands((prev) => [...prev, `git checkout ${branchName}`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -137,6 +145,7 @@ function App() {
           "success"
         );
         setMergeModalOpen(false);
+        setTerminalCommands((prev) => [...prev, `git merge ${sourceBranch}`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -332,10 +341,10 @@ function App() {
       const commitData = getCommit(node.id);
       const commitBranches = getBranchesForCommit(node.id);
 
-      // Auto-switch HEAD to a sensible target branch for this node
+      // Autoo-switch HEAD to a sensible target branch for this node
       // Priority:
       // 1) If currentBranch already points here, keep it
-      // 2) If some branch tip points here, prefer commitData.createdByBranch if present, else the first branch tip
+      // 2) If some branch tip pints here, prefer commitData.createdByBranch if present, else the first branch tip
       // 3) Else fall back to the commit's creating branch (if it exists)
       let targetBranch = null;
 
@@ -392,8 +401,10 @@ function App() {
         onRebase={() => setRebaseModalOpen(true)}
         onQuickTest={handleQuickTest}
         onCheckout={handleCheckout}
+        onToggleTerminal={() => setTerminalOpen((prev) => !prev)}
         currentBranch={currentBranch}
         branches={branches}
+        terminalOpen={terminalOpen}
       />
 
       {/* React Flow Graph */}
@@ -422,7 +433,7 @@ function App() {
         <Background color="#94a3b8" gap={25} size={1.5} variant="dots" />
         <Controls
           showInteractive={false}
-          position="bottom-left"
+          position="top-left"
           className="rf-controls"
         />
       </ReactFlow>
@@ -480,6 +491,17 @@ function App() {
         <div className={`notification notification-${notification.type}`}>
           {notification.message}
         </div>
+      )}
+
+      {/* Terminal */}
+      {terminalOpen && (
+        <Terminal
+          gitGraph={gitGraph}
+          currentBranch={currentBranch}
+          onCommandExecute={forceUpdate}
+          commandsFromToolbar={terminalCommands}
+          onClose={() => setTerminalOpen(false)}
+        />
       )}
     </div>
   );

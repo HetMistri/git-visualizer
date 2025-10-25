@@ -14,6 +14,7 @@ import Toolbar from "./Toolbar";
 import InputModal from "./InputModal";
 import RebaseModal from "./RebaseModal";
 import CommitDetails from "./CommitDetails";
+import Terminal from "./Terminal";
 import { useGitGraph } from "../hooks/useGitGraph";
 import { useRebaseAnimation } from "../hooks/useRebaseAnimation";
 import { GitBranch } from "lucide-react";
@@ -63,6 +64,10 @@ function App() {
   // Selected commit for revert operation
   const [selectedCommitId, setSelectedCommitId] = useState(null);
 
+  // Terminal state
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const [terminalCommands, setTerminalCommands] = useState([]);
+
   // Notification state
   const [notification, setNotification] = useState(null); // Update React Flow nodes/edges when graph changes
   useEffect(() => {
@@ -91,6 +96,8 @@ function App() {
       if (result.success) {
         showNotification(`✓ Commit created: ${message}`, "success");
         setCommitModalOpen(false);
+        // Push to terminal
+        setTerminalCommands((prev) => [...prev, `git commit -m "${message}"`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -105,6 +112,7 @@ function App() {
       if (result.success) {
         showNotification(`✓ Branch created: ${branchName}`, "success");
         setBranchModalOpen(false);
+        setTerminalCommands((prev) => [...prev, `git branch ${branchName}`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -118,6 +126,7 @@ function App() {
       const result = checkout(branchName);
       if (result.success) {
         showNotification(`✓ Switched to branch: ${branchName}`, "success");
+        setTerminalCommands((prev) => [...prev, `git checkout ${branchName}`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -135,6 +144,7 @@ function App() {
           "success"
         );
         setMergeModalOpen(false);
+        setTerminalCommands((prev) => [...prev, `git merge ${sourceBranch}`]);
       } else {
         showNotification(`✗ ${result.error}`, "error");
       }
@@ -390,6 +400,7 @@ function App() {
         onRebase={() => setRebaseModalOpen(true)}
         onQuickTest={handleQuickTest}
         onCheckout={handleCheckout}
+        onToggleTerminal={() => setTerminalOpen((prev) => !prev)}
         currentBranch={currentBranch}
         branches={branches}
       />
@@ -478,6 +489,21 @@ function App() {
         <div className={`notification notification-${notification.type}`}>
           {notification.message}
         </div>
+      )}
+
+      {/* Terminal */}
+      {terminalOpen && (
+        <Terminal
+          gitGraph={gitGraph}
+          currentBranch={currentBranch}
+          onCommandExecute={() => {
+            // Trigger graph update after terminal command
+            setNodes(graphNodes);
+            setEdges(graphEdges);
+          }}
+          commandsFromToolbar={terminalCommands}
+          onClose={() => setTerminalOpen(false)}
+        />
       )}
     </div>
   );

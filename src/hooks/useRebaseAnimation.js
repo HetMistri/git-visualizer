@@ -163,8 +163,8 @@ export const useRebaseAnimation = () => {
     (gitGraph, sourceBranch, targetBranch, setNodes, setEdges, onComplete) => {
       try {
         // Step 1: Capture old state
-  const oldGraphData = convertToReactFlow(gitGraph);
-  const oldNodes = oldGraphData.nodes;
+        const oldGraphData = convertToReactFlow(gitGraph);
+        const oldNodes = oldGraphData.nodes;
 
         // Step 2: Perform the rebase operation
         gitGraph.rebase(sourceBranch, targetBranch);

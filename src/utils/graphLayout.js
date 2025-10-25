@@ -302,7 +302,7 @@ export const convertToReactFlow = (gitGraph) => {
       const parentId = commit.parents[i];
       if (commits.has(parentId)) {
         const childNode = nodes.find((n) => n.id === id);
-  const parentNode = nodes.find((n) => n.id === parentId);
+        const parentNode = nodes.find((n) => n.id === parentId);
 
         // Determine edge type based on node positions
         const isMainLine = i === 0; // First parent is main line

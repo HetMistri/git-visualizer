@@ -327,7 +327,7 @@ export const convertToReactFlow = (gitGraph) => {
           target: id, // Child (newer, on right)
           sourceHandle: null,
           targetHandle: null,
-          type: "smoothstep", // Use smoothstep for better curves
+          type: "custom", // Use custom edge type for circle markers
           animated: false,
           style: {
             stroke: isOrphanedEdge ? "#9ca3af" : edgeColor, // Lighter grey for orphaned edges
@@ -338,13 +338,10 @@ export const convertToReactFlow = (gitGraph) => {
               ? "8,4"
               : undefined,
             opacity: isOrphanedEdge ? 0.4 : isMainLine ? 1 : 0.7, // Slightly more visible
+            strokeLinecap: "round", // Round line caps for smoother appearance
           },
-          markerEnd: {
-            type: "arrowclosed",
-            color: isOrphanedEdge ? "#9ca3af" : edgeColor,
-            width: 20,
-            height: 20,
-          },
+          // Remove markerEnd to eliminate arrowheads - you can add circles via CSS or custom component
+          markerEnd: undefined,
           data: {
             isOrphaned: isOrphanedEdge, // Mark orphaned edges
           },

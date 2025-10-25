@@ -292,3 +292,20 @@
   animation: pulse 1.5s ease-in-out infinite;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
 }
+
+/* Custom edge styling */
+.react-flow__edge-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Custom circle marker at edge ends */
+.custom-edge-marker {
+  transition: r 0.2s ease, opacity 0.2s ease;
+}
+
+/* Hover effect on edges */
+.react-flow__edge:hover .custom-edge-marker {
+  r: 5;
+  opacity: 1;
+}

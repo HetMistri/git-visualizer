@@ -52,7 +52,7 @@ function App() {
   // Animation hooks
   const { performAnimatedRebase, isAnimating: isRebaseAnimating } =
     useRebaseAnimation();
-
+  // Local alias used throughout the component
   const isAnimating = isRebaseAnimating;
 
   // Modal states
@@ -69,8 +69,8 @@ function App() {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [terminalCommands, setTerminalCommands] = useState([]);
 
-  // Notification state
-  const [notification, setNotification] = useState(null); // Update React Flow nodes/edges when graph changes
+  // Toasts (lightweight notifications)
+  const [notification, setNotification] = useState(null);
   useEffect(() => {
     // Add selection state to node data
     const nodesWithSelection = graphNodes.map((node) => ({
@@ -84,77 +84,74 @@ function App() {
     setEdges(graphEdges);
   }, [graphNodes, graphEdges, selectedCommitId, setNodes, setEdges]);
 
-  // Show notification
-  const showNotification = useCallback((message, type = "info") => {
+  // Tiny toast helper
+  const toast = useCallback((message, type = "info") => {
     setNotification({ message, type });
     setTimeout(() => setNotification(null), 3000);
   }, []);
 
-  // Handle commit
-  const handleCommit = useCallback(
+  // 1) commit
+  const onCommit = useCallback(
     (message) => {
       const result = commit(message);
       if (result.success) {
-        showNotification(`✓ Commit created: ${message}`, "success");
+        toast(`✓ Commit created: ${message}`, "success");
         setCommitModalOpen(false);
         // Push to terminal
         setTerminalCommands((prev) => [...prev, `git commit -m "${message}"`]);
       } else {
-        showNotification(`✗ ${result.error}`, "error");
+        toast(`✗ ${result.error}`, "error");
       }
     },
-    [commit, showNotification]
+    [commit, toast]
   );
 
-  // Handle create branch
-  const handleCreateBranch = useCallback(
+  // 2) branch
+  const onBranch = useCallback(
     (branchName) => {
       const result = createBranch(branchName);
       if (result.success) {
-        showNotification(`✓ Branch created: ${branchName}`, "success");
+        toast(`✓ Branch created: ${branchName}`, "success");
         setBranchModalOpen(false);
         setTerminalCommands((prev) => [...prev, `git branch ${branchName}`]);
       } else {
-        showNotification(`✗ ${result.error}`, "error");
+        toast(`✗ ${result.error}`, "error");
       }
     },
-    [createBranch, showNotification]
+    [createBranch, toast]
   );
 
-  // Handle checkout
-  const handleCheckout = useCallback(
+  // 3) checkout
+  const onCheckout = useCallback(
     (branchName) => {
       const result = checkout(branchName);
       if (result.success) {
-        showNotification(`✓ Switched to branch: ${branchName}`, "success");
+        toast(`✓ Switched to branch: ${branchName}`, "success");
         setTerminalCommands((prev) => [...prev, `git checkout ${branchName}`]);
       } else {
-        showNotification(`✗ ${result.error}`, "error");
+        toast(`✗ ${result.error}`, "error");
       }
     },
-    [checkout, showNotification]
+    [checkout, toast]
   );
 
-  // Handle merge
-  const handleMerge = useCallback(
+  // 4) merge
+  const onMerge = useCallback(
     (sourceBranch) => {
       const result = merge(sourceBranch);
       if (result.success) {
-        showNotification(
-          `✓ Merged ${sourceBranch} into ${currentBranch}`,
-          "success"
-        );
+        toast(`✓ Merged ${sourceBranch} into ${currentBranch}`, "success");
         setMergeModalOpen(false);
         setTerminalCommands((prev) => [...prev, `git merge ${sourceBranch}`]);
       } else {
-        showNotification(`✗ ${result.error}`, "error");
+        toast(`✗ ${result.error}`, "error");
       }
     },
-    [merge, currentBranch, showNotification]
+    [merge, currentBranch, toast]
   );
 
-  // Handle reset to a specific commit
-  const handleResetToCommit = useCallback(
+  // 7) reset (to specific commit)
+  const onResetToCommit = useCallback(
     (commitId) => {
       // Preview: compute which commits on the target branch would become orphaned
       const targetBranch = gitGraph.HEAD;
@@ -195,45 +192,42 @@ function App() {
         if (result.success) {
           const orphanCount = gitGraph.orphanedCommits.size;
           if (orphanCount > 0) {
-            showNotification(
+            toast(
               `✓ Branch reset. ${orphanCount} commit${
                 orphanCount > 1 ? "s" : ""
               } orphaned (will be removed on next commit)`,
               "success"
             );
           } else {
-            showNotification(
-              `✓ Branch ${currentBranch} reset to commit`,
-              "success"
-            );
+            toast(`✓ Branch ${currentBranch} reset to commit`, "success");
           }
         } else {
-          showNotification(`✗ ${result.error}`, "error");
+          toast(`✗ ${result.error}`, "error");
         }
       }
     },
-    [reset, currentBranch, showNotification, gitGraph]
+    [reset, currentBranch, toast, gitGraph]
   );
 
-  // Quick test sequence
-  const handleQuickTest = useCallback(() => {
+  // Quick test sequence (demo)
+  const onQuickRun = useCallback(() => {
     const frontend = "frontend";
     const backend = "backend";
 
-    showNotification("▶ Running quick test scenario...", "info");
+    toast("▶ Running quick test scenario...", "info");
 
     // Ensure branches exist
     if (!branches.includes(frontend)) {
       const r1 = createBranch(frontend);
       if (!r1.success) {
-        showNotification(`✗ ${r1.error}`, "error");
+        toast(`✗ ${r1.error}`, "error");
         return;
       }
     }
     if (!branches.includes(backend)) {
       const r2 = createBranch(backend);
       if (!r2.success) {
-        showNotification(`✗ ${r2.error}`, "error");
+        toast(`✗ ${r2.error}`, "error");
         return;
       }
     }
@@ -249,13 +243,13 @@ function App() {
     checkout(backend);
     commit("Feat: add B");
 
-    showNotification("✓ Quick test scenario complete", "success");
-  }, [branches, createBranch, checkout, commit, showNotification]);
+    toast("✓ Quick test scenario complete", "success");
+  }, [branches, createBranch, checkout, commit, toast]);
 
-  // Handle revert
-  const handleRevert = useCallback(() => {
+  // 6) revert
+  const onRevert = useCallback(() => {
     if (!selectedCommitId) {
-      showNotification("✗ Please select a commit to revert", "error");
+      toast("✗ Please select a commit to revert", "error");
       return;
     }
 
@@ -265,40 +259,31 @@ function App() {
     ) {
       const result = revert(selectedCommitId);
       if (result.success) {
-        showNotification(`✓ Reverted commit: ${commitData.message}`, "success");
+        toast(`✓ Reverted commit: ${commitData.message}`, "success");
         setSelectedCommitId(null);
       } else {
-        showNotification(`✗ ${result.error}`, "error");
+        toast(`✗ ${result.error}`, "error");
       }
     }
-  }, [selectedCommitId, revert, getCommit, showNotification]);
+  }, [selectedCommitId, revert, getCommit, toast]);
 
-  // Handle rebase with animation
-  const handleRebase = useCallback(
+  // 5) rebase (animated)
+  const onRebase = useCallback(
     (data) => {
       const { sourceBranch, targetBranch } = data;
 
       if (sourceBranch === targetBranch) {
-        showNotification(
-          "✗ Source and target branches must be different",
-          "error"
-        );
+        toast("✗ Source and target branches must be different", "error");
         return;
       }
 
       if (isAnimating) {
-        showNotification(
-          "✗ Please wait for current animation to complete",
-          "warning"
-        );
+        toast("✗ Please wait for current animation to complete", "warning");
         return;
       }
 
       // Show notification that animation is starting
-      showNotification(
-        `🎬 Rebasing ${sourceBranch} onto ${targetBranch}...`,
-        "info"
-      );
+      toast(`🎬 Rebasing ${sourceBranch} onto ${targetBranch}...`, "info");
       setRebaseModalOpen(false);
 
       // Perform animated rebase
@@ -310,29 +295,19 @@ function App() {
         setEdges,
         () => {
           // Animation complete callback
-          showNotification(
-            `✓ Rebased ${sourceBranch} onto ${targetBranch}`,
-            "success"
-          );
+          toast(`✓ Rebased ${sourceBranch} onto ${targetBranch}`, "success");
         }
       );
 
       if (!result.success) {
-        showNotification(`✗ ${result.error}`, "error");
+        toast(`✗ ${result.error}`, "error");
       }
     },
-    [
-      gitGraph,
-      performAnimatedRebase,
-      setNodes,
-      setEdges,
-      showNotification,
-      isAnimating,
-    ]
+    [gitGraph, performAnimatedRebase, setNodes, setEdges, toast, isAnimating]
   );
 
-  // Handle node click
-  const onNodeClick = useCallback(
+  // Node select → auto-branch context + details
+  const onNodeSelect = useCallback(
     (event, node) => {
       // Set selected commit ID for revert operation
       setSelectedCommitId(node.id);
@@ -341,6 +316,9 @@ function App() {
       const commitData = getCommit(node.id);
       const commitBranches = getBranchesForCommit(node.id);
 
+      // Orphaned commits are view-only
+      const isOrphan = gitGraph.orphanedCommits.has(node.id);
+
       // Autoo-switch HEAD to a sensible target branch for this node
       // Priority:
       // 1) If currentBranch already points here, keep it
@@ -348,7 +326,10 @@ function App() {
       // 3) Else fall back to the commit's creating branch (if it exists)
       let targetBranch = null;
 
-      if (commitBranches.includes(currentBranch)) {
+      if (isOrphan) {
+        targetBranch = null;
+        toast("Orphaned commit (read-only)", "warning");
+      } else if (commitBranches.includes(currentBranch)) {
         targetBranch = currentBranch;
       } else if (commitBranches.length > 0) {
         if (
@@ -366,10 +347,10 @@ function App() {
         targetBranch = commitData.createdByBranch;
       }
 
-      if (targetBranch && targetBranch !== currentBranch) {
+      if (!isOrphan && targetBranch && targetBranch !== currentBranch) {
         const result = checkout(targetBranch);
         if (result.success) {
-          showNotification(
+          toast(
             `✓ Switched to branch '${targetBranch}' for this commit`,
             "info"
           );
@@ -379,6 +360,7 @@ function App() {
       setSelectedCommit({
         ...commitData,
         branches: commitBranches,
+        isOrphaned: isOrphan,
       });
     },
     [
@@ -387,7 +369,8 @@ function App() {
       checkout,
       currentBranch,
       branches,
-      showNotification,
+      toast,
+      gitGraph,
     ]
   );
 
@@ -399,8 +382,8 @@ function App() {
         onCreateBranch={() => setBranchModalOpen(true)}
         onMerge={() => setMergeModalOpen(true)}
         onRebase={() => setRebaseModalOpen(true)}
-        onQuickTest={handleQuickTest}
-        onCheckout={handleCheckout}
+        onQuickTest={onQuickRun}
+        onCheckout={onCheckout}
         onToggleTerminal={() => setTerminalOpen((prev) => !prev)}
         currentBranch={currentBranch}
         branches={branches}
@@ -413,10 +396,9 @@ function App() {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onNodeClick={isAnimating ? undefined : onNodeClick}
+        onNodeClick={isAnimating ? undefined : onNodeSelect}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        fitView
         onInit={(instance) => instance.fitView({ padding: 0.2, duration: 500 })}
         minZoom={0.2}
         maxZoom={2}
@@ -442,7 +424,7 @@ function App() {
       <InputModal
         isOpen={commitModalOpen}
         onClose={() => setCommitModalOpen(false)}
-        onSubmit={handleCommit}
+        onSubmit={onCommit}
         title="Create Commit"
         placeholder="Enter commit message..."
         buttonText="Commit"
@@ -451,7 +433,7 @@ function App() {
       <InputModal
         isOpen={branchModalOpen}
         onClose={() => setBranchModalOpen(false)}
-        onSubmit={handleCreateBranch}
+        onSubmit={onBranch}
         title="Create Branch"
         placeholder="Enter branch name..."
         buttonText="Create"
@@ -460,7 +442,7 @@ function App() {
       <InputModal
         isOpen={mergeModalOpen}
         onClose={() => setMergeModalOpen(false)}
-        onSubmit={handleMerge}
+        onSubmit={onMerge}
         title="Merge Branch"
         placeholder="Enter branch to merge..."
         buttonText="Merge"
@@ -469,7 +451,7 @@ function App() {
       <RebaseModal
         isOpen={rebaseModalOpen}
         onClose={() => setRebaseModalOpen(false)}
-        onSubmit={handleRebase}
+        onSubmit={onRebase}
         branches={branches}
         currentBranch={currentBranch}
       />
@@ -479,9 +461,9 @@ function App() {
           commit={selectedCommit}
           branches={selectedCommit.branches}
           onClose={() => setSelectedCommit(null)}
-          onCheckout={handleCheckout}
-          onRevert={handleRevert}
-          onReset={() => handleResetToCommit(selectedCommit.id)}
+          onCheckout={onCheckout}
+          onRevert={onRevert}
+          onReset={() => onResetToCommit(selectedCommit.id)}
           currentBranch={currentBranch}
         />
       )}

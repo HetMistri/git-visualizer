@@ -1,16 +1,10 @@
 import { useState } from "react";
 import { X, GitCompare } from "lucide-react";
-import "./InputModal.css";
+import "./RebaseModal.css"; // we’ll reuse your modern modal styles
 
-const RebaseModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  branches,
-  currentBranch,
-}) => {
-  const [sourceBranch, setSourceBranch] = useState("");
-  const [targetBranch, setTargetBranch] = useState("");
+const RebaseModal = ({ isOpen, onClose, onSubmit, branches, currentBranch }) => {
+  const [source, setSource] = useState("");
+  const [target, setTarget] = useState("");
   const [error, setError] = useState("");
 
   if (!isOpen) return null;
@@ -19,73 +13,70 @@ const RebaseModal = ({
     e.preventDefault();
     setError("");
 
-    if (!sourceBranch || !targetBranch) {
-      setError("Please select both source and target branches");
+    if (!source || !target) {
+      setError("Please select both branches.");
       return;
     }
 
-    if (sourceBranch === targetBranch) {
-      setError("Source and target branches must be different");
+    if (source === target) {
+      setError("Branches must be different.");
       return;
     }
 
-    onSubmit({ sourceBranch, targetBranch });
-    setSourceBranch("");
-    setTargetBranch("");
+    onSubmit({ source, target });
+    handleClose();
   };
 
   const handleClose = () => {
-    setSourceBranch("");
-    setTargetBranch("");
+    setSource("");
+    setTarget("");
     setError("");
     onClose();
   };
 
   return (
     <div className="modal-overlay" onClick={handleClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+      <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
         <div className="modal-header">
           <div className="modal-title-wrapper">
-            <GitCompare size={24} className="modal-icon" />
-            <h2 className="modal-title">Rebase Branch</h2>
+            <GitCompare className="modal-icon" size={22} />
+            <h3 className="modal-title">Rebase Branch</h3>
           </div>
-          <button
-            className="modal-close"
-            onClick={handleClose}
-            aria-label="Close"
-          >
-            <X size={20} />
+          <button className="close-btn" onClick={handleClose}>
+            <X size={18} />
           </button>
         </div>
 
+        {/* Form */}
         <form onSubmit={handleSubmit} className="modal-form">
-          <div className="rebase-explanation">
+          <div className="rebase-info">
             <p>
-              Rebase will replay commits from the source branch onto the target
-              branch.
+              <strong>Rebase</strong> moves commits from one branch onto another —
+              like stacking your changes on a fresh base.
             </p>
-            <p className="rebase-formula">
-              <code>{sourceBranch || "source"}</code> →{" "}
-              <code>{targetBranch || "target"}</code>
-            </p>
+            <div className="rebase-preview">
+              <code>{source || "source"}</code> → <code>{target || "target"}</code>
+            </div>
           </div>
 
+          {/* Source branch */}
           <div className="input-wrapper">
-            <label htmlFor="sourceBranch" className="input-label">
-              Source Branch (to rebase)
+            <label htmlFor="source" className="input-label">
+              Source branch (to move)
             </label>
             <select
-              id="sourceBranch"
-              value={sourceBranch}
-              onChange={(e) => setSourceBranch(e.target.value)}
+              id="source"
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
               className={`modal-input modal-select ${
-                error && !sourceBranch ? "input-error" : ""
+                error && !source ? "has-error" : ""
               }`}
             >
               <option value="">Select source branch...</option>
-              {branches.map((branch) => (
-                <option key={branch} value={branch}>
-                  {branch} {branch === currentBranch ? "(current)" : ""}
+              {branches.map((b) => (
+                <option key={b} value={b}>
+                  {b} {b === currentBranch ? "(current)" : ""}
                 </option>
               ))}
             </select>
@@ -93,39 +84,37 @@ const RebaseModal = ({
 
           <div className="rebase-arrow">↓</div>
 
+          {/* Target branch */}
           <div className="input-wrapper">
-            <label htmlFor="targetBranch" className="input-label">
-              Target Branch (new base)
+            <label htmlFor="target" className="input-label">
+              Target branch (new base)
             </label>
             <select
-              id="targetBranch"
-              value={targetBranch}
-              onChange={(e) => setTargetBranch(e.target.value)}
+              id="target"
+              value={target}
+              onChange={(e) => setTarget(e.target.value)}
               className={`modal-input modal-select ${
-                error && !targetBranch ? "input-error" : ""
+                error && !target ? "has-error" : ""
               }`}
             >
               <option value="">Select target branch...</option>
-              {branches.map((branch) => (
-                <option key={branch} value={branch}>
-                  {branch} {branch === currentBranch ? "(current)" : ""}
+              {branches.map((b) => (
+                <option key={b} value={b}>
+                  {b} {b === currentBranch ? "(current)" : ""}
                 </option>
               ))}
             </select>
           </div>
 
-          {error && <span className="error-message">{error}</span>}
+          {error && <p className="error-text">{error}</p>}
 
+          {/* Actions */}
           <div className="modal-actions">
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={handleClose}
-            >
+            <button type="button" className="btn secondary" onClick={handleClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn-primary">
-              <GitCompare size={18} />
+            <button type="submit" className="btn primary">
+              <GitCompare size={16} />
               Rebase
             </button>
           </div>

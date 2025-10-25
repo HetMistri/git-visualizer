@@ -6,51 +6,57 @@ import { GitBranch, GitMerge } from "lucide-react";
 import { nodeVariants } from "../utils/animations";
 import "./CustomNode.css";
 
+/**
+ * CustomNode.jsx
+ * 
+ * Represents one commit node in the git graph.
+ * Supports animations for new commits, rebase, revert, merge, etc.
+ */
 const CustomNode = ({ data, isConnectable }) => {
   const {
     commit,
-    branches,
-    branchColors,
+    branches = [],
+    branchColors = {},
     color,
     isHead,
     isMerge,
     isSelected,
     isOrphaned,
-    animationType, // New: determines which animation to play
-    isNew, // New: indicates if this is a newly created node
+    animationType,
+    isNew,
   } = data;
 
-  const [shouldAnimate, setShouldAnimate] = useState(isNew);
+  const [playAnim, setPlayAnim] = useState(isNew);
 
+  // Stop animation after it plays once (for new commits)
   useEffect(() => {
     if (isNew) {
-      // Reset animation flag after animation completes
-      const timer = setTimeout(() => setShouldAnimate(false), 1000);
+      const timer = setTimeout(() => setPlayAnim(false), 1000);
       return () => clearTimeout(timer);
     }
   }, [isNew]);
 
-  // Determine which animation variant to use
-  const getAnimationVariant = () => {
-    if (!shouldAnimate && !animationType) return null;
-
+  // Decide which animation to use (kept simple)
+  const pickAnim = () => {
     if (isOrphaned) return nodeVariants.orphaned;
-    if (animationType === "rebaseOld") return nodeVariants.rebaseOld;
-    if (animationType === "rebaseNew") return nodeVariants.rebaseNew;
-    if (animationType === "merge") return nodeVariants.mergeNew;
-    if (animationType === "mergeParent") return nodeVariants.mergeParent;
-    if (animationType === "revert") return nodeVariants.revertNew;
-    if (animationType === "revertTarget") return nodeVariants.revertTarget;
-    if (isNew) return nodeVariants.newCommit;
-
+    const map = {
+      rebaseOld: nodeVariants.rebaseOld,
+      rebaseNew: nodeVariants.rebaseNew,
+      merge: nodeVariants.mergeNew,
+      mergeParent: nodeVariants.mergeParent,
+      revert: nodeVariants.revertNew,
+      revertTarget: nodeVariants.revertTarget,
+    };
+    if (animationType && map[animationType]) return map[animationType];
+    if (isNew && playAnim) return nodeVariants.newCommit;
     return null;
   };
 
-  const animationVariant = getAnimationVariant();
+  const anim = pickAnim();
 
   return (
     <div className="custom-node-wrapper">
-      {/* Connection handles for LEFT TO RIGHT flow - positioned at circle center */}
+      {/* Small invisible handles for connections */}
       <Handle
         type="target"
         position={Position.Left}
@@ -60,20 +66,19 @@ const CustomNode = ({ data, isConnectable }) => {
 
       <motion.div
         className="node-content"
-        initial={animationVariant?.initial}
-        animate={animationVariant?.animate}
-        exit={animationVariant?.exit}
+        initial={anim?.initial}
+        animate={anim?.animate}
+        exit={anim?.exit}
       >
-        {/* Main node circle */}
+        {/* Commit Circle */}
         <motion.div
-          className={`commit-node ${isHead ? "head-node" : ""} ${
-            isMerge ? "merge-node" : ""
-          } ${isSelected ? "selected-node" : ""} ${
-            isOrphaned ? "orphaned-node" : ""
-          }`}
-          style={{
-            "--node-color": isOrphaned ? "#6b7280" : color,
-          }}
+          className={`commit-node
+            ${isHead ? "head-node" : ""}
+            ${isMerge ? "merge-node" : ""}
+            ${isSelected ? "selected-node" : ""}
+            ${isOrphaned ? "orphaned-node" : ""}
+          `}
+          style={{ "--node-color": isOrphaned ? "#6b7280" : color }}
           whileHover={{ scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
@@ -83,7 +88,7 @@ const CustomNode = ({ data, isConnectable }) => {
             </div>
           )}
 
-          {/* Pulse effect for HEAD (not shown for orphaned) */}
+          {/* Glowing pulse for HEAD */}
           {isHead && !isOrphaned && (
             <motion.div
               className="head-pulse"
@@ -92,7 +97,7 @@ const CustomNode = ({ data, isConnectable }) => {
             />
           )}
 
-          {/* Glow effect for new commits */}
+          {/* Soft glow for new commits */}
           {isNew && !isOrphaned && (
             <motion.div
               className="glow-pulse"
@@ -108,9 +113,9 @@ const CustomNode = ({ data, isConnectable }) => {
           )}
         </motion.div>
 
-        {/* Commit info below node */}
+        {/* Commit info */}
         <div className={`commit-info ${isOrphaned ? "orphaned-info" : ""}`}>
-          <div className="commit-hash">{commit.id.substring(0, 7)}</div>
+          <div className="commit-hash">{commit.id.slice(0, 7)}</div>
           {commit.message && (
             <div className="commit-message">{commit.message}</div>
           )}
@@ -119,7 +124,7 @@ const CustomNode = ({ data, isConnectable }) => {
         </div>
       </motion.div>
 
-      {/* Branch badges */}
+      {/* Branch tags below each commit */}
       {branches.length > 0 && (
         <motion.div
           className="branch-badges"
@@ -127,24 +132,23 @@ const CustomNode = ({ data, isConnectable }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.3 }}
         >
-          {branches.map((branch, index) => {
-            // Use the specific branch's color, not the node's color
-            const branchColor = branchColors?.[branch] || color;
+          {branches.map((b, i) => {
+            const bColor = branchColors[b] || color;
+            const isActive = isHead && b === data.headBranch;
+
             return (
               <motion.div
-                key={branch}
-                className={`branch-badge ${
-                  isHead && branch === data.headBranch ? "active-branch" : ""
-                }`}
+                key={b}
+                className={`branch-badge ${isActive ? "active-branch" : ""}`}
                 style={{
-                  backgroundColor: branchColor + "20",
-                  borderColor: branchColor,
-                  color: branchColor,
+                  backgroundColor: bColor + "20",
+                  borderColor: bColor,
+                  color: bColor,
                 }}
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.85 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{
-                  delay: 0.3 + index * 0.1,
+                  delay: 0.3 + i * 0.1,
                   type: "spring",
                   stiffness: 200,
                   damping: 15,
@@ -152,7 +156,7 @@ const CustomNode = ({ data, isConnectable }) => {
                 whileHover={{ scale: 1.05 }}
               >
                 <GitBranch size={12} />
-                <span>{branch}</span>
+                <span>{b}</span>
               </motion.div>
             );
           })}

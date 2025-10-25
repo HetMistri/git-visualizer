@@ -20,131 +20,135 @@ const CommitDetails = ({
 }) => {
   if (!commit) return null;
 
-  const handleBranchClick = (branchName) => {
-    onCheckout(branchName);
+  const isOrphan = !!commit.isOrphaned;
+
+  const clickBranch = (name) => {
+    if (isOrphan) return; // read-only
+    onCheckout(name);
     onClose();
   };
 
-  const handleRevert = () => {
-    if (onRevert) {
-      onRevert();
-      onClose();
-    }
+  const clickRevert = () => {
+    if (isOrphan) return;
+    onRevert?.();
+    onClose();
   };
 
-  const handleReset = () => {
-    if (onReset) {
-      onReset();
-      onClose();
-    }
+  const clickReset = () => {
+    if (isOrphan) return;
+    onReset?.();
+    onClose();
   };
 
   return (
-    <div className="details-overlay" onClick={onClose}>
-      <div
-        className="details-container glass-strong"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="details-header">
-          <div className="header-icon">
-            <GitCommit size={24} />
+    <div className="overlay" onClick={onClose}>
+      <div className="card" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="card-header">
+          <div className="icon-box">
+            <GitCommit size={22} />
           </div>
-          <h2 className="details-title">Commit Details</h2>
-          <button
-            className="details-reset"
-            onClick={handleReset}
-            aria-label="Reset to commit"
-            title={`Reset current branch (HEAD: ${currentBranch}) to this commit`}
-          >
-            <RotateCcw size={18} />
-            <span>Reset (HEAD: {currentBranch})</span>
-          </button>
-          <button
-            className="details-revert"
-            onClick={handleRevert}
-            aria-label="Revert commit"
-            title="Revert this commit"
-          >
-            <Undo2 size={18} />
-            <span>Revert</span>
-          </button>
-          <button
-            className="details-close"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <X size={20} />
-          </button>
+          <h2 className="title">Commit Details</h2>
+
+          {isOrphan && (
+            <div
+              className="badge read-only"
+              title="Orphaned commit – actions disabled"
+            >
+              Read-only
+            </div>
+          )}
+
+          <div className="header-buttons">
+            <button
+              className="btn reset"
+              onClick={clickReset}
+              title={
+                isOrphan
+                  ? "Reset disabled for orphaned commit"
+                  : `Reset ${currentBranch} to this commit`
+              }
+              disabled={isOrphan}
+            >
+              <RotateCcw size={16} />
+              <span>Reset</span>
+            </button>
+            <button
+              className="btn revert"
+              onClick={clickRevert}
+              title={
+                isOrphan
+                  ? "Revert disabled for orphaned commit"
+                  : "Revert this commit"
+              }
+              disabled={isOrphan}
+            >
+              <Undo2 size={16} />
+              <span>Revert</span>
+            </button>
+            <button className="btn close" onClick={onClose} title="Close">
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
-        <div className="details-body">
-          {/* Commit Hash */}
-          <div className="detail-section">
-            <div className="detail-label">
-              <Hash size={16} />
-              <span>Commit Hash</span>
-            </div>
-            <div className="detail-value hash-value">{commit.id}</div>
-          </div>
+        {/* Body */}
+        <div className="card-body">
+          <Info
+            label="Commit Hash"
+            icon={<Hash size={14} />}
+            value={commit.id}
+            code
+          />
+          <Info
+            label="Message"
+            icon={<GitCommit size={14} />}
+            value={commit.message}
+          />
+          <Info
+            label="Timestamp"
+            icon={<Calendar size={14} />}
+            value={commit.timestamp}
+          />
 
-          {/* Commit Message */}
-          <div className="detail-section">
-            <div className="detail-label">
-              <GitCommit size={16} />
-              <span>Message</span>
-            </div>
-            <div className="detail-value message-value">{commit.message}</div>
-          </div>
-
-          {/* Timestamp */}
-          <div className="detail-section">
-            <div className="detail-label">
-              <Calendar size={16} />
-              <span>Timestamp</span>
-            </div>
-            <div className="detail-value">{commit.timestamp}</div>
-          </div>
-
-          {/* Parents */}
           {commit.parents.length > 0 && (
-            <div className="detail-section">
-              <div className="detail-label">
-                <GitCommit size={16} />
-                <span>Parent{commit.parents.length > 1 ? "s" : ""}</span>
-              </div>
-              <div className="parents-list">
-                {commit.parents.map((parentId, index) => (
-                  <div key={parentId} className="parent-item">
-                    <span className="parent-number">{index + 1}</span>
-                    <span className="parent-hash">{parentId}</span>
+            <div className="section">
+              <Label
+                icon={<GitCommit size={14} />}
+                text={`Parent${commit.parents.length > 1 ? "s" : ""}`}
+              />
+              <div className="parent-list">
+                {commit.parents.map((pid, i) => (
+                  <div key={pid} className="parent">
+                    <span className="num">{i + 1}</span>
+                    <span className="hash">{pid}</span>
                   </div>
                 ))}
               </div>
               {commit.parents.length > 1 && (
-                <div className="merge-badge">
-                  <span>🔀 Merge Commit</span>
-                </div>
+                <div className="merge-tag">🔀 Merge Commit</div>
               )}
             </div>
           )}
 
-          {/* Branches */}
-          {branches && branches.length > 0 && (
-            <div className="detail-section">
-              <div className="detail-label">
-                <GitBranch size={16} />
-                <span>Branches</span>
-              </div>
-              <div className="branches-list">
-                {branches.map((branch) => (
+          {branches?.length > 0 && (
+            <div className="section">
+              <Label icon={<GitBranch size={14} />} text="Branches" />
+              <div className="branch-list">
+                {branches.map((b) => (
                   <button
-                    key={branch}
+                    key={b}
                     className="branch-chip"
-                    onClick={() => handleBranchClick(branch)}
-                    title={`Checkout to ${branch}`}
+                    onClick={() => clickBranch(b)}
+                    disabled={isOrphan}
+                    title={
+                      isOrphan
+                        ? "Checkout disabled on orphaned commit"
+                        : `Switch to ${b}`
+                    }
                   >
-                    <GitBranch size={14} />
-                    <span>{branch}</span>
+                    <GitBranch size={12} />
+                    <span>{b}</span>
                   </button>
                 ))}
               </div>
@@ -155,5 +159,20 @@ const CommitDetails = ({
     </div>
   );
 };
+
+// Small helper subcomponents
+const Info = ({ label, icon, value, code }) => (
+  <div className="section">
+    <Label icon={icon} text={label} />
+    <div className={`value ${code ? "code" : ""}`}>{value}</div>
+  </div>
+);
+
+const Label = ({ icon, text }) => (
+  <div className="label">
+    {icon}
+    <span>{text}</span>
+  </div>
+);
 
 export default CommitDetails;

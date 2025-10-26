@@ -8,16 +8,14 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
-import CustomNode from "./CustomNode";
-import CustomEdge from "./CustomEdge";
-import Toolbar from "./Toolbar";
-import InputModal from "./InputModal";
-import RebaseModal from "./RebaseModal";
-import CommitDetails from "./CommitDetails";
-import Terminal from "./Terminal";
-import { useGitGraph } from "../hooks/useGitGraph";
-import { useRebaseAnimation } from "../hooks/useRebaseAnimation";
-import { GitBranch, Eraser } from "lucide-react";
+import { CustomNode, CustomEdge } from "../features/visualizer";
+import { Toolbar } from "../features/visualizer";
+import { InputModal, RebaseModal } from "../features/visualizer";
+import { CommitDetails } from "../features/visualizer";
+import { Terminal } from "../features/visualizer";
+import { useGitGraph, useRebaseAnimation } from "../features/visualizer";
+import { Eraser, Sun, Moon } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
 import "./App.css";
 
 const nodeTypes = {
@@ -46,6 +44,8 @@ function App() {
     gitGraph,
     forceUpdate,
   } = useGitGraph();
+
+  const { toggleTheme, isDark } = useTheme();
 
   const [nodes, setNodes, onNodesChange] = useNodesState(graphNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(graphEdges);
@@ -337,10 +337,10 @@ function App() {
       // Orphaned commits are view-only
       const isOrphan = gitGraph.orphanedCommits.has(node.id);
 
-      // Autoo-switch HEAD to a sensible target branch for this node
+      // Auto-switch HEAD to a sensible target branch for this node
       // Priority:
       // 1) If currentBranch already points here, keep it
-      // 2) If some branch tip pints here, prefer commitData.createdByBranch if present, else the first branch tip
+      // 2) If some branch tip points here, prefer commitData.createdByBranch if present, else the first branch tip
       // 3) Else fall back to the commit's creating branch (if it exists)
       let targetBranch = null;
 
@@ -394,6 +394,16 @@ function App() {
 
   return (
     <div className="app-container">
+      {/* Theme Toggle Button - Top Right */}
+      <button
+        className="theme-toggle-btn"
+        onClick={toggleTheme}
+        title={`Switch to ${isDark ? "light" : "dark"} mode`}
+        aria-label="Toggle theme"
+      >
+        {isDark ? <Sun size={20} /> : <Moon size={20} />}
+      </button>
+
       {/* Toolbar */}
       <Toolbar
         onCommit={() => setCommitModalOpen(true)}

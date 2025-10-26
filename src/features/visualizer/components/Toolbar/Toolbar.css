@@ -1,8 +1,9 @@
+/* Copied from original src/components/Toolbar.css to keep styling consistent */
 /* Horizontal Pill Toolbar - Bottom Center */
 .toolbar-pill {
   position: fixed;
   left: 50%;
-  bottom: 20px; 
+  bottom: 20px;
   transform: translateX(-50%);
   transform-origin: center center;
   z-index: 1000;
@@ -16,12 +17,18 @@
   height: 64px;
   animation: slideInBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  /* overflow-x: auto;
-  overflow-y: hidden; */
+  overflow-x: auto;
   overflow: hidden;
   scrollbar-gutter: stable;
   isolation: isolate;
   transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide desktop toolbar on mobile */
+@media (max-width: 768px) {
+  .toolbar-pill {
+    display: none;
+  }
 }
 
 /* When terminal is open, move toolbar up */
@@ -214,6 +221,7 @@
   flex-direction: row;
   gap: 12px;
   align-items: center;
+  /* overflow-x: scroll; */
 }
 
 .branch-dot {
@@ -370,4 +378,266 @@
 .branch-option:focus-visible {
   outline: 3px solid var(--primary-color);
   outline-offset: 2px;
+}
+
+/* ================================
+   BURGER MENU (Mobile Only)
+================================ */
+.burger-menu-btn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 1001;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.burger-menu-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  border-color: var(--primary-color);
+}
+
+.burger-menu-btn:active {
+  transform: scale(0.95);
+}
+
+.burger-menu-btn.terminal-open {
+  bottom: 280px;
+}
+
+@media (max-width: 768px) {
+  .burger-menu-btn {
+    display: flex;
+  }
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 1100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-overlay {
+    display: block;
+  }
+}
+
+/* Mobile Menu Panel */
+.mobile-menu {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 80vh;
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px 24px 0 0;
+  animation: slideUpMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Menu Header */
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mobile-menu-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.mobile-menu-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--error-color);
+  transform: rotate(90deg);
+}
+
+/* Mobile Menu Content */
+.mobile-menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mobile-menu-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mobile-menu-content::-webkit-scrollbar-thumb {
+  background: var(--glass-border);
+  border-radius: 2px;
+}
+
+/* Mobile Menu Item */
+.mobile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.mobile-menu-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(4px);
+  border-color: var(--primary-color);
+}
+
+.mobile-menu-item:active {
+  transform: translateX(2px) scale(0.98);
+}
+
+.mobile-menu-item svg {
+  flex-shrink: 0;
+}
+
+/* Mobile Menu Divider */
+.mobile-menu-divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 12px 0;
+}
+
+/* Mobile Branches Section */
+.mobile-menu-branches {
+  margin-top: 8px;
+}
+
+.mobile-menu-branches h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  padding: 0 4px;
+}
+
+.mobile-branch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-branch-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.mobile-branch-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(4px);
+}
+
+.mobile-branch-item.active {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: var(--primary-color);
+}
+
+.mobile-branch-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.mobile-branch-name {
+  flex: 1;
+  font-family: "Courier New", monospace;
+  font-size: 13px;
+}
+
+.mobile-branch-badge {
+  padding: 2px 8px;
+  background: var(--primary-color);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
 }

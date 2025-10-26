@@ -1,68 +1,23 @@
+/**
+ * Global Styles Entry Point
+ * Imports all style modules in correct order
+ */
+
+/* Google Fonts */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* Import design tokens and themes */
+@import "./variables.css";
+@import "./themes.css";
+
+/* ============================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================ */
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-:root {
-  /* Z-index layers (theme-independent) */
-  --z-toolbar: 100;
-  --z-tooltip: 10000;
-  --z-modal: 1000;
-  --z-overlay: 9999;
-}
-
-/* Dark Theme (default) */
-:root,
-[data-theme="dark"] {
-  --primary-color: #667eea;
-  --secondary-color: #764ba2;
-  --accent-color: #f093fb;
-  --success-color: #4ade80;
-  --warning-color: #fbbf24;
-  --error-color: #f87171;
-  --background-dark: #0f172a;
-  --background-darker: #020617;
-  --background-gradient-start: #020617;
-  --background-gradient-end: #0f172a;
-  --glass-background: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-hover: rgba(255, 255, 255, 0.08);
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-  --shadow-color: rgba(102, 126, 234, 0.3);
-  --shadow-strong: rgba(0, 0, 0, 0.5);
-  --overlay-bg: rgba(0, 0, 0, 0.6);
-  --node-bg: rgba(15, 23, 42, 0.95);
-  --node-border: rgba(255, 255, 255, 0.15);
-}
-
-/* Light Theme */
-[data-theme="light"] {
-  --primary-color: #5b6dd6;
-  --secondary-color: #6b4c9a;
-  --accent-color: #e084f8;
-  --success-color: #22c55e;
-  --warning-color: #f59e0b;
-  --error-color: #ef4444;
-  --background-dark: #f8fafc;
-  --background-darker: #ffffff;
-  --background-gradient-start: #ffffff;
-  --background-gradient-end: #f1f5f9;
-  --glass-background: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(148, 163, 184, 0.2);
-  --glass-hover: rgba(241, 245, 249, 0.9);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --shadow-color: rgba(91, 109, 214, 0.2);
-  --shadow-strong: rgba(0, 0, 0, 0.1);
-  --overlay-bg: rgba(15, 23, 42, 0.4);
-  --node-bg: rgba(255, 255, 255, 0.95);
-  --node-border: rgba(148, 163, 184, 0.3);
 }
 
 body {
@@ -85,7 +40,10 @@ body {
   height: 100vh;
 }
 
-/* Custom Scrollbar */
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -106,7 +64,10 @@ body {
   background: rgba(255, 255, 255, 0.15);
 }
 
-/* Glassmorphism utility classes */
+/* ============================================
+   GLASSMORPHISM UTILITY CLASSES
+   ============================================ */
+
 .glass {
   background: var(--glass-background);
   backdrop-filter: blur(20px);
@@ -125,7 +86,10 @@ body {
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-/* Animations */
+/* ============================================
+   ANIMATIONS & KEYFRAMES
+   ============================================ */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -168,6 +132,16 @@ body {
   }
 }
 
+@keyframes dashdraw {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Animation utility classes */
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out;
 }
@@ -176,7 +150,10 @@ body {
   animation: slideIn 0.3s ease-out;
 }
 
-/* React Flow Custom Styles */
+/* ============================================
+   REACT FLOW CUSTOM STYLES
+   ============================================ */
+
 .react-flow {
   background: transparent;
 }
@@ -184,6 +161,12 @@ body {
 .react-flow__node {
   cursor: pointer;
   font-family: "Inter", sans-serif;
+  transition: filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.react-flow__node:hover {
+  transform: scale(1.05);
 }
 
 .react-flow__edge {
@@ -206,20 +189,6 @@ body {
   animation: dashdraw 0.5s linear infinite;
 }
 
-@keyframes dashdraw {
-  from {
-    stroke-dashoffset: 10;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Arrow styling */
-.react-flow__edge .react-flow__edge-path {
-  stroke-linecap: round;
-}
-
 .react-flow__connectionline {
   stroke: var(--primary-color);
   stroke-width: 2;
@@ -230,6 +199,7 @@ body {
   stroke-width: 2;
 }
 
+/* React Flow Controls */
 .react-flow__controls {
   background: var(--glass-background);
   backdrop-filter: blur(20px);
@@ -259,6 +229,7 @@ body {
   border-bottom: none;
 }
 
+/* React Flow Minimap */
 .react-flow__minimap {
   background: var(--glass-background);
   backdrop-filter: blur(20px);
@@ -277,20 +248,9 @@ body {
 }
 
 /* ============================================
-   GRAPH ANIMATIONS
+   QUICK TEST PROGRESS BAR
    ============================================ */
 
-/* Node color transition (checkout) */
-.react-flow__node {
-  transition: filter 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.react-flow__node:hover {
-  transform: scale(1.05);
-}
-
-/* Progress bar for Quick Test */
 .quick-test-progress {
   position: fixed;
   top: 20px;

@@ -3,12 +3,12 @@ import { memo, useEffect, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { motion } from "framer-motion";
 import { GitBranch, GitMerge } from "lucide-react";
-import { nodeVariants } from "../utils/animations";
+import { nodeVariants } from "../../../../utils/animations";
 import "./CustomNode.css";
 
 /**
  * CustomNode.jsx
- * 
+ *
  * Represents one commit node in the git graph.
  * Supports animations for new commits, rebase, revert, merge, etc.
  */

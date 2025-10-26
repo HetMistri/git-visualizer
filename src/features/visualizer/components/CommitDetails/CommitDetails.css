@@ -1,3 +1,4 @@
+/* Copied from original src/components/CommitDetails.css */
 .overlay {
   position: fixed;
   inset: 0;
@@ -267,5 +268,86 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 10px;
+  }
+
+  .card {
+    max-width: 100%;
+    border-radius: 16px;
+  }
+
+  .card-header {
+    padding: 16px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .icon-box {
+    width: 36px;
+    height: 36px;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .header-buttons {
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .btn span {
+    display: none; /* Hide text on mobile, show only icons */
+  }
+
+  .btn.close {
+    width: 32px;
+    height: 32px;
+  }
+
+  .card-body {
+    padding: 16px;
+    gap: 14px;
+  }
+
+  .value {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .value.code {
+    font-size: 11px;
+    word-break: break-all;
+  }
+
+  .badge.read-only {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .card-body {
+    padding: 12px;
   }
 }

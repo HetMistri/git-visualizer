@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { getSmoothStepPath } from "@xyflow/react";
 import { motion } from "framer-motion";
-import { edgeAnimations } from "../utils/animations";
+import { edgeAnimations } from "../../../../utils/animations";
 
 /**
  * CustomEdge.jsx
- * 
+ *
  * A smoother, animated edge for the git graph.
  * Supports different animation types like draw, pulse, and fade.
  */

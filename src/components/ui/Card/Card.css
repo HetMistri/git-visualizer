@@ -1,0 +1,191 @@
+/* Card Component Styles */
+
+.card {
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Variants */
+.card-default {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+}
+
+.card-elevated {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.card-glass {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+}
+
+.card-solid {
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+}
+
+/* Padding Variants */
+.card-padding-none {
+  padding: 0;
+}
+
+.card-padding-small {
+  padding: 16px;
+}
+
+.card-padding-medium {
+  padding: 24px;
+}
+
+.card-padding-large {
+  padding: 32px;
+}
+
+/* Interactive States */
+.card-hoverable:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+}
+
+.card-clickable {
+  cursor: pointer;
+}
+
+.card-clickable:active {
+  transform: translateY(-2px);
+}
+
+/* Top border accent (appears on hover for hoverable cards) */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.card-hoverable:hover::before {
+  transform: scaleX(1);
+}
+
+/* Card Sub-components */
+.card-header {
+  margin-bottom: 16px;
+}
+
+.card-body {
+  flex: 1;
+}
+
+.card-footer {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.2),
+    rgba(118, 75, 162, 0.2)
+  );
+  border-radius: 12px;
+  margin-bottom: 16px;
+  color: var(--primary-color);
+}
+
+.card-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.card-description {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .card-padding-medium {
+    padding: 20px;
+  }
+
+  .card-padding-large {
+    padding: 24px;
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+  }
+
+  .card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .card-title {
+    font-size: 18px;
+  }
+
+  .card-description {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-padding-small {
+    padding: 12px;
+  }
+
+  .card-padding-medium {
+    padding: 16px;
+  }
+
+  .card-padding-large {
+    padding: 20px;
+  }
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .card-default,
+[data-theme="light"] .card-elevated,
+[data-theme="light"] .card-glass {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+[data-theme="light"] .card-hoverable:hover {
+  background: white;
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+}

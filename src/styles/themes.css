@@ -1,0 +1,89 @@
+/**
+ * Theme Definitions
+ * Dark and Light theme color schemes
+ */
+
+/* Dark Theme (default) */
+:root,
+[data-theme="dark"] {
+  /* Brand colors */
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --accent-color: #f093fb;
+
+  /* Semantic colors */
+  --success-color: #4ade80;
+  --warning-color: #fbbf24;
+  --error-color: #f87171;
+  --info-color: #60a5fa;
+
+  /* Background colors */
+  --background-dark: #0f172a;
+  --background-darker: #020617;
+  --background-gradient-start: #020617;
+  --background-gradient-end: #0f172a;
+
+  /* Glass/Glassmorphism */
+  --glass-background: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-hover: rgba(255, 255, 255, 0.08);
+
+  /* Text colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+  --text-muted: #475569;
+
+  /* Shadows */
+  --shadow-color: rgba(102, 126, 234, 0.3);
+  --shadow-strong: rgba(0, 0, 0, 0.5);
+
+  /* Overlays */
+  --overlay-bg: rgba(0, 0, 0, 0.6);
+
+  /* Node/Component specific */
+  --node-bg: rgba(15, 23, 42, 0.95);
+  --node-border: rgba(255, 255, 255, 0.15);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  /* Brand colors */
+  --primary-color: #5b6dd6;
+  --secondary-color: #6b4c9a;
+  --accent-color: #e084f8;
+
+  /* Semantic colors */
+  --success-color: #22c55e;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --info-color: #3b82f6;
+
+  /* Background colors */
+  --background-dark: #f8fafc;
+  --background-darker: #ffffff;
+  --background-gradient-start: #ffffff;
+  --background-gradient-end: #f1f5f9;
+
+  /* Glass/Glassmorphism */
+  --glass-background: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(148, 163, 184, 0.2);
+  --glass-hover: rgba(241, 245, 249, 0.9);
+
+  /* Text colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-muted: #cbd5e1;
+
+  /* Shadows */
+  --shadow-color: rgba(91, 109, 214, 0.2);
+  --shadow-strong: rgba(0, 0, 0, 0.1);
+
+  /* Overlays */
+  --overlay-bg: rgba(15, 23, 42, 0.4);
+
+  /* Node/Component specific */
+  --node-bg: rgba(255, 255, 255, 0.95);
+  --node-border: rgba(148, 163, 184, 0.3);
+}

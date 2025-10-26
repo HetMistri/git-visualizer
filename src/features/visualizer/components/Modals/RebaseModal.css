@@ -1,3 +1,4 @@
+/* Copied from original src/components/RebaseModal.css */
 /* --- RebaseModal Specific --- */
 .rebase-info {
   background: rgba(255, 255, 255, 0.05);
@@ -39,6 +40,44 @@
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .rebase-info {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .rebase-preview {
+    font-size: 13px;
+  }
+
+  .rebase-preview code {
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+
+  .rebase-arrow {
+    font-size: 20px;
+    margin: 8px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .rebase-info {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .rebase-preview {
+    font-size: 12px;
+  }
 }

@@ -1,0 +1,253 @@
+/* Badge Component Styles */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Variants */
+.badge-default {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.badge-primary {
+  background: rgba(102, 126, 234, 0.2);
+  color: #a5b4fc;
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.badge-info {
+  background: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.badge-neutral {
+  background: rgba(148, 163, 184, 0.2);
+  color: #cbd5e1;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+/* Outline Variants */
+.badge-outline {
+  background: transparent;
+  border-width: 2px;
+}
+
+.badge-outline.badge-default {
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.badge-outline.badge-primary {
+  color: #667eea;
+  border-color: #667eea;
+}
+
+.badge-outline.badge-success {
+  color: #10b981;
+  border-color: #10b981;
+}
+
+.badge-outline.badge-warning {
+  color: #f59e0b;
+  border-color: #f59e0b;
+}
+
+.badge-outline.badge-danger {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.badge-outline.badge-info {
+  color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+/* Sizes */
+.badge-small {
+  padding: 4px 8px;
+  font-size: 11px;
+  gap: 4px;
+  border-radius: 4px;
+}
+
+.badge-medium {
+  padding: 6px 12px;
+  font-size: 13px;
+  gap: 6px;
+  border-radius: 6px;
+}
+
+.badge-large {
+  padding: 8px 16px;
+  font-size: 14px;
+  gap: 8px;
+  border-radius: 8px;
+}
+
+/* Pill Shape */
+.badge-pill {
+  border-radius: 100px;
+}
+
+/* With Dot */
+.badge-with-dot {
+  padding-left: 10px;
+}
+
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  animation: badge-pulse 2s infinite;
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Icon */
+.badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.badge-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.badge-small .badge-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.badge-large .badge-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Text */
+.badge-text {
+  line-height: 1;
+}
+
+/* Interactive (when used as button or link) */
+.badge:hover {
+  cursor: default;
+}
+
+button.badge,
+a.badge {
+  cursor: pointer;
+}
+
+button.badge:hover,
+a.badge:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+button.badge:active,
+a.badge:active {
+  transform: translateY(0);
+}
+
+/* Dot-only (no text) */
+.badge:not(.badge-text) {
+  padding: 8px;
+  border-radius: 50%;
+}
+
+.badge-small:not(.badge-text) {
+  padding: 6px;
+}
+
+.badge-large:not(.badge-text) {
+  padding: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .badge-medium {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .badge-large {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .badge-default {
+  background: rgba(0, 0, 0, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .badge-primary {
+  background: rgba(102, 126, 234, 0.15);
+  color: #4f46e5;
+}
+
+[data-theme="light"] .badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+[data-theme="light"] .badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+[data-theme="light"] .badge-danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+[data-theme="light"] .badge-info {
+  background: rgba(59, 130, 246, 0.15);
+  color: #2563eb;
+}

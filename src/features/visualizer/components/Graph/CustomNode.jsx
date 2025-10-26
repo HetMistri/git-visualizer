@@ -24,6 +24,7 @@ const CustomNode = ({ data, isConnectable }) => {
     isOrphaned,
     animationType,
     isNew,
+    animationIndex = 0, // For staggered animations
   } = data;
 
   const [playAnim, setPlayAnim] = useState(isNew);
@@ -69,6 +70,7 @@ const CustomNode = ({ data, isConnectable }) => {
         initial={anim?.initial}
         animate={anim?.animate}
         exit={anim?.exit}
+        custom={animationIndex} // Pass index for staggered animations
       >
         {/* Commit Circle */}
         <motion.div

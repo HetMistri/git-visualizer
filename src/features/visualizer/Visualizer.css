@@ -1,0 +1,523 @@
+.visualizer-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* React Flow container */
+.react-flow {
+  position: relative;
+}
+
+.app-header {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  left: 20px;
+  z-index: 99;
+  border-radius: 16px;
+  padding: 20px 28px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    left: 20px;
+    top: 20px;
+  }
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 8px 24px var(--shadow-color);
+}
+
+.logo-text h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-text p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 2px 0 0 0;
+  font-weight: 500;
+}
+
+.header-stats {
+  display: flex;
+  gap: 12px;
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.stat-badge:hover {
+  background: var(--glass-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--shadow-strong);
+}
+
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.stat-number {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary-color);
+  font-variant-numeric: tabular-nums;
+}
+
+/* React Flow Container */
+.react-flow__viewport {
+  padding-top: 120px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .app-header {
+    left: 20px;
+    right: 20px;
+    padding: 16px 20px;
+  }
+
+  .logo-text h1 {
+    font-size: 20px;
+  }
+
+  .header-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stat-badge {
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    padding: 12px 16px;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .logo {
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo-text h1 {
+    font-size: 18px;
+  }
+
+  .header-stats {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .stat-badge {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* Loading animation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  animation: rotate 2s linear infinite;
+}
+
+/* Notification styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: var(--glass-background);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1001;
+  animation: slideIn 0.22s ease-in-out;
+  box-shadow: 0 6px 18px var(--shadow-color);
+  max-width: calc(100vw - 40px);
+}
+
+.notification.success {
+  border-color: var(--success-color);
+  background: rgba(74, 222, 128, 0.1);
+}
+
+.notification.error {
+  border-color: var(--error-color);
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.notification.warning {
+  border-color: var(--warning-color);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+/* Responsive notifications */
+@media (max-width: 768px) {
+  .notification {
+    bottom: 10px;
+    right: 10px;
+    left: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+/* React Flow Controls - glassmorphic blending */
+.rf-controls.react-flow__controls {
+  background: transparent;
+  box-shadow: none;
+}
+
+.rf-controls .react-flow__controls-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  backdrop-filter: blur(10px);
+  transition: all 0.18s ease-in-out;
+}
+
+.rf-controls .react-flow__controls-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.rf-controls .react-flow__controls-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Icons inside controls */
+.rf-controls svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Position tweaks */
+.react-flow__panel.react-flow__controls.rf-controls {
+  border-radius: 14px;
+  padding: 6px;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Clear Canvas panel/button */
+.clear-canvas-panel {
+  position: absolute;
+  top: 16vh;
+  left: 17px;
+  z-index: 5;
+}
+
+.clear-canvas-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-background);
+  color: var(--text-primary);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.18s ease-in-out;
+}
+
+.clear-canvas-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  border-color: var(--warning-color);
+  color: var(--warning-color);
+}
+
+/* Responsive adjustments for controls and clear button */
+@media (max-width: 1024px) {
+  .clear-canvas-panel {
+    top: 15vh;
+    left: 17px;
+  }
+
+  .clear-canvas-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .rf-controls .react-flow__controls-button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .rf-controls svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .clear-canvas-panel {
+    top: 14vh;
+    left: 17px;
+  }
+
+  .clear-canvas-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .clear-canvas-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .rf-controls .react-flow__controls-button {
+    width: 30px;
+    height: 30px;
+  }
+
+  .rf-controls svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .react-flow__panel.react-flow__controls.rf-controls {
+    padding: 4px;
+    gap: 6px;
+  }
+}
+
+/* Subtle dim during animations (no loud overlays) */
+.react-flow.animating .react-flow__controls {
+  opacity: 0.5;
+  filter: saturate(0.9);
+  transition: opacity 0.2s ease-in-out;
+  pointer-events: none;
+}
+
+/* Animation state */
+.react-flow.animating {
+  cursor: wait !important;
+}
+
+.react-flow.animating * {
+  pointer-events: none !important;
+}
+
+/* Animation overlay */
+.react-flow.animating::after {
+  content: "⚡ Animating...";
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 14px;
+  z-index: 1000;
+  animation: pulse 1.5s ease-in-out infinite;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+@media (max-width: 768px) {
+  .react-flow.animating::after {
+    top: 10px;
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}
+
+/* Custom edge styling */
+.react-flow__edge-path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Custom circle marker at edge ends */
+.custom-edge-marker {
+  transition: r 0.2s ease, opacity 0.2s ease;
+}
+
+/* Hover effect on edges */
+.react-flow__edge:hover .custom-edge-marker {
+  r: 5;
+  opacity: 1;
+}
+
+/* ================================
+   THEME TOGGLE BUTTON (Top Right)
+================================ */
+.theme-toggle-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1) rotate(15deg);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-color);
+  background: rgba(240, 147, 251, 0.1);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95) rotate(180deg);
+}
+
+/* Home Button - Top Left (in visualizer) */
+.home-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--glass-background);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.home-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+  border-color: var(--primary-color);
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.home-btn:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .theme-toggle-btn {
+    top: 10px;
+    right: 10px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .theme-toggle-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .home-btn {
+    top: 10px;
+    left: 10px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .home-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}

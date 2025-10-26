@@ -17,7 +17,7 @@ const Toolbar = ({
   onCreateBranch,
   onMerge,
   onRebase,
-  onQuickTest,
+  // onQuickTest,
   onCheckout,
   onToggleTerminal,
   currentBranch,
@@ -95,13 +95,13 @@ const Toolbar = ({
                 <span>Rebase</span>
               </button>
 
-              <button
+              {/* <button
                 className="mobile-menu-item"
                 onClick={() => handleMenuItemClick(onQuickTest)}
               >
                 <Play size={20} />
                 <span>Quick Test</span>
-              </button>
+              </button> */}
 
               <button
                 className="mobile-menu-item"
@@ -194,7 +194,7 @@ const Toolbar = ({
             <GitCompare size={22} />
           </button>
 
-          <button
+          {/* <button
             type="button"
             className="toolbar-icon-btn btn-quick"
             onClick={onQuickTest}
@@ -202,7 +202,7 @@ const Toolbar = ({
             title="Run quick test scenario"
           >
             <Play size={22} />
-          </button>
+          </button> */}
 
           <button
             type="button"

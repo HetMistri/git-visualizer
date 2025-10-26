@@ -191,6 +191,7 @@
 
 .input-field[type="number"] {
   -moz-appearance: textfield;
+  appearance: testextfield;
 }
 
 /* Responsive */

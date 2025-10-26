@@ -11,6 +11,5 @@
 export { default as ThemeToggle } from "./ThemeToggle";
 export { default as HomeButton } from "./HomeButton";
 
-// Named exports
-export { ThemeToggle } from "./ThemeToggle";
-export { HomeButton } from "./HomeButton";
+// If you also need named exports, re-export from source files directly.
+// Avoid duplicating the same symbol name in this barrel to prevent build errors.

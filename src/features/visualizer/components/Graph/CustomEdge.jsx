@@ -38,10 +38,12 @@ const CustomEdge = ({
   // Animation type (passed in from parent)
   const animType = data?.animationType;
   const isOrphaned = data?.isOrphaned;
+  const animationIndex = data?.animationIndex || 0;
+  const isMergeEdge = data?.isMergeEdge || false;
 
   // Simple animation map
   const animMap = {
-    draw: edgeAnimations.draw,
+    draw: isMergeEdge ? edgeAnimations.mergeDraw : edgeAnimations.draw,
     pulse: edgeAnimations.energyFlow,
     fade: edgeAnimations.fadeOut,
     reverse: edgeAnimations.reverseFlow,
@@ -61,6 +63,7 @@ const CustomEdge = ({
         initial={anim?.initial}
         animate={anim?.animate}
         exit={anim?.exit}
+        custom={animationIndex} // Pass index for staggered animations
       />
 
       {/* Dot marker at target */}
@@ -75,7 +78,12 @@ const CustomEdge = ({
         className="edge-dot"
         initial={anim ? { scale: 0, opacity: 0 } : undefined}
         animate={anim ? { scale: 1, opacity } : undefined}
-        transition={{ delay: 0.2, type: "spring", stiffness: 180, damping: 15 }}
+        transition={{
+          delay: isMergeEdge ? 0.7 : 0.5, // Delay dot for merge edges
+          type: "spring",
+          stiffness: 180,
+          damping: 15,
+        }}
         whileHover={{ r: 6, transition: { duration: 0.2 } }}
       />
     </>

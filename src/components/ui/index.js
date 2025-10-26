@@ -13,10 +13,3 @@ export { default as Card } from "./Card";
 export { default as Modal } from "./Modal";
 export { default as Input } from "./Input";
 export { default as Badge } from "./Badge";
-
-// Export individual components for named imports
-export { Button } from "./Button";
-export { Card } from "./Card";
-export { Modal } from "./Modal";
-export { Input } from "./Input";
-export { Badge } from "./Badge";

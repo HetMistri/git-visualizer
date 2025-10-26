@@ -18,34 +18,39 @@
 // ============================================================================
 
 export const nodeVariants = {
-  // 🟢 Commit / New Node - Growth & Progress
+  // 🟢 Commit / New Node - Growth & Progress (with pointer animation)
   newCommit: {
     initial: {
-      scale: 0.6,
+      scale: 0,
       opacity: 0,
-      x: -10,
     },
     animate: {
       scale: 1,
       opacity: 1,
-      x: 0,
       transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 15,
+        scale: {
+          delay: 0.8, // Wait for pointer and line to animate first
+          type: "spring",
+          stiffness: 200,
+          damping: 15,
+        },
+        opacity: {
+          delay: 0.8,
+          duration: 0.4,
+        },
       },
     },
   },
 
-  // 🔄 Rebase - Rewrite & Realignment
+  // 🔄 Rebase - Rewrite & Realignment (slow grey out)
   rebaseOld: {
     initial: { opacity: 1, scale: 1 },
     animate: {
       opacity: 0.3,
       scale: 0.9,
-      filter: "grayscale(0.8)",
+      filter: "grayscale(1)",
       transition: {
-        duration: 0.4,
+        duration: 1.2, // Slower grey out
         ease: "easeInOut",
       },
     },
@@ -69,19 +74,19 @@ export const nodeVariants = {
     },
   },
 
-  // 🕓 Reset - Rewind & Correction
+  // 🕓 Reset - Rewind & Correction (grey out as pointer passes)
   resetOrphaned: {
     initial: { opacity: 1, scale: 1 },
-    animate: {
-      opacity: 0.5,
+    animate: (custom) => ({
+      opacity: 0.4,
       scale: 0.85,
-      y: 5,
-      filter: "grayscale(0.9)",
+      filter: "grayscale(1)",
       transition: {
-        duration: 0.5,
-        ease: [0.4, 0, 0.2, 1], // ease-in-out cubic
+        duration: 0.3,
+        delay: custom * 0.15, // Stagger the grey-out effect
+        ease: [0.4, 0, 0.2, 1],
       },
-    },
+    }),
   },
   resetBranchMove: {
     animate: {
@@ -126,29 +131,27 @@ export const nodeVariants = {
     },
   },
 
-  // 🧬 Merge - Unification & Convergence
+  // 🧬 Merge - Unification & Convergence (lines extend and merge)
   mergeParent: {
     animate: {
-      boxShadow: [
-        "0 0 0px rgba(102, 126, 234, 0)",
-        "0 0 15px rgba(102, 126, 234, 0.6)",
-        "0 0 0px rgba(102, 126, 234, 0)",
-      ],
+      scale: [1, 1.05, 1],
       transition: {
-        duration: 0.8,
+        duration: 0.6,
         times: [0, 0.5, 1],
+        ease: "easeInOut",
       },
     },
   },
   mergeNew: {
     initial: {
-      scale: 1.4,
-      opacity: 0.8,
+      scale: 0,
+      opacity: 0,
     },
     animate: {
       scale: 1,
       opacity: 1,
       transition: {
+        delay: 0.8, // Wait for edges to extend
         type: "spring",
         stiffness: 200,
         damping: 15,
@@ -218,14 +221,27 @@ export const nodeVariants = {
 // ============================================================================
 
 export const edgeAnimations = {
-  // Draw edge from parent to child
+  // Draw edge from parent to child (for commits)
   draw: {
     initial: { pathLength: 0, opacity: 0 },
     animate: {
       pathLength: 1,
       opacity: 1,
       transition: {
-        pathLength: { duration: 0.5, ease: "easeInOut" },
+        pathLength: { duration: 0.6, ease: "easeInOut", delay: 0.3 }, // After pointer moves
+        opacity: { duration: 0.3, delay: 0.3 },
+      },
+    },
+  },
+
+  // Draw edge for merge (both edges extend simultaneously)
+  mergeDraw: {
+    initial: { pathLength: 0, opacity: 0 },
+    animate: {
+      pathLength: 1,
+      opacity: 1,
+      transition: {
+        pathLength: { duration: 0.7, ease: "easeInOut" },
         opacity: { duration: 0.3 },
       },
     },
@@ -243,16 +259,17 @@ export const edgeAnimations = {
     },
   },
 
-  // Edge fade out (for orphaned)
+  // Edge fade out (for orphaned) - gradual fade
   fadeOut: {
-    animate: {
+    animate: (custom) => ({
       opacity: 0.3,
       strokeDasharray: "8,8",
       transition: {
-        duration: 0.5,
+        duration: 0.3,
+        delay: custom * 0.15, // Stagger with nodes
         ease: "easeIn",
       },
-    },
+    }),
   },
 
   // Edge reverse flow (for revert)

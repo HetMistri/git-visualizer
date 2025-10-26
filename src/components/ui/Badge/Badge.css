@@ -177,10 +177,7 @@
   cursor: default;
 }
 
-button.badge,
-a.badge {
-  cursor: pointer;
-}
+
 
 button.badge:hover,
 a.badge:hover {

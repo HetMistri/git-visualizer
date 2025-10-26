@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+   
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 16px var(--shadow-strong),
@@ -275,7 +275,7 @@
   font-weight: 600;
   backdrop-filter: blur(20px);
   white-space: nowrap;
-  cursor: pointer;
+   
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px var(--shadow-strong);
 }

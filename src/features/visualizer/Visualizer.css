@@ -301,7 +301,7 @@
   border: 1px solid var(--glass-border);
   background: var(--glass-background);
   color: var(--text-primary);
-  cursor: pointer;
+   
   backdrop-filter: blur(10px);
   transition: all 0.18s ease-in-out;
 }
@@ -444,7 +444,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
-  cursor: pointer;
+   
   z-index: 999;
   display: flex;
   align-items: center;
@@ -476,7 +476,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
-  cursor: pointer;
+   
   z-index: 999;
   display: flex;
   align-items: center;

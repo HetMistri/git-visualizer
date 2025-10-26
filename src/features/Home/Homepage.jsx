@@ -13,7 +13,7 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Visualize", href: "/visualizer" },
   { label: "GitHub", href: "https://github.com/omeepatel04/git-visualizer" },
-  { label: "Documentation", href: "/documentation" },
+  { label: "Documentation", href: "https://git-scm.com/docs" },
 ];
 
 const velocity = 100;

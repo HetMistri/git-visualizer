@@ -1,0 +1,34 @@
+{
+    "sourceFile": "src/features/Home/components/FlowShowcase/FlowShowcaseBranch.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1761540509466,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1761548585449,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +0,0 @@\n-import React from \"react\";\r\n-import FlowShowcase from \"./FlowShowcase\";\r\n-\r\n-export default function FlowShowcaseBranch(props) {\r\n-  return <FlowShowcase variant=\"branch\" {...props} />;\r\n-}\r\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1761548590758,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,6 @@\n-\n+import React from \"react\";\r\n+import FlowShowcase from \"./FlowShowcase\";\r\n+\r\n+export default function FlowShowcaseBranch(props) {\r\n+  return <FlowShowcase variant=\"branch\" {...props} />;\r\n+}\r\n"
+                },
+                {
+                    "date": 1761548611811,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +0,0 @@\n-import React from \"react\";\r\n-import FlowShowcase from \"./FlowShowcase\";\r\n-\r\n-export default function FlowShowcaseBranch(props) {\r\n-  return <FlowShowcase variant=\"branch\" {...props} />;\r\n-}\r\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1761548632360,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,1 +1,6 @@\n-\n+import React from \"react\";\r\n+import FlowShowcase from \"./FlowShowcase\";\r\n+\r\n+export default function FlowShowcaseBranch(props) {\r\n+  return <FlowShowcase variant=\"branch\" {...props} />;\r\n+}\r\n"
+                }
+            ],
+            "date": 1761540509466,
+            "name": "Commit-0",
+            "content": "import React from \"react\";\r\nimport FlowShowcase from \"./FlowShowcase\";\r\n\r\nexport default function FlowShowcaseBranch(props) {\r\n  return <FlowShowcase variant=\"branch\" {...props} />;\r\n}\r\n"
+        }
+    ]
+}

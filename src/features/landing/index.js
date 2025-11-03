@@ -1,0 +1,9 @@
+export { default as Landing } from "./Landing";
+export { default as Navbar } from "./components/Navbar";
+export { default as Hero } from "./components/Hero";
+export { default as FeaturesSection } from "./components/Features";
+export { default as DemoPreview } from "./components/DemoPreview";
+export { default as ArchitectureSection } from "./components/Architecture";
+export { default as ContributorsSection } from "./components/Contributors";
+export { default as ContactSection } from "./components/Contact";
+export { default as LandingFooter } from "./components/Footer";

@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1761505351328,
@@ -16,6 +16,10 @@
                 {
                     "date": 1761505616266,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,9 +3,9 @@\n   height: 100vh;\r\n   position: relative;\r\n   overflow: hidden;\r\n \r\n-    cursor: none;}\r\n+}\r\n \r\n .app-header {\r\n   position: fixed;\r\n   top: 20px;\r\n@@ -296,9 +296,9 @@\n   border-radius: 10px;\r\n   border: 1px solid var(--glass-border);\r\n   background: var(--glass-background);\r\n   color: var(--text-primary);\r\n-  cursor: pointer;\r\n+   \r\n   backdrop-filter: blur(10px);\r\n   transition: all 0.18s ease-in-out;\r\n }\r\n \r\n@@ -439,9 +439,9 @@\n   background: var(--glass-background);\r\n   backdrop-filter: blur(20px);\r\n   border: 1px solid var(--glass-border);\r\n   color: var(--text-primary);\r\n-  cursor: pointer;\r\n+   \r\n   z-index: 999;\r\n   display: flex;\r\n   align-items: center;\r\n   justify-content: center;\r\n@@ -471,9 +471,9 @@\n   background: var(--glass-background);\r\n   backdrop-filter: blur(20px);\r\n   border: 1px solid var(--glass-border);\r\n   color: var(--text-primary);\r\n-  cursor: pointer;\r\n+   \r\n   z-index: 999;\r\n   display: flex;\r\n   align-items: center;\r\n   justify-content: center;\r\n"
+                },
+                {
+                    "date": 1761551987604,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,11 @@\n .app-container {\r\n-  width: 100vw;\r\n+  width: 100%;\r\n+  max-width: 100vw;\r\n   height: 100vh;\r\n   position: relative;\r\n-  overflow: hidden;\r\n-\r\n+  overflow-x: hidden;\r\n+  overflow-y: auto;\r\n }\r\n \r\n .app-header {\r\n   position: fixed;\r\n@@ -296,9 +297,9 @@\n   border-radius: 10px;\r\n   border: 1px solid var(--glass-border);\r\n   background: var(--glass-background);\r\n   color: var(--text-primary);\r\n-   \r\n+\r\n   backdrop-filter: blur(10px);\r\n   transition: all 0.18s ease-in-out;\r\n }\r\n \r\n@@ -439,9 +440,9 @@\n   background: var(--glass-background);\r\n   backdrop-filter: blur(20px);\r\n   border: 1px solid var(--glass-border);\r\n   color: var(--text-primary);\r\n-   \r\n+\r\n   z-index: 999;\r\n   display: flex;\r\n   align-items: center;\r\n   justify-content: center;\r\n@@ -471,9 +472,9 @@\n   background: var(--glass-background);\r\n   backdrop-filter: blur(20px);\r\n   border: 1px solid var(--glass-border);\r\n   color: var(--text-primary);\r\n-   \r\n+\r\n   z-index: 999;\r\n   display: flex;\r\n   align-items: center;\r\n   justify-content: center;\r\n"
                 }
             ],
             "date": 1761505351328,

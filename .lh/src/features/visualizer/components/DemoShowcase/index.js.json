@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/features/visualizer/components/DemoShowcase/index.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1762148258448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1762149763116,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,4 +2,5 @@\n export { default as CommitDemo } from \"./CommitDemo\";\r\n export { default as BranchingDemo } from \"./BranchingDemo\";\r\n export { default as MergeDemo } from \"./MergeDemo\";\r\n export { default as TestSequenceDemo } from \"./TestSequenceDemo\";\r\n+export { default as TerminalDemo } from \"./TerminalDemo\";\r\n"
+                }
+            ],
+            "date": 1762148258448,
+            "name": "Commit-0",
+            "content": "export { default as DemoShowcase } from \"./DemoShowcase\";\r\nexport { default as CommitDemo } from \"./CommitDemo\";\r\nexport { default as BranchingDemo } from \"./BranchingDemo\";\r\nexport { default as MergeDemo } from \"./MergeDemo\";\r\nexport { default as TestSequenceDemo } from \"./TestSequenceDemo\";\r\n"
+        }
+    ]
+}

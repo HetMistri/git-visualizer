@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/features/landing/components/Architecture/Architecture.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762146192945,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762146192945,
+            "name": "Commit-0",
+            "content": "import { useEffect, useRef } from \"react\";\r\nimport gsap from \"gsap\";\r\nimport { ScrollTrigger } from \"gsap/ScrollTrigger\";\r\nimport \"./Architecture.css\";\r\n\r\nexport default function ArchitectureSection() {\r\n  const rootRef = useRef(null);\r\n\r\n  useEffect(() => {\r\n    const ctx = gsap.context(() => {\r\n      const items = gsap.utils.toArray(\".arch-item\");\r\n      gsap.set(items, { y: 20, autoAlpha: 0 });\r\n      ScrollTrigger.batch(items, {\r\n        start: \"top 80%\",\r\n        onEnter: (batch) =>\r\n          gsap.to(batch, {\r\n            y: 0,\r\n            autoAlpha: 1,\r\n            duration: 0.6,\r\n            stagger: 0.1,\r\n            ease: \"power2.out\",\r\n          }),\r\n        onLeaveBack: (batch) =>\r\n          gsap.to(batch, { y: 20, autoAlpha: 0, duration: 0.3 }),\r\n      });\r\n    }, rootRef);\r\n    return () => ctx.revert();\r\n  }, []);\r\n\r\n  return (\r\n    <section id=\"architecture\" ref={rootRef} className=\"section\">\r\n      <div className=\"section-inner\">\r\n        <h2 className=\"section-title\">Feature-based Architecture</h2>\r\n        <p className=\"section-subtitle\">\r\n          Modular surfaces, reusable UI, and a clean state facade for Git\r\n          operations.\r\n        </p>\r\n\r\n        <div className=\"arch-grid\">\r\n          <div className=\"arch-item glass\">\r\n            <div className=\"arch-title\">src/features/visualizer</div>\r\n            <div className=\"arch-desc\">\r\n              Core Git model (GitGraph), ReactFlow graph UI, toolbar, terminal,\r\n              and modals.\r\n            </div>\r\n          </div>\r\n          <div className=\"arch-item glass\">\r\n            <div className=\"arch-title\">hooks/useGitGraph</div>\r\n            <div className=\"arch-desc\">\r\n              Facade over GitGraph with error handling, operations, and derived\r\n              helpers.\r\n            </div>\r\n          </div>\r\n          <div className=\"arch-item glass\">\r\n            <div className=\"arch-title\">utils/graphLayout</div>\r\n            <div className=\"arch-desc\">\r\n              Level and lane assignment, deterministic branch colors, and edges.\r\n            </div>\r\n          </div>\r\n          <div className=\"arch-item glass\">\r\n            <div className=\"arch-title\">components/ui</div>\r\n            <div className=\"arch-desc\">\r\n              Atomic UI: Button, Card, Modal, Input — used consistently across\r\n              pages.\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </section>\r\n  );\r\n}\r\n"
+        }
+    ]
+}

@@ -1,0 +1,285 @@
+/* DemoShowcase styles */
+
+.demo-showcase-root {
+  width: 100%;
+  min-height: 100vh;
+  padding: 32px;
+  background: var(--background-dark);
+  box-sizing: border-box;
+}
+
+.demo-showcase-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.demo-showcase-title {
+  font-size: 42px;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.demo-showcase-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Individual demo container */
+.demo-container {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  box-shadow: 0 8px 30px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+.demo-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--glass-hover);
+}
+
+.demo-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: var(--text-primary);
+}
+
+.demo-description {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.demo-graph {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Override ReactFlow theme for demos */
+.demo-graph .react-flow {
+  background: transparent;
+}
+
+.demo-graph .react-flow__background {
+  opacity: 0.1;
+}
+
+.demo-graph .react-flow__controls {
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+}
+
+.demo-graph .react-flow__controls-button {
+  background: transparent;
+  border-bottom: 1px solid var(--glass-border);
+  color: var(--text-primary);
+}
+
+.demo-graph .react-flow__controls-button:hover {
+  background: var(--glass-hover);
+}
+
+.demo-graph .react-flow__controls-button:last-child {
+  border-bottom: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .demo-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .demo-showcase-root {
+    padding: 16px;
+  }
+
+  .demo-showcase-title {
+    font-size: 32px;
+  }
+
+  .demo-showcase-subtitle {
+    font-size: 16px;
+  }
+
+  .demo-grid {
+    gap: 20px;
+  }
+
+  .demo-container {
+    height: 400px;
+  }
+}
+
+/* Terminal Demo Specific Styles */
+.terminal-demo-container {
+  height: 600px;
+}
+
+.terminal-demo-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  gap: 0;
+}
+
+.terminal-demo-window {
+  flex: 0 0 45%;
+  display: flex;
+  flex-direction: column;
+  background: #1e1e1e;
+  border-right: 1px solid var(--glass-border);
+}
+
+.terminal-demo-header {
+  height: 36px;
+  background: #2d2d2d;
+  border-bottom: 1px solid #1e1e1e;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.terminal-demo-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dot-red {
+  background: #ff5f56;
+}
+
+.dot-yellow {
+  background: #ffbd2e;
+}
+
+.dot-green {
+  background: #27c93f;
+}
+
+.terminal-demo-title {
+  font-size: 13px;
+  color: #8b8b8b;
+  font-weight: 500;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.terminal-demo-content {
+  flex: 1;
+  padding: 16px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  color: #d4d4d4;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+.terminal-line {
+  margin-bottom: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.terminal-prompt {
+  color: #4ec9b0;
+  font-weight: 600;
+}
+
+.terminal-output {
+  color: #d7ba7d;
+  padding-left: 16px;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: #4ec9b0;
+  margin-left: 2px;
+  animation: terminal-blink 1s infinite;
+}
+
+@keyframes terminal-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.terminal-demo-graph {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--glass-background);
+}
+
+/* Responsive terminal demo */
+@media (max-width: 968px) {
+  .terminal-demo-layout {
+    flex-direction: column;
+  }
+
+  .terminal-demo-window {
+    flex: 0 0 250px;
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .terminal-demo-container {
+    height: 650px;
+  }
+}
+
+@media (max-width: 768px) {
+  .terminal-demo-window {
+    flex: 0 0 200px;
+  }
+
+  .terminal-demo-content {
+    font-size: 12px;
+    padding: 12px;
+  }
+
+  .terminal-demo-container {
+    height: 550px;
+  }
+}

@@ -21,7 +21,7 @@
   --background-dark: #0f172a;
   --background-darker: #020617;
   --background-gradient-start: #020617;
-  --background-gradient-end: #0f172a;
+  --background-gradient-end: #1e1b4b;
 
   /* Glass/Glassmorphism */
   --glass-background: rgba(255, 255, 255, 0.05);
@@ -30,9 +30,9 @@
 
   /* Text colors */
   --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-tertiary: #64748b;
-  --text-muted: #475569;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-muted: #64748b;
 
   /* Shadows */
   --shadow-color: rgba(102, 126, 234, 0.3);
@@ -44,6 +44,9 @@
   /* Node/Component specific */
   --node-bg: rgba(15, 23, 42, 0.95);
   --node-border: rgba(255, 255, 255, 0.15);
+
+  /* Border color */
+  --color-border: rgba(255, 255, 255, 0.1);
 }
 
 /* Light Theme */
@@ -51,7 +54,7 @@
   /* Brand colors */
   --primary-color: #5b6dd6;
   --secondary-color: #6b4c9a;
-  --accent-color: #e084f8;
+  --accent-color: #d174f0;
 
   /* Semantic colors */
   --success-color: #22c55e;
@@ -63,22 +66,22 @@
   --background-dark: #f8fafc;
   --background-darker: #ffffff;
   --background-gradient-start: #ffffff;
-  --background-gradient-end: #f1f5f9;
+  --background-gradient-end: #e0e7ff;
 
   /* Glass/Glassmorphism */
-  --glass-background: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(148, 163, 184, 0.2);
-  --glass-hover: rgba(241, 245, 249, 0.9);
+  --glass-background: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(148, 163, 184, 0.25);
+  --glass-hover: rgba(241, 245, 249, 0.95);
 
   /* Text colors */
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --text-muted: #cbd5e1;
+  --text-tertiary: #64748b;
+  --text-muted: #94a3b8;
 
   /* Shadows */
-  --shadow-color: rgba(91, 109, 214, 0.2);
-  --shadow-strong: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(91, 109, 214, 0.15);
+  --shadow-strong: rgba(15, 23, 42, 0.1);
 
   /* Overlays */
   --overlay-bg: rgba(15, 23, 42, 0.4);
@@ -86,4 +89,7 @@
   /* Node/Component specific */
   --node-bg: rgba(255, 255, 255, 0.95);
   --node-border: rgba(148, 163, 184, 0.3);
+
+  /* Border color */
+  --color-border: rgba(148, 163, 184, 0.2);
 }

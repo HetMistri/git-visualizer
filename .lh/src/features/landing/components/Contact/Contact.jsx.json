@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/features/landing/components/Contact/Contact.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762146735201,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762146735201,
+            "name": "Commit-0",
+            "content": "import { useEffect, useRef, useState } from \"react\";\r\nimport gsap from \"gsap\";\r\nimport { ScrollTrigger } from \"gsap/ScrollTrigger\";\r\nimport Input from \"@/components/ui/Input\";\r\nimport Button from \"@/components/ui/Button\";\r\nimport \"./Contact.css\";\r\n\r\ngsap.registerPlugin(ScrollTrigger);\r\n\r\nexport default function ContactSection() {\r\n  const rootRef = useRef(null);\r\n  const [name, setName] = useState(\"\");\r\n  const [email, setEmail] = useState(\"\");\r\n  const [message, setMessage] = useState(\"\");\r\n  const [sent, setSent] = useState(false);\r\n\r\n  useEffect(() => {\r\n    const ctx = gsap.context(() => {\r\n      const el = rootRef.current;\r\n      gsap.set(el, { background: \"linear-gradient(180deg, rgba(102,126,234,0.08), transparent)\" });\r\n      gsap.fromTo(\r\n        \".contact-card\",\r\n        { autoAlpha: 0, y: 20 },\r\n        {\r\n          autoAlpha: 1,\r\n          y: 0,\r\n          duration: 0.7,\r\n          ease: \"power2.out\",\r\n          scrollTrigger: { trigger: el, start: \"top 80%\" },\r\n        }\r\n      );\r\n    }, rootRef);\r\n    return () => ctx.revert();\r\n  }, []);\r\n\r\n  const handleSubmit = (e) => {\r\n    e.preventDefault();\r\n    // For now, just link to GitHub issues.\r\n    window.open(\"https://github.com/omeepatel04/git-visualizer/issues\", \"_blank\");\r\n    setSent(true);\r\n  };\r\n\r\n  return (\r\n    <section id=\"contact\" ref={rootRef} className=\"section\">\r\n      <div className=\"section-inner\">\r\n        <h2 className=\"section-title\">Get in touch</h2>\r\n        <p className=\"section-subtitle\">Send a note or open an issue — we’d love to hear from you.</p>\r\n\r\n        <form className=\"contact-card glass\" onSubmit={handleSubmit}>\r\n          <div className=\"contact-grid\">\r\n            <Input label=\"Name\" value={name} onChange={setName} placeholder=\"Ada Lovelace\" fullWidth required />\r\n            <Input label=\"Email\" type=\"email\" value={email} onChange={setEmail} placeholder=\"ada@example.com\" fullWidth required />\r\n          </div>\r\n          <Input.Textarea label=\"Message\" value={message} onChange={setMessage} rows={5} placeholder=\"Tell us how you'd use Git-Vis…\" fullWidth />\r\n          <div className=\"contact-actions\">\r\n            <Button type=\"submit\">Open GitHub Issues</Button>\r\n            {sent && <span className=\"contact-hint\">Opened issues in a new tab.</span>}\r\n          </div>\r\n        </form>\r\n      </div>\r\n    </section>\r\n  );\r\n}\r\n"
+        }
+    ]
+}

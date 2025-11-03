@@ -154,6 +154,7 @@ export const calculateLevels = (commits) => {
 /**
  * Assign lanes (vertical positions) with main/master branch centered
  * Other branches distributed above and below
+ * FIXED: Uses a fixed center lane to prevent graph shifting when branches are added
  */
 const assignLanes = (commits) => {
   const lanes = new Map();
@@ -175,19 +176,20 @@ const assignLanes = (commits) => {
     mainIndex = 0; // If no main/master, use first branch
   }
 
-  // Assign lanes: main in center, others alternate above/below
-  const centerLane = Math.max(0, branchNames.length - 1);
+  // FIXED: Use a fixed center lane instead of calculating based on branch count
+  // This prevents the graph from shifting when new branches are created
+  const FIXED_CENTER_LANE = 5; // Fixed center position
 
   branchNames.forEach((branchName, index) => {
     if (index === mainIndex) {
-      // Main branch gets center lane
-      branchLanes.set(branchName, centerLane);
+      // Main branch gets fixed center lane
+      branchLanes.set(branchName, FIXED_CENTER_LANE);
     } else if (index < mainIndex) {
       // Branches before main go above (lower lane numbers)
-      branchLanes.set(branchName, centerLane - (mainIndex - index));
+      branchLanes.set(branchName, FIXED_CENTER_LANE - (mainIndex - index));
     } else {
       // Branches after main go below (higher lane numbers)
-      branchLanes.set(branchName, centerLane + (index - mainIndex));
+      branchLanes.set(branchName, FIXED_CENTER_LANE + (index - mainIndex));
     }
   });
 
@@ -198,7 +200,7 @@ const assignLanes = (commits) => {
     // Get the lane for this branch, default to center if not found
     let lane = branchLanes.get(branchName);
     if (lane === undefined) {
-      lane = centerLane;
+      lane = FIXED_CENTER_LANE;
     }
 
     lanes.set(id, lane);
@@ -240,12 +242,21 @@ export const convertToReactFlow = (gitGraph) => {
   // Assign lanes for vertical positioning
   const lanes = assignLanes(commits);
 
-  // Calculate adaptive spacing based on graph size
-  const laneCount = Math.max(...Array.from(lanes.values())) + 1;
+  // FIXED: Calculate spacing to ensure all nodes are visible
+  // Find the min and max lanes actually used
+  const laneValues = Array.from(lanes.values());
+  const minLane = Math.min(...laneValues);
+  const maxLane = Math.max(...laneValues);
+  const laneRange = maxLane - minLane + 1;
+
+  // Fixed spacing that works well for most graphs
   const nodeSpacing = {
-    x: 200, // Horizontal spacing
-    y: Math.max(200, 800 / Math.max(laneCount, 1)), // Adaptive vertical spacing
+    x: 200, // Horizontal spacing between commit levels
+    y: 120, // Fixed vertical spacing between lanes
   };
+
+  // Calculate vertical offset to center the graph
+  const verticalOffset = 100 - minLane * nodeSpacing.y;
 
   // Create nodes - LEFT TO RIGHT layout
   const nodes = [];
@@ -280,7 +291,7 @@ export const convertToReactFlow = (gitGraph) => {
       type: "custom",
       position: {
         x: level * nodeSpacing.x + 150, // Horizontal: left (old) to right (new)
-        y: lane * nodeSpacing.y + 100, // Vertical: lanes for different branches
+        y: lane * nodeSpacing.y + verticalOffset, // Vertical: fixed lanes with centering offset
       },
       data: {
         commit,

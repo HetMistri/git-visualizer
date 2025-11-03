@@ -1,0 +1,283 @@
+/* Terminal Showcase Section */
+.terminal-showcase-section {
+  position: relative;
+  width: 100%;
+  padding: 8rem 2rem;
+  background: var(--color-bg-primary);
+  overflow: hidden;
+}
+
+.terminal-showcase-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+}
+
+/* Header */
+.terminal-showcase-header {
+  text-align: center;
+  max-width: 800px;
+}
+
+.terminal-showcase-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.2;
+}
+
+.terminal-showcase-subtitle {
+  font-size: clamp(1rem, 1.5vw, 1.125rem);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Terminal Container */
+.terminal-showcase-terminal {
+  width: 100%;
+  max-width: 900px;
+  overflow-y: scroll;
+}
+
+.terminal-window {
+  background: linear-gradient(
+    145deg,
+    rgba(20, 20, 30, 0.95),
+    rgba(30, 30, 45, 0.95)
+  );
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 10px 30px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.terminal-header {
+  height: 40px;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 40, 50, 0.9),
+    rgba(30, 30, 40, 0.9)
+  );
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  transition: opacity 0.2s;
+}
+
+.terminal-dot-red {
+  background: #ff5f56;
+  box-shadow: 0 0 8px rgba(255, 95, 86, 0.5);
+}
+
+.terminal-dot-yellow {
+  background: #ffbd2e;
+  box-shadow: 0 0 8px rgba(255, 189, 46, 0.5);
+}
+
+.terminal-dot-green {
+  background: #27c93f;
+  box-shadow: 0 0 8px rgba(39, 201, 63, 0.5);
+}
+
+.terminal-body {
+  padding: 2rem;
+  min-height: 300px;
+  font-family: "Fira Code", "Courier New", Courier, monospace;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #e0e0e0;
+}
+
+.terminal-line {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeInLine 0.3s ease-out;
+}
+
+@keyframes fadeInLine {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.terminal-prompt {
+  color: #4ec9b0;
+  font-weight: 600;
+  font-size: 16px;
+  user-select: none;
+}
+
+.terminal-text {
+  color: #e0e0e0;
+  flex: 1;
+}
+
+.terminal-command .terminal-text {
+  color: #e0e0e0;
+}
+
+.terminal-output {
+  padding-left: 28px;
+}
+
+.terminal-output .terminal-text {
+  color: #ce9178;
+  font-size: 14px;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 18px;
+  background: #4ec9b0;
+  margin-left: 2px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.terminal-typing {
+  animation: none;
+}
+
+/* CTA Button */
+.terminal-showcase-cta {
+  text-align: center;
+}
+
+.showcase-cta-button {
+  padding: 1rem 2.5rem;
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.showcase-cta-button:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.showcase-cta-button:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .terminal-showcase-section {
+    padding: 6rem 2rem;
+  }
+
+  .terminal-body {
+    padding: 1.5rem;
+    min-height: 250px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .terminal-showcase-section {
+    padding: 5rem 1.5rem;
+  }
+
+  .terminal-showcase-container {
+    gap: 2.5rem;
+  }
+
+  .terminal-body {
+    padding: 1.25rem;
+    min-height: 220px;
+    font-size: 13px;
+  }
+
+  .terminal-line {
+    gap: 8px;
+  }
+
+  .terminal-prompt {
+    font-size: 14px;
+  }
+
+  .terminal-output {
+    padding-left: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .terminal-showcase-section {
+    padding: 4rem 1rem;
+  }
+
+  .terminal-header {
+    height: 36px;
+    padding: 0 12px;
+  }
+
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .terminal-body {
+    padding: 1rem;
+    min-height: 200px;
+    font-size: 12px;
+  }
+
+  .terminal-line {
+    margin-bottom: 0.75rem;
+  }
+
+  .showcase-cta-button {
+    padding: 0.875rem 2rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Animation optimizations */
+.terminal-showcase-header,
+.terminal-showcase-terminal,
+.terminal-showcase-cta {
+  will-change: transform, opacity;
+}

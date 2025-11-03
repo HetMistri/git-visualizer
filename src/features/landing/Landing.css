@@ -1,0 +1,111 @@
+/* Landing page scaffold and shared styles */
+
+.landing-root {
+  --section-padding: clamp(48px, 6vw, 96px);
+  --container-max: 1200px;
+}
+
+.landing-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+      1200px 800px at 10% 10%,
+      rgba(102, 126, 234, 0.15),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 700px at 90% 20%,
+      rgba(118, 75, 162, 0.15),
+      transparent 60%
+    ),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.3));
+}
+
+[data-theme="light"] .landing-bg {
+  background: radial-gradient(
+      1200px 800px at 10% 10%,
+      rgba(102, 126, 234, 0.2),
+      transparent 60%
+    ),
+    radial-gradient(
+      1000px 700px at 90% 20%,
+      rgba(118, 75, 162, 0.2),
+      transparent 60%
+    ),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6));
+}
+
+.section {
+  position: relative;
+  padding: var(--section-padding) 24px;
+}
+
+.section-inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}
+
+.section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  font-size: clamp(16px, 2vw, 18px);
+  color: var(--text-secondary);
+  margin: 0 0 32px;
+}
+
+/* utility grid */
+.grid {
+  display: grid;
+  gap: 24px;
+}
+.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+@media (max-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* glass block utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  border-radius: 16px;
+}
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(102, 126, 234, 0.2);
+}
+
+/* pin spacer helper (for pinned demo section spacing if needed) */
+.pin-spacer {
+  min-height: 100vh;
+}
+
+
+.nav{
+    position: fixed;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    z-index: 1000;
+}
+
+.scroll-velocity{
+    height: 100vh;
+    display: grid;
+    place-items: center;
+}

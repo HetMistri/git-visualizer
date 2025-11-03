@@ -1,0 +1,25 @@
+/* Contact */
+.contact-card {
+  padding: 20px;
+  border-radius: 16px;
+}
+.contact-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 720px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.contact-hint {
+  color: var(--text-secondary);
+  font-size: 14px;
+}

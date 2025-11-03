@@ -71,7 +71,7 @@
   font-weight: 600;
   border-radius: 8px;
   border: 1px solid transparent;
-  cursor: pointer;
+   
   transition: all 0.2s ease;
 }
 
@@ -241,7 +241,7 @@
   color: var(--primary-color);
   font-size: 12px;
   font-weight: 600;
-  cursor: pointer;
+   
   background: rgba(102, 126, 234, 0.1);
   transition: all 0.2s ease;
 }

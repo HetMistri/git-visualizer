@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/features/landing/components/Contact/Contact.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762146735346,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762146735346,
+            "name": "Commit-0",
+            "content": "/* Contact */\r\n.contact-card { padding: 20px; border-radius: 16px; }\r\n.contact-grid { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }\r\n@media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr; } }\r\n.contact-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; }\r\n.contact-hint { color: var(--text-secondary); font-size: 14px; }\r\n"
+        }
+    ]
+}

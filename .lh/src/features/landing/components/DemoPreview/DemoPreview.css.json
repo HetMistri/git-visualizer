@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/features/landing/components/DemoPreview/DemoPreview.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762146192560,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762146192560,
+            "name": "Commit-0",
+            "content": "/* Demo preview with pin & zoom */\r\n.demo-section {\r\n  padding-top: 10vh;\r\n  padding-bottom: 10vh;\r\n}\r\n.demo-box {\r\n  padding: 24px;\r\n  border-radius: 18px;\r\n}\r\n.demo-head {\r\n  font-weight: 700;\r\n  color: var(--text-primary);\r\n  margin-bottom: 12px;\r\n}\r\n.demo-body {\r\n  aspect-ratio: 16/9;\r\n  background: rgba(255, 255, 255, 0.04);\r\n  border: 1px dashed rgba(255, 255, 255, 0.12);\r\n  border-radius: 12px;\r\n  display: grid;\r\n  place-items: center;\r\n  color: var(--text-secondary);\r\n}\r\n[data-theme=\"light\"] .demo-body {\r\n  background: rgba(0, 0, 0, 0.04);\r\n  border-color: rgba(102, 126, 234, 0.24);\r\n}\r\n"
+        }
+    ]
+}

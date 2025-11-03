@@ -1,0 +1,50 @@
+{
+    "sourceFile": "src/features/landing/Landing.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1762146191110,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1762147635129,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,17 +8,33 @@\n .landing-bg {\r\n   position: fixed;\r\n   inset: 0;\r\n   z-index: -1;\r\n-  background: radial-gradient(1200px 800px at 10% 10%, rgba(102,126,234,0.15), transparent 60%),\r\n-              radial-gradient(1000px 700px at 90% 20%, rgba(118,75,162,0.15), transparent 60%),\r\n-              linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.3));\r\n+  background: radial-gradient(\r\n+      1200px 800px at 10% 10%,\r\n+      rgba(102, 126, 234, 0.15),\r\n+      transparent 60%\r\n+    ),\r\n+    radial-gradient(\r\n+      1000px 700px at 90% 20%,\r\n+      rgba(118, 75, 162, 0.15),\r\n+      transparent 60%\r\n+    ),\r\n+    linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.3));\r\n }\r\n \r\n [data-theme=\"light\"] .landing-bg {\r\n-  background: radial-gradient(1200px 800px at 10% 10%, rgba(102,126,234,0.2), transparent 60%),\r\n-              radial-gradient(1000px 700px at 90% 20%, rgba(118,75,162,0.2), transparent 60%),\r\n-              linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.6));\r\n+  background: radial-gradient(\r\n+      1200px 800px at 10% 10%,\r\n+      rgba(102, 126, 234, 0.2),\r\n+      transparent 60%\r\n+    ),\r\n+    radial-gradient(\r\n+      1000px 700px at 90% 20%,\r\n+      rgba(118, 75, 162, 0.2),\r\n+      transparent 60%\r\n+    ),\r\n+    linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6));\r\n }\r\n \r\n .section {\r\n   position: relative;\r\n@@ -50,23 +66,34 @@\n }\r\n .grid-3 {\r\n   grid-template-columns: repeat(3, minmax(0, 1fr));\r\n }\r\n-@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2,1fr); } }\r\n-@media (max-width: 640px) { .grid-3 { grid-template-columns: 1fr; } }\r\n+@media (max-width: 1024px) {\r\n+  .grid-3 {\r\n+    grid-template-columns: repeat(2, 1fr);\r\n+  }\r\n+}\r\n+@media (max-width: 640px) {\r\n+  .grid-3 {\r\n+    grid-template-columns: 1fr;\r\n+  }\r\n+}\r\n \r\n /* glass block utility */\r\n .glass {\r\n-  background: rgba(255,255,255,0.05);\r\n-  border: 1px solid rgba(255,255,255,0.08);\r\n+  background: rgba(255, 255, 255, 0.05);\r\n+  border: 1px solid rgba(255, 255, 255, 0.08);\r\n   backdrop-filter: blur(16px);\r\n   border-radius: 16px;\r\n }\r\n [data-theme=\"light\"] .glass {\r\n-  background: rgba(255,255,255,0.8);\r\n-  border-color: rgba(102,126,234,0.2);\r\n+  background: rgba(255, 255, 255, 0.8);\r\n+  border-color: rgba(102, 126, 234, 0.2);\r\n }\r\n \r\n /* pin spacer helper (for pinned demo section spacing if needed) */\r\n .pin-spacer {\r\n   min-height: 100vh;\r\n }\r\n+\r\n+\r\n+.nav\r\n"
+                },
+                {
+                    "date": 1762147640864,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -95,5 +95,10 @@\n   min-height: 100vh;\r\n }\r\n \r\n \r\n-.nav\r\n+.nav{\r\n+    position: fixed;\r\n+    top: 0;\r\n+    left: 0;\r\n+    width: 50%;\r\n+}\r\n"
+                },
+                {
+                    "date": 1762147649999,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -97,8 +97,6 @@\n \r\n \r\n .nav{\r\n     position: fixed;\r\n-    top: 0;\r\n-    left: 0;\r\n-    width: 50%;\r\n+    width: 100;\r\n }\r\n"
+                },
+                {
+                    "date": 1762147664215,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -97,6 +97,8 @@\n \r\n \r\n .nav{\r\n     position: fixed;\r\n-    width: 100;\r\n+    width: 100%;\r\n+    display: grid;\r\n+    place-items: ;\r\n }\r\n"
+                },
+                {
+                    "date": 1762147686109,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -99,6 +99,7 @@\n .nav{\r\n     position: fixed;\r\n     width: 100%;\r\n     display: grid;\r\n-    place-items: ;\r\n+    place-items: center;\r\n+    \r\n }\r\n"
+                },
+                {
+                    "date": 1762151966098,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -100,6 +100,8 @@\n     position: fixed;\r\n     width: 100%;\r\n     display: grid;\r\n     place-items: center;\r\n-    \r\n+    z-index: 1000;\r\n }\r\n+\r\n+.scroll-velocity\r\n"
+                },
+                {
+                    "date": 1762151978207,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -103,5 +103,8 @@\n     place-items: center;\r\n     z-index: 1000;\r\n }\r\n \r\n-.scroll-velocity\r\n+.scroll-velocity{\r\n+    height: 100vh;\r\n+    display: grid;\r\n+}\r\n"
+                },
+                {
+                    "date": 1762151984751,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -106,6 +106,6 @@\n \r\n .scroll-velocity{\r\n     height: 100vh;\r\n     display: grid;\r\n-    place\r\n+    place-items: center;\r\n }\r\n"
+                }
+            ],
+            "date": 1762146191110,
+            "name": "Commit-0",
+            "content": "/* Landing page scaffold and shared styles */\r\n\r\n.landing-root {\r\n  --section-padding: clamp(48px, 6vw, 96px);\r\n  --container-max: 1200px;\r\n}\r\n\r\n.landing-bg {\r\n  position: fixed;\r\n  inset: 0;\r\n  z-index: -1;\r\n  background: radial-gradient(1200px 800px at 10% 10%, rgba(102,126,234,0.15), transparent 60%),\r\n              radial-gradient(1000px 700px at 90% 20%, rgba(118,75,162,0.15), transparent 60%),\r\n              linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.3));\r\n}\r\n\r\n[data-theme=\"light\"] .landing-bg {\r\n  background: radial-gradient(1200px 800px at 10% 10%, rgba(102,126,234,0.2), transparent 60%),\r\n              radial-gradient(1000px 700px at 90% 20%, rgba(118,75,162,0.2), transparent 60%),\r\n              linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.6));\r\n}\r\n\r\n.section {\r\n  position: relative;\r\n  padding: var(--section-padding) 24px;\r\n}\r\n\r\n.section-inner {\r\n  max-width: var(--container-max);\r\n  margin: 0 auto;\r\n}\r\n\r\n.section-title {\r\n  font-size: clamp(28px, 4vw, 44px);\r\n  font-weight: 800;\r\n  margin: 0 0 16px;\r\n  color: var(--text-primary);\r\n}\r\n\r\n.section-subtitle {\r\n  font-size: clamp(16px, 2vw, 18px);\r\n  color: var(--text-secondary);\r\n  margin: 0 0 32px;\r\n}\r\n\r\n/* utility grid */\r\n.grid {\r\n  display: grid;\r\n  gap: 24px;\r\n}\r\n.grid-3 {\r\n  grid-template-columns: repeat(3, minmax(0, 1fr));\r\n}\r\n@media (max-width: 1024px) { .grid-3 { grid-template-columns: repeat(2,1fr); } }\r\n@media (max-width: 640px) { .grid-3 { grid-template-columns: 1fr; } }\r\n\r\n/* glass block utility */\r\n.glass {\r\n  background: rgba(255,255,255,0.05);\r\n  border: 1px solid rgba(255,255,255,0.08);\r\n  backdrop-filter: blur(16px);\r\n  border-radius: 16px;\r\n}\r\n[data-theme=\"light\"] .glass {\r\n  background: rgba(255,255,255,0.8);\r\n  border-color: rgba(102,126,234,0.2);\r\n}\r\n\r\n/* pin spacer helper (for pinned demo section spacing if needed) */\r\n.pin-spacer {\r\n  min-height: 100vh;\r\n}\r\n"
+        }
+    ]
+}

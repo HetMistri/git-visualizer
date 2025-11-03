@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/features/visualizer/components/DemoShowcase/DemoShowcase.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762148258351,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762148258351,
+            "name": "Commit-0",
+            "content": "import CommitDemo from \"./CommitDemo\";\r\nimport BranchingDemo from \"./BranchingDemo\";\r\nimport MergeDemo from \"./MergeDemo\";\r\nimport TestSequenceDemo from \"./TestSequenceDemo\";\r\nimport \"./DemoShowcase.css\";\r\n\r\n/**\r\n * DemoShowcase - Container component that displays all demo visualizations\r\n * Each demo is independent with its own GitGraph instance\r\n */\r\nexport const DemoShowcase = () => {\r\n  return (\r\n    <div className=\"demo-showcase-root\">\r\n      <div className=\"demo-showcase-header\">\r\n        <h1 className=\"demo-showcase-title\">Git Visualizer Demos</h1>\r\n        <p className=\"demo-showcase-subtitle\">\r\n          Interactive demonstrations of core Git operations\r\n        </p>\r\n      </div>\r\n\r\n      <div className=\"demo-grid\">\r\n        <CommitDemo />\r\n        <BranchingDemo />\r\n        <MergeDemo />\r\n        <TestSequenceDemo />\r\n      </div>\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default DemoShowcase;\r\n"
+        }
+    ]
+}

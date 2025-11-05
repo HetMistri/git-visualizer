@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ReactFlow, Background, Controls } from "@xyflow/react";
 import { useGitGraph } from "../../hooks/useGitGraph";
+import { GitGraph } from "../../core/gitGraph";
 import CustomNode from "../Graph/CustomNode";
 import CustomEdge from "../Graph/CustomEdge";
 import "@xyflow/react/dist/style.css";
@@ -19,7 +20,12 @@ const edgeTypes = {
  * Demonstrates: Terminal commands being executed and their visual effects
  */
 export const TerminalDemo = () => {
-  const { nodes, edges, commit, createBranch, checkout, merge } = useGitGraph();
+  const graphRef = useRef(null);
+  if (!graphRef.current) graphRef.current = new GitGraph();
+  const { nodes, edges, commit, createBranch, checkout, merge } = useGitGraph({
+    instanceId: "demo-terminal",
+    graph: graphRef.current,
+  });
   const [terminalLines, setTerminalLines] = useState([
     { type: "prompt", text: "$ " },
   ]);
@@ -127,6 +133,7 @@ export const TerminalDemo = () => {
         {/* Graph Visualization */}
         <div className="terminal-demo-graph">
           <ReactFlow
+            key="rf-terminal-demo"
             nodes={nodes}
             edges={edges}
             nodeTypes={nodeTypes}

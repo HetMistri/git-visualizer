@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls } from "@xyflow/react";
 import { useGitGraph } from "../../hooks/useGitGraph";
+import { GitGraph } from "../../core/gitGraph";
 import CustomNode from "../Graph/CustomNode";
 import CustomEdge from "../Graph/CustomEdge";
 import "@xyflow/react/dist/style.css";
@@ -19,7 +20,12 @@ const edgeTypes = {
  * Demonstrates: Branch merge, merge commits with multiple parents
  */
 export const MergeDemo = () => {
-  const { nodes, edges, commit, createBranch, checkout, merge } = useGitGraph();
+  const graphRef = useRef(null);
+  if (!graphRef.current) graphRef.current = new GitGraph();
+  const { nodes, edges, commit, createBranch, checkout, merge } = useGitGraph({
+    instanceId: "demo-merge",
+    graph: graphRef.current,
+  });
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -68,6 +74,7 @@ export const MergeDemo = () => {
     <div className="demo-container">
       <div className="demo-graph">
         <ReactFlow
+          key="rf-merge-demo"
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

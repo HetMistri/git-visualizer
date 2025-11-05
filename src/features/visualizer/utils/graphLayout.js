@@ -209,20 +209,44 @@ const assignLanes = (commits) => {
   return lanes;
 };
 
-// Cache for branch colors to ensure consistency
-const branchColorCache = new Map();
+// Cache for branch colors to ensure consistency (scoped per GitGraph instance)
+// Using WeakMap so caches are garbage-collected when graphs are discarded
+const branchColorCacheByGraph = new WeakMap();
+// Fallback global cache for callers that don't have a graph key (e.g., Toolbar)
+const globalBranchColorCache = new Map();
 
 /**
- * Get cached branch color - ensures color consistency across graph and toolbar
+ * Get cached branch color for a specific GitGraph instance - ensures color
+ * consistency within a single graph while avoiding cross-graph coupling.
  * @param {string} branchName - The name of the branch
+ * @param {object} graphKey - The GitGraph instance used as cache key
  * @returns {string} - The cached color for the branch
  */
-export const getCachedBranchColor = (branchName) => {
+export const getCachedBranchColor = (branchName, graphKey) => {
   const key = (branchName || "").trim();
-  if (!branchColorCache.has(key)) {
-    branchColorCache.set(key, getBranchColor(key));
+
+  // If no graph key provided, fall back to a shared cache (used by UI chrome)
+  if (
+    !graphKey ||
+    (typeof graphKey !== "object" && typeof graphKey !== "function")
+  ) {
+    if (!globalBranchColorCache.has(key)) {
+      globalBranchColorCache.set(key, getBranchColor(key));
+    }
+    return globalBranchColorCache.get(key);
   }
-  return branchColorCache.get(key);
+
+  // Resolve cache map for this graph
+  let cache = branchColorCacheByGraph.get(graphKey);
+  if (!cache) {
+    cache = new Map();
+    branchColorCacheByGraph.set(graphKey, cache);
+  }
+
+  if (!cache.has(key)) {
+    cache.set(key, getBranchColor(key));
+  }
+  return cache.get(key);
 };
 
 /**
@@ -271,14 +295,14 @@ export const convertToReactFlow = (gitGraph) => {
     for (const [branchName, branchCommitId] of branches) {
       if (branchCommitId === id) {
         commitBranches.push(branchName);
-        branchColors[branchName] = getCachedBranchColor(branchName);
+        branchColors[branchName] = getCachedBranchColor(branchName, gitGraph);
       }
     }
 
     // Use the branch that CREATED this commit for persistent color
     // This ensures commits keep their color even after branch moves
     const creatingBranch = commit.createdByBranch || "main";
-    const color = getCachedBranchColor(creatingBranch);
+    const color = getCachedBranchColor(creatingBranch, gitGraph);
 
     // Check if this is the HEAD commit
     const isHead = commitBranches.includes(HEAD);

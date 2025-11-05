@@ -5,8 +5,32 @@ import { convertToReactFlow, getAllBranches } from "../utils/graphLayout";
 /**
  * Custom hook to manage Git graph state and operations
  */
-export const useGitGraph = () => {
-  const [gitGraph] = useState(() => new GitGraph());
+// Optional instance registry to allow multiple isolated graphs on the same page
+// When an `instanceId` is provided, the same id returns the same GitGraph
+// across re-renders of that component tree; different ids are isolated.
+const graphInstances = new Map();
+
+// Overload: useGitGraph(opts?) where opts can be:
+// - string (instanceId)
+// - { instanceId?: string, graph?: GitGraph }
+export const useGitGraph = (opts) => {
+  const instanceId = typeof opts === "string" ? opts : opts?.instanceId;
+  const externalGraph = typeof opts === "object" ? opts?.graph : undefined;
+
+  const [gitGraph] = useState(() => {
+    // Explicit external graph always wins and guarantees isolation
+    if (externalGraph instanceof GitGraph) {
+      return externalGraph;
+    }
+    if (instanceId) {
+      if (!graphInstances.has(instanceId)) {
+        graphInstances.set(instanceId, new GitGraph());
+      }
+      return graphInstances.get(instanceId);
+    }
+    // No id provided → create a dedicated instance for this hook call
+    return new GitGraph();
+  });
   const [updateCounter, setUpdateCounter] = useState(0);
 
   // Force re-render by incrementing counter

@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CommitDemo, BranchingDemo, MergeDemo } from "@/features/visualizer";
+import {
+  StaticCommitDemo,
+  StaticBranchingDemo,
+  StaticMergeDemo,
+} from "@/features/visualizer";
 import "./Features.css";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,7 +17,7 @@ const FEATURES = [
     subtitle: "Watch Commits Appear in Real-Time",
     description:
       "The things you need are already there: dragging nodes, zooming, panning, selecting multiple nodes, and adding/removing elements are all built-in. See commits materialize on the DAG with animated edges and smooth transitions.",
-    demo: CommitDemo,
+    demo: StaticCommitDemo,
     align: "left", // text left, demo right
   },
   {
@@ -22,7 +26,7 @@ const FEATURES = [
     subtitle: "Branch Management Made Visual",
     description:
       "Git-Vis nodes are simply React components, ready for your interactive elements. Create, checkout, and manage color-coded branches. We play nice with Tailwind and plain old CSS.",
-    demo: BranchingDemo,
+    demo: StaticBranchingDemo,
     align: "right", // text right, demo left
   },
   {
@@ -31,7 +35,7 @@ const FEATURES = [
     subtitle: "Merge & DAG Structure",
     description:
       "Make more advanced apps with Background, Minimap, Controls, Panel, NodeToolbar, and NodeResizer components. Visualize two-parent merges with smooth edge paths and understand complex Git histories.",
-    demo: MergeDemo,
+    demo: StaticMergeDemo,
     align: "left", // text left, demo right
   },
 ];

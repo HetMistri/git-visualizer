@@ -3,11 +3,15 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 0,
+            "activePatchIndex": 1,
             "patches": [
                 {
                     "date": 1762148258718,
                     "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1762155392765,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,8 @@\n export function CustomLayoutPage() {\r\n   return (\r\n     <div style={{ padding: \"20px\" }}>\r\n       <h1>Git Operations</h1>\r\n-\r\n       <section>\r\n         <h2>Basic Commits</h2>\r\n         <CommitDemo />\r\n       </section>\r\n"
                 }
             ],
             "date": 1762148258718,

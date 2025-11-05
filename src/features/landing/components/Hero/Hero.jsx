@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Button from "@/components/ui/Button";
-import { TestSequenceDemo } from "@/features/visualizer";
+import { StaticTestSequenceDemo } from "@/features/visualizer";
 import "./Hero.css";
 
 export default function Hero({ onLaunch }) {
@@ -144,12 +144,11 @@ export default function Hero({ onLaunch }) {
               <div className="demo-window-title">Git Workflow</div>
             </div>
             <div className="demo-window-content">
-              <TestSequenceDemo key="hero-test-sequence-demo" />
+              <StaticTestSequenceDemo key="hero-test-sequence-demo" />
             </div>
           </div>
         </div>
-      </div>
-
+      </div>{" "}
       {/* Ambient background effects */}
       <div className="ambient">
         <div className="orb orb-a" />

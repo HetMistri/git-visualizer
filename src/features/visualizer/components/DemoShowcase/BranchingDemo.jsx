@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls } from "@xyflow/react";
 import { useGitGraph } from "../../hooks/useGitGraph";
+import { GitGraph } from "../../core/gitGraph";
 import CustomNode from "../Graph/CustomNode";
 import CustomEdge from "../Graph/CustomEdge";
 import "@xyflow/react/dist/style.css";
@@ -19,7 +20,12 @@ const edgeTypes = {
  * Demonstrates: Branch creation, checkout, parallel commits
  */
 export const BranchingDemo = () => {
-  const { nodes, edges, commit, createBranch, checkout } = useGitGraph();
+  const graphRef = useRef(null);
+  if (!graphRef.current) graphRef.current = new GitGraph();
+  const { nodes, edges, commit, createBranch, checkout } = useGitGraph({
+    instanceId: "demo-branching",
+    graph: graphRef.current,
+  });
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -66,6 +72,7 @@ export const BranchingDemo = () => {
     <div className="demo-container">
       <div className="demo-graph">
         <ReactFlow
+          key="rf-branching-demo"
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

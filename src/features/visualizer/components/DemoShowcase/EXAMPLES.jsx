@@ -28,7 +28,6 @@ export function CustomLayoutPage() {
   return (
     <div style={{ padding: "20px" }}>
       <h1>Git Operations</h1>
-
       <section>
         <h2>Basic Commits</h2>
         <CommitDemo />

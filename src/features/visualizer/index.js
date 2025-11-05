@@ -11,6 +11,10 @@ export {
   MergeDemo,
   TestSequenceDemo,
   TerminalDemo,
+  StaticCommitDemo,
+  StaticBranchingDemo,
+  StaticMergeDemo,
+  StaticTestSequenceDemo,
 } from "./components/DemoShowcase";
 export { useGitGraph } from "./hooks/useGitGraph";
 export { useRebaseAnimation } from "./hooks/useRebaseAnimation";

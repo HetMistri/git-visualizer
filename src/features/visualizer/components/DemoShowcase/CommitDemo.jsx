@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls } from "@xyflow/react";
 import { useGitGraph } from "../../hooks/useGitGraph";
+import { GitGraph } from "../../core/gitGraph";
 import CustomNode from "../Graph/CustomNode";
 import CustomEdge from "../Graph/CustomEdge";
 import "@xyflow/react/dist/style.css";
@@ -19,7 +20,13 @@ const edgeTypes = {
  * Demonstrates: Basic commit flow, linear history
  */
 export const CommitDemo = () => {
-  const { nodes, edges, commit } = useGitGraph();
+  // Hard isolate: create a dedicated GitGraph for this demo
+  const graphRef = useRef(null);
+  if (!graphRef.current) graphRef.current = new GitGraph();
+  const { nodes, edges, commit } = useGitGraph({
+    instanceId: "demo-commit",
+    graph: graphRef.current,
+  });
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -48,6 +55,7 @@ export const CommitDemo = () => {
     <div className="demo-container">
       <div className="demo-graph">
         <ReactFlow
+          key="rf-commit-demo"
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

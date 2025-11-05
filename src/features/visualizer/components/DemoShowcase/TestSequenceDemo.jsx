@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ReactFlow, Background, Controls } from "@xyflow/react";
 import { useGitGraph } from "../../hooks/useGitGraph";
+import { GitGraph } from "../../core/gitGraph";
 import CustomNode from "../Graph/CustomNode";
 import CustomEdge from "../Graph/CustomEdge";
 import "@xyflow/react/dist/style.css";
@@ -19,7 +20,12 @@ const edgeTypes = {
  * Demonstrates: Feature branch workflow, testing, and integration
  */
 export const TestSequenceDemo = () => {
-  const { nodes, edges, commit, createBranch, checkout, merge } = useGitGraph();
+  const graphRef = useRef(null);
+  if (!graphRef.current) graphRef.current = new GitGraph();
+  const { nodes, edges, commit, createBranch, checkout, merge } = useGitGraph({
+    instanceId: "demo-testsequence",
+    graph: graphRef.current,
+  });
   const hasInitialized = useRef(false);
 
   useEffect(() => {
@@ -83,6 +89,7 @@ export const TestSequenceDemo = () => {
       </div> */}
       <div className="demo-graph">
         <ReactFlow
+          key="rf-testsequence-demo"
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

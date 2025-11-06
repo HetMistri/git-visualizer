@@ -56,7 +56,7 @@ export default function Landing() {
     }
   };
 
-  const items = [
+  const navItems = [
     {
       label: "Explore",
       links: [
@@ -66,32 +66,38 @@ export default function Landing() {
           ariaLabel: "Jump to features",
           targetId: "features",
         },
-        { label: "Demo", ariaLabel: "Jump to demo", targetId: "demo" },
+        {
+          label: "Visualizer",
+          ariaLabel: "Launch visualizer",
+          href: "/visualizer",
+          external: false,
+        },
       ],
     },
     {
       label: "Learn",
       links: [
         {
-          label: "Architecture",
-          ariaLabel: "Jump to architecture",
-          targetId: "architecture",
-        },
-        {
-          label: "Contributors",
-          ariaLabel: "Jump to contributors",
-          targetId: "contributors",
+          label: "Documentation",
+          ariaLabel: "View documentation on GitHub",
+          href: "https://github.com/omeepatel04/git-visualizer#readme",
+          external: true,
         },
       ],
     },
     {
       label: "Connect",
       links: [
-        { label: "Contact", ariaLabel: "Jump to contact", targetId: "contact" },
         {
           label: "GitHub",
-          ariaLabel: "Open GitHub",
+          ariaLabel: "Open GitHub repository",
           href: "https://github.com/omeepatel04/git-visualizer",
+          external: true,
+        },
+        {
+          label: "Report Issue",
+          ariaLabel: "Report an issue on GitHub",
+          href: "https://github.com/omeepatel04/git-visualizer/issues",
           external: true,
         },
       ],
@@ -105,7 +111,7 @@ export default function Landing() {
         <Navbar
           logo={logo}
           logoAlt="Git-Vis Logo"
-          items={items}
+          items={navItems}
           ease="power3.out"
           onNav={(target) => handleScrollTo(target)}
           onGoVisualizer={handleLaunch}

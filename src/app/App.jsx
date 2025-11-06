@@ -8,6 +8,9 @@ const Visualizer = lazy(() => import("../features/visualizer/Visualizer"));
 const Landing = lazy(() =>
   import("@/features/landing").then((module) => ({ default: module.Landing }))
 );
+const NotFound = lazy(() =>
+  import("@/features/NotFound").then((module) => ({ default: module.NotFound }))
+);
 
 export default function App() {
   return (
@@ -18,7 +21,7 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/visualizer" element={<Visualizer />} />
           <Route path="/app" element={<Navigate to="/visualizer" replace />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

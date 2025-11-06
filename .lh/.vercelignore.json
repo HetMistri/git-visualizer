@@ -1,0 +1,18 @@
+{
+    "sourceFile": ".vercelignore",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762412519878,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762412519878,
+            "name": "Commit-0",
+            "content": "# Don't upload these to Vercel\r\nnode_modules\r\n.git\r\n.github\r\n.lh\r\n*.log\r\n.DS_Store\r\n.env.local\r\n.env*.local\r\ncoverage\r\nsrc\r\npublic\r\n*.md\r\n.gitignore\r\n.eslintrc*\r\neslint.config.js\r\nvite.config.js\r\npackage-lock.json\r\n"
+        }
+    ]
+}

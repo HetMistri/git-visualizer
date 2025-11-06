@@ -1,0 +1,18 @@
+{
+    "sourceFile": "index.html",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1762412519762,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1762412519762,
+            "name": "Commit-0",
+            "content": "<!DOCTYPE html>\r\n<html lang=\"en\">\r\n  <head>\r\n    <meta charset=\"UTF-8\" />\r\n    <link rel=\"icon\" type=\"image/png\" href=\"/logo.png\" />\r\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\r\n    <meta\r\n      name=\"description\"\r\n      content=\"Git-Vis - Interactive Git Visualization Tool. Learn Git by visualizing commit DAG in real-time.\"\r\n    />\r\n    <title>Git-Vis | Interactive Git Visualization</title>\r\n  </head>\r\n  <body>\r\n    <div id=\"root\"></div>\r\n    <script type=\"module\" src=\"/src/main.jsx\"></script>\r\n  </body>\r\n</html>\r\n"
+        }
+    ]
+}

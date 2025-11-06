@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 3,
+            "activePatchIndex": 5,
             "patches": [
                 {
                     "date": 1762146192125,
@@ -20,6 +20,14 @@
                 {
                     "date": 1762255304839,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n import { useEffect, useRef } from \"react\";\r\n import gsap from \"gsap\";\r\n import { ScrollTrigger } from \"gsap/ScrollTrigger\";\r\n-import { CommitDemo, BranchingDemo, MergeDemo } from \"@/features/visualizer\";\r\n+import { StaticCommitDemo, StaticBranchingDemo, StaticMergeDemo } from \"@/features/visualizer\";\r\n import \"./Features.css\";\r\n \r\n gsap.registerPlugin(ScrollTrigger);\r\n \r\n@@ -12,27 +12,27 @@\n     title: \"Ready out-of-the-box\",\r\n     subtitle: \"Watch Commits Appear in Real-Time\",\r\n     description:\r\n       \"The things you need are already there: dragging nodes, zooming, panning, selecting multiple nodes, and adding/removing elements are all built-in. See commits materialize on the DAG with animated edges and smooth transitions.\",\r\n-    demo: CommitDemo,\r\n+    demo: StaticCommitDemo,\r\n     align: \"left\", // text left, demo right\r\n   },\r\n   {\r\n     id: \"branching\",\r\n     title: \"Powered by us. Designed by you.\",\r\n     subtitle: \"Branch Management Made Visual\",\r\n     description:\r\n       \"Git-Vis nodes are simply React components, ready for your interactive elements. Create, checkout, and manage color-coded branches. We play nice with Tailwind and plain old CSS.\",\r\n-    demo: BranchingDemo,\r\n+    demo: StaticBranchingDemo,\r\n     align: \"right\", // text right, demo left\r\n   },\r\n   {\r\n     id: \"merging\",\r\n     title: \"All the right plugins\",\r\n     subtitle: \"Merge & DAG Structure\",\r\n     description:\r\n       \"Make more advanced apps with Background, Minimap, Controls, Panel, NodeToolbar, and NodeResizer components. Visualize two-parent merges with smooth edge paths and understand complex Git histories.\",\r\n-    demo: MergeDemo,\r\n+    demo: StaticMergeDemo,\r\n     align: \"left\", // text left, demo right\r\n   },\r\n ];\r\n \r\n"
+                },
+                {
+                    "date": 1762336023063,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,12 @@\n import { useEffect, useRef } from \"react\";\r\n import gsap from \"gsap\";\r\n import { ScrollTrigger } from \"gsap/ScrollTrigger\";\r\n-import { StaticCommitDemo, StaticBranchingDemo, StaticMergeDemo } from \"@/features/visualizer\";\r\n+import {\r\n+  StaticCommitDemo,\r\n+  StaticBranchingDemo,\r\n+  StaticMergeDemo,\r\n+} from \"@/features/visualizer\";\r\n import \"./Features.css\";\r\n \r\n gsap.registerPlugin(ScrollTrigger);\r\n \r\n@@ -132,8 +136,10 @@\n                 </div>\r\n \r\n                 {/* Connector SVG between features */}\r\n                 {index < FEATURES.length - 1 && (\r\n+\r\n+                  \r\n                   <svg\r\n                     ref={(el) => (connectorRefs.current[index] = el)}\r\n                     className={`feature-connector ${\r\n                       isLeft\r\n"
+                },
+                {
+                    "date": 1762336030418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -137,9 +137,8 @@\n \r\n                 {/* Connector SVG between features */}\r\n                 {index < FEATURES.length - 1 && (\r\n \r\n-                  \r\n                   <svg\r\n                     ref={(el) => (connectorRefs.current[index] = el)}\r\n                     className={`feature-connector ${\r\n                       isLeft\r\n"
                 }
             ],
             "date": 1762146192125,

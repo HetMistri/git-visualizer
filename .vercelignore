@@ -1,0 +1,18 @@
+# Don't upload these to Vercel
+node_modules
+.git
+.github
+.lh
+*.log
+.DS_Store
+.env.local
+.env*.local
+coverage
+src
+public
+*.md
+.gitignore
+.eslintrc*
+eslint.config.js
+vite.config.js
+package-lock.json

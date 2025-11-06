@@ -1,0 +1,11 @@
+# Don't upload these to Vercel
+
+.git
+.github
+.lh
+_.log
+.DS_Store
+.env_.local
+coverage
+DEPLOYMENT.md
+DEMO_CONVERSION_GUIDE.md

@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import { GoArrowUpRight } from "react-icons/go";
 import "./Navbar.css";
@@ -12,6 +13,7 @@ const Navbar = ({
   onNav,
   onGoVisualizer,
 }) => {
+  const navigate = useNavigate();
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const navRef = useRef(null);
@@ -145,11 +147,15 @@ const Navbar = ({
   const handleLinkClick = (lnk) => (e) => {
     if (lnk?.onClick) return; // allow custom handler upstream if passed
     e.preventDefault();
+    
+    // Handle scroll targets (internal page sections)
     if (lnk?.targetId && typeof onNav === "function") {
       onNav(lnk.targetId);
       closeMenu();
       return;
     }
+    
+    // Handle hash links
     if (
       typeof lnk?.href === "string" &&
       lnk.href.startsWith("#") &&
@@ -159,11 +165,22 @@ const Navbar = ({
       closeMenu();
       return;
     }
+    
+    // Handle external links
     if (typeof lnk?.href === "string" && /^https?:\/\//.test(lnk.href)) {
-      window.open(lnk.href, "_blank", "noopener");
+      window.open(lnk.href, "_blank", "noopener noreferrer");
       closeMenu();
       return;
     }
+    
+    // Handle internal routes (React Router)
+    if (typeof lnk?.href === "string" && lnk.href.startsWith("/")) {
+      navigate(lnk.href);
+      closeMenu();
+      return;
+    }
+    
+    // Fallback for other hrefs
     if (typeof lnk?.href === "string") {
       window.location.href = lnk.href;
       closeMenu();

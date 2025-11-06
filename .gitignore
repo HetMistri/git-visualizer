@@ -1,6 +1,8 @@
 # Build output
 /dist
 
+/.lh
+
 # OS-specific files
 .DS_Store
 Thumbs.db

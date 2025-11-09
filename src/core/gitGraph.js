@@ -149,6 +149,7 @@ export class GitGraph {
 
     if (targetId === sourceId) {
       throw new Error("Branches are already up-to-date. Nothing to merge");
+      
     }
 
     // 4. Create a new merge commit. This is the key step:
@@ -393,5 +394,5 @@ export class GitGraph {
 
     // Note: Orphaned commits will be shown greyed out
     // They'll be permanently deleted on the next commit to this branch
-  }
+    }
 }

@@ -18,8 +18,9 @@ export default function App() {
       <CustomCursor />
       <Suspense fallback={<LoadingSpinner message="Loading Git-Vis..." />}>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/visualizer" element={<Visualizer />} />
+          <Route path="/home" element={<Landing />} />
+          {/* <Route path="/visualizer" element={<Visualizer />} /> */}
+          {/* Momentarily Switched to Visualizer as default landing */} <Route path="/" element={<Visualizer />} />
           <Route path="/app" element={<Navigate to="/visualizer" replace />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

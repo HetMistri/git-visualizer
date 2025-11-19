@@ -147,14 +147,14 @@ const Navbar = ({
   const handleLinkClick = (lnk) => (e) => {
     if (lnk?.onClick) return; // allow custom handler upstream if passed
     e.preventDefault();
-    
+
     // Handle scroll targets (internal page sections)
     if (lnk?.targetId && typeof onNav === "function") {
       onNav(lnk.targetId);
       closeMenu();
       return;
     }
-    
+
     // Handle hash links
     if (
       typeof lnk?.href === "string" &&
@@ -165,21 +165,21 @@ const Navbar = ({
       closeMenu();
       return;
     }
-    
+
     // Handle external links
     if (typeof lnk?.href === "string" && /^https?:\/\//.test(lnk.href)) {
       window.open(lnk.href, "_blank", "noopener noreferrer");
       closeMenu();
       return;
     }
-    
+
     // Handle internal routes (React Router)
     if (typeof lnk?.href === "string" && lnk.href.startsWith("/")) {
       navigate(lnk.href);
       closeMenu();
       return;
     }
-    
+
     // Fallback for other hrefs
     if (typeof lnk?.href === "string") {
       window.location.href = lnk.href;

@@ -136,7 +136,7 @@ export default function Landing() {
         <FeaturesSection />
         {/* <DemoPreview /> */}
         {/* <ArchitectureSection /> */}
-        <ContributorsSection />
+        {/* <ContributorsSection /> */}
         <ContactSection />
       </main>
 

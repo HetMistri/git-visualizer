@@ -2,6 +2,9 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "./Features.css";
+import commitDemoImg from "@/assets/demo/commit.png";
+import branchingDemoImg from "@/assets/demo/branching.png";
+import mergeDemoImg from "@/assets/demo/merge.png";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +15,7 @@ const FEATURES = [
     subtitle: "Watch Commits Appear in Real-Time",
     description:
       "The things you need are already there: dragging nodes, zooming, panning, selecting multiple nodes, and adding/removing elements are all built-in. See commits materialize on the DAG with animated edges and smooth transitions.",
+    image: commitDemoImg,
     align: "left", // text left, demo right
   },
   {
@@ -20,6 +24,7 @@ const FEATURES = [
     subtitle: "Branch Management Made Visual",
     description:
       "Git-Vis nodes are simply React components, ready for your interactive elements. Create, checkout, and manage color-coded branches. We play nice with Tailwind and plain old CSS.",
+    image: branchingDemoImg,
     align: "right", // text right, demo left
   },
   {
@@ -28,6 +33,7 @@ const FEATURES = [
     subtitle: "Merge & DAG Structure",
     description:
       "Make more advanced apps with Background, Minimap, Controls, Panel, NodeToolbar, and NodeResizer components. Visualize two-parent merges with smooth edge paths and understand complex Git histories.",
+    image: mergeDemoImg,
     align: "left", // text left, demo right
   },
 ];
@@ -120,7 +126,11 @@ export default function FeaturesSection() {
                         </div>
                       </div>
                       <div className="feature-demo-content">
-                        {/* <DemoComponent key={`demo-${feature.id}`} /> */}
+                        <img
+                          src={feature.image}
+                          alt={feature.title}
+                          className="feature-demo-image"
+                        />
                       </div>
                     </div>
                   </div>

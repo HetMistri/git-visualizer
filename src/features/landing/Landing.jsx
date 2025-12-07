@@ -75,7 +75,7 @@ export default function Landing() {
       ],
     },
     {
-      label: "Learn",
+      label: "Resoruces",
       links: [
         {
           label: "Documentation",
@@ -83,11 +83,6 @@ export default function Landing() {
           href: "https://github.com/omeepatel04/git-visualizer#readme",
           external: true,
         },
-      ],
-    },
-    {
-      label: "Connect",
-      links: [
         {
           label: "GitHub",
           ariaLabel: "Open GitHub repository",
@@ -119,7 +114,7 @@ export default function Landing() {
       </nav>
 
       <main>
-        <div className="scroll-velocity">
+        {/* <div className="scroll-velocity">
           <ScrollVelocity
             texts={[
               "Visulize Your Git",
@@ -129,14 +124,18 @@ export default function Landing() {
             velocity={velocity}
             className="custom-scroll-text"
           />
-        </div>
+        </div> */}
 
         <Hero onLaunch={handleLaunch} />
-        <TerminalShowcase />
+
+        {/* <TerminalShowcase /> */}
+
         <FeaturesSection />
-        {/* <DemoPreview /> */}
-        {/* <ArchitectureSection /> */}
-        {/* <ContributorsSection /> */}
+
+        {/* <DemoPreview />
+        <ArchitectureSection />
+        <ContributorsSection /> */}
+
         <ContactSection />
       </main>
 

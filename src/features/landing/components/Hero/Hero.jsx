@@ -3,6 +3,7 @@ import gsap from "gsap";
 import Button from "@/components/ui/Button";
 // import { StaticTestSequenceDemo } from "@/features/visualizer";
 import "./Hero.css";
+import heroImage from "@/assets/hero.png";
 
 export default function Hero({ onLaunch }) {
   const rootRef = useRef(null);
@@ -144,6 +145,11 @@ export default function Hero({ onLaunch }) {
               <div className="demo-window-title">Git Workflow</div>
             </div>
             <div className="demo-window-content">
+              <img
+                src={heroImage}
+                alt="Hero Demo"
+                className="feature-demo-image"
+              />
               {/* <StaticTestSequenceDemo key="hero-test-sequence-demo" /> */}
             </div>
           </div>

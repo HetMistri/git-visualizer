@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   ReactFlow,
   Background,
@@ -10,7 +11,7 @@ import {
 import "@xyflow/react/dist/style.css";
 
 // import { HeadPointerOverlay } from "../features/visualizer";
-import { CustomNode, CustomEdge, HeadPointerOverlay } from ".";
+import { CustomNode, CustomEdge } from ".";
 import { Toolbar } from ".";
 import { InputModal, RebaseModal } from ".";
 import { CommitDetails } from ".";
@@ -18,6 +19,7 @@ import { Terminal } from ".";
 import { useGitGraph, useRebaseAnimation } from ".";
 import { Eraser, Sun, Moon } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
+import HomeButton from "../../components/layout/HomeButton/HomeButton";
 import "./Visualizer.css";
 
 const nodeTypes = {
@@ -29,6 +31,7 @@ const edgeTypes = {
 };
 
 function Visualizer() {
+  const navigate = useNavigate();
   const {
     commit,
     createBranch,
@@ -424,15 +427,47 @@ function Visualizer() {
 
   return (
     <div className="visualizer-container">
-      {/* Theme Toggle Button - Top Right */}
-      <button
-        className="theme-toggle-btn"
-        onClick={toggleTheme}
-        title={`Switch to ${isDark ? "light" : "dark"} mode`}
-        aria-label="Toggle theme"
-      >
-        {isDark ? <Sun size={20} /> : <Moon size={20} />}
-      </button>
+      <div className="controls">
+        {/* Home Button - Top Center */}
+        <div className="visualizer-home-btn">
+          <HomeButton onClick={() => navigate("/")} className="" />
+        </div>
+
+        {/* Theme Toggle Button - Top Right */}
+        <button
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          title={`Switch to ${isDark ? "light" : "dark"} mode`}
+          aria-label="Toggle theme"
+        >
+          {isDark ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+        {/* Clear Canvas button near controls */}
+        <div className="clear-canvas-panel">
+          <button
+            className="clear-canvas-btn"
+            onClick={() => {
+              if (
+                confirm(
+                  "Clear canvas? This will reset to a fresh repo with only the initial commit on 'main'."
+                )
+              ) {
+                const res = clearGraph();
+                if (res.success) {
+                  toast("✓ Canvas cleared", "success");
+                  // Log to terminal (informational)
+                  setTerminalCommands((prev) => [...prev, "git init"]);
+                } else {
+                  toast(`✗ ${res.error}`, "error");
+                }
+              }
+            }}
+            title="Clear Canvas"
+          >
+            <Eraser size={16} />
+          </button>
+        </div>
+      </div>
 
       {/* Toolbar */}
       <Toolbar
@@ -467,7 +502,7 @@ function Visualizer() {
         panOnDrag={isAnimating ? false : [1, 2]} // Disable pan during animation
         zoomOnScroll={!isAnimating}
         zoomOnPinch={!isAnimating}
-        preventScrolling={true}
+        preventScrolling={false}
         className={isAnimating ? "animating" : ""}
       >
         <Background color="#94a3b8" gap={25} size={1.5} variant="dots" />
@@ -476,41 +511,6 @@ function Visualizer() {
           position="top-left"
           className="rf-controls"
         />
-
-        {/* HEAD Pointer - Rendered with viewport transformation */}
-        {/* {headPosition && (
-          <HeadPointerOverlay
-            position={headPosition}
-            branchName={currentBranch}
-            color={branches.includes(currentBranch) ? "#667eea" : "#94a3b8"}
-          />
-        )} */}
-
-        {/* Clear Canvas button near controls */}
-        <div className="clear-canvas-panel">
-          <button
-            className="clear-canvas-btn"
-            onClick={() => {
-              if (
-                confirm(
-                  "Clear canvas? This will reset to a fresh repo with only the initial commit on 'main'."
-                )
-              ) {
-                const res = clearGraph();
-                if (res.success) {
-                  toast("✓ Canvas cleared", "success");
-                  // Log to terminal (informational)
-                  setTerminalCommands((prev) => [...prev, "git init"]);
-                } else {
-                  toast(`✗ ${res.error}`, "error");
-                }
-              }
-            }}
-            title="Clear Canvas"
-          >
-            <Eraser size={16} />
-          </button>
-        </div>
       </ReactFlow>
 
       {/* Modals */}

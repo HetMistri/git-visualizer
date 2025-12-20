@@ -1,8 +1,9 @@
 .visualizer-container {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: relative;
   overflow: hidden;
+  touch-action: manipulation;
 }
 
 /* React Flow container */
@@ -119,6 +120,41 @@
 /* React Flow Container */
 .react-flow__viewport {
   padding-top: 120px;
+}
+
+/* Controls Container */
+.controls {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 1000;
+}
+
+/* Home Button */
+.visualizer-home-btn {
+  /* positioning handled by parent .controls */
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  /* positioning handled by parent .controls */
+}
+
+/* Clear Canvas Panel */
+.clear-canvas-panel {
+  /* positioning handled by parent .controls */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .controls {
+    gap: 8px;
+  }
 }
 
 /* Responsive Design */
@@ -283,13 +319,7 @@
   background: rgba(0, 0, 0, 0.06);
 }
 
-/* Clear Canvas panel/button */
-.clear-canvas-panel {
-  position: absolute;
-  top: 16vh;
-  left: 17px;
-  z-index: 5;
-}
+/* Clear Canvas Button Styles */
 
 .clear-canvas-btn {
   display: inline-flex;
@@ -301,7 +331,7 @@
   border: 1px solid var(--glass-border);
   background: var(--glass-background);
   color: var(--text-primary);
-   
+
   backdrop-filter: blur(10px);
   transition: all 0.18s ease-in-out;
 }
@@ -434,9 +464,6 @@
    THEME TOGGLE BUTTON (Top Right)
 ================================ */
 .theme-toggle-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
   width: 48px;
   height: 48px;
   border-radius: 50%;
@@ -444,7 +471,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
-   
+
   z-index: 999;
   display: flex;
   align-items: center;
@@ -476,7 +503,7 @@
   backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
-   
+
   z-index: 999;
   display: flex;
   align-items: center;
